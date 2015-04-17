@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+  <title>Queensland Speech Survey</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" user-scalable="no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="icon" type="image/x-icon" href="resources/images/favicon.ico">
+  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
+
+  <link rel="import" href="components.html">
+  <link href="resources/theme/styles.css" rel="stylesheet">
+</head>
+
+<body fullbleed unresolved onresize="drawerHeightFix()">
+
+<core-drawer-panel forceNarrow>
+
+  <div drawer>
+    <div vertical layout id="account">
+      <div horizontal layout>
+        <div>
+          <a href="http://www.uq.edu.au" class="uq-link"><img src="https://app.library.uq.edu.au/images/uq_theme/uq.png" id="mini-logo"></a>
+          <a href="http://www.uq.edu.au"><img src="https://www.library.uq.edu.au/360Link/Current/uq-logo.svg" id="main-logo"></a>
+          <a class="uq-library-header-logo" href="https://www.library.uq.edu.au">Library</a>
+          <a class="uq-library-header-logo-mini" href="https://www.library.uq.edu.au">UQ Library</a>
+        </div>
+      </div>
+      <div flex></div>
+
+    </div>
+
+    <core-menu selectedAttribute="">
+      <paper-item on-tap="{{togglePage}}">
+        <core-icon icon="home"></core-icon>UQ Library</paper-item>
+      <paper-item>
+        <core-icon icon="info"></core-icon>About</paper-item>
+
+      <!--<paper-item onclick="document.querySelector('#languages-facet').toggle();">-->
+      <!--<core-icon icon="language"></core-icon>Languages</paper-item>-->
+      <!--<core-collapse id="languages-facet">-->
+      <!--<div class="content">-->
+      <!--<div>-->
+      <!--<p>Language</p>-->
+      <!--<p>Language</p>-->
+      <!--<p>Language</p>-->
+      <!--<p>Language</p>-->
+      <!--<p>Language</p>-->
+      <!--<p>...</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</core-collapse>-->
+
+      <!--<paper-item onclick="document.querySelector('#interviewers-facet').toggle();">-->
+      <!--<core-icon icon="av:artist"></core-icon>Interviewees</paper-item>-->
+      <!--<core-collapse id="interviewers-facet">-->
+      <!--<div class="content">-->
+      <!--<div>-->
+      <!--<p>Interviewee</p>-->
+      <!--<p>Interviewee</p>-->
+      <!--<p>Interviewee</p>-->
+      <!--<p>Interviewee</p>-->
+      <!--<p>Interviewee</p>-->
+      <!--<p>...</p>-->
+      <!--</div>-->
+      <!--</div>-->
+      <!--</core-collapse>-->
+
+      <hr>
+
+      <paper-item>
+        <core-icon icon="help"></core-icon>Help &amp; Feedback</paper-item>
+
+    </core-menu>
+  </div>
+
+  <div main>
+    <template is="auto-binding">
+      <div id="clicker" on-tap="{{clickAction}}">
+        <core-toolbar>
+          <paper-icon-button icon="menu" core-drawer-toggle></paper-icon-button>
+          <div class="glow">
+            <a href="#" class="uq-header-links">Indigenous Voices</a>
+          </div>
+          <div flex>
+            <!--<paper-input-decorator label="Search for a language or speaker" id="searchInput">-->
+            <!--<input is="core-input">-->
+            <!--</paper-input-decorator>-->
+          </div>
+          <!--<paper-icon-button icon="search" id="search"></paper-icon-button>-->
+          <paper-icon-button icon="communication:clear-all" id="more" class="responsive-menu-icon"></paper-icon-button>
+        </core-toolbar>
+      </div>
+    </template>
+    <paper-tabs selected="0">
+      <paper-tab>Map</paper-tab>
+      <paper-tab>Languages</paper-tab>
+      <paper-tab>Voices</paper-tab>
+      <paper-tab>Search</paper-tab>
+    </paper-tabs>
+
+    <core-animated-pages selected="{{selected}}" transitions="slide-from-right">
+
+      <core-drawer-panel id="marker-info" rightDrawer responsiveWidth="1020px" drawerWidth="360px" disableSwipe="true">
+
+        <div drawer vertical layout>
+          <!--<div vertical layout>-->
+          <div horizontal layout center-center>
+            <div>
+              <core-icon class="huge sidebar-header-icon" icon="hardware:headset"></core-icon>
+            </div>
+            <div flex>
+              <h1 class="sidebar-header">Alyawarr</h1>
+            </div>
+            <div>
+              <paper-icon-button icon="close" id="close-drawer" class="responsive-menu-icon" onclick="closeDrawer()"></paper-icon-button>
+            </div>
+          </div>
+          <div flex>
+            <img src="resources/images/list-sample.png" width="100%">
+          </div>
+          <div horizontal layout center-center id="player">
+            <div>
+              <paper-icon-button class="huge" icon="av:play-circle-outline" class="material-dark"></paper-icon-button>
+            </div>
+            <div flex>
+              <paper-slider></paper-slider>
+            </div>
+            <div>
+              <paper-icon-button icon="av:volume-down"></paper-icon-button>
+            </div>
+          </div>
+          <!--</div>-->
+        </div>
+
+        <div main>
+          <google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6">
+
+            <!--<google-map-marker latitude="-19.265433" longitude="146.816289" clickEvents></google-map-marker>-->
+            <google-map-marker latitude="-21.392335" longitude="145.101973" clickEvents></google-map-marker>
+
+          </google-map>
+        </div>
+      </core-drawer-panel>
+
+    </core-animated-pages>
+  </div>
+
+</core-drawer-panel>
+
+<paper-action-dialog backdrop autoCloseDisabled layered="false" id="warning">
+  <h1>Cultural Sensitivity Warning</h1>
+  <p>We warn that there may be words and descriptions that may be culturally sensitive and which might not normally be used in certain public or community contexts. Terms and annotations that reflect the attitude of the author or the period in which the item was written, may be considered inappropriate today.</p>
+  <p>Please be aware that in some Aboriginal communities, hearing or seeing names or seeing images of deceased persons might cause sadness or distress, particularly to the relatives of these people. Aboriginal people may also have prohibitions in place on who may see certain records based on the age, or sacred or sensitive status of information in them, as it may relate to individuals of any particular Aboriginal group.</p>
+
+  <paper-button affirmative autofocus>Yes, I understand</paper-button>
+  <paper-button affirmative>No thanks</paper-button>
+</paper-action-dialog>
+
+<script>
+  function slideElements(name, type) {
+    document.querySelector(name).classList.toggle(type);
+  }
+
+  function closeDrawer() {
+    document.querySelector('#marker-info').togglePanel();
+  }
+
+  function clickAction(e) {
+    var t = e.target;
+    if (t.localName === 'core-toolbar') {
+      slideElements('#search', 'iconSlide');
+      slideElements('#searchInput', 'slideIn');
+    }
+
+    if (t.localName === 'paper-icon-button') {
+      if (t.id == "search") {
+        slideElements('#search', 'iconSlide');
+        slideElements('#searchInput', 'slideIn');
+      } else if (t.id == "more") {
+        document.querySelector('#marker-info').togglePanel();
+      }
+    }
+  }
+
+  // temporary hack to get drawer height to equal visible height
+  function drawerHeightFix() {
+    var drawerHeight = document.querySelector('body').offsetHeight-110;
+    document.querySelector('#marker-info').style.height = (drawerHeight + "px");
+  }
+
+  addEventListener('template-bound', function (e) {
+    drawerHeightFix();
+    e.target.clickAction = clickAction;
+//          slideElements('#search', 'iconSlide');
+//          slideElements('#searchInput', 'slideIn');
+    //document.querySelector('#marker-info').openDrawer();
+//            document.querySelector('#warning').toggle();
+  });
+
+  addEventListener('google-map-marker-click', function (e) {
+    document.querySelector('#marker-info').openDrawer();
+  });
+
+</script>
+
+</body>
+
+</html>

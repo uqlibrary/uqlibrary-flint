@@ -1,0 +1,124 @@
+//   _____           _
+//  |  ___|__  _ __ | |_ ___
+//  | |_ / _ \| '_ \| __/ __|
+//  |  _| (_) | | | | |_\__ \
+//  |_|  \___/|_| |_|\__|___/
+//
+
+// Base font-size is 14sp = 1em = 14px
+
+// Quick explanation about font size specifications:
+// Em is traditionally defined as the width of the uppercase M in the current face and point size.
+// It is more properly defined as simply the current point size.
+// For example, in 12-point type, em is a distance of 12 points.
+// see: http://stackoverflow.com/questions/15827038/what-does-css-measurement-unit-em-actually-stand-for
+
+// Sp = scalable pixel; not yet used in web but em is closest approximation
+// Material Design spec is given in sp, so we convert to em for a completely scalable and responsive interface.
+
+// DO NOT DELETE - KEEP FOR REFERENCE
+//$display4-size-font: 112sp;
+//$display3-size-font: 56sp;
+//$display2-size-font: 45sp;
+//$display1-size-font: 34sp;
+//$headline-size-font: 24sp;
+//$title-size-font: 20sp;
+//$subhead-size-font-device: 16sp;
+//$subhead-size-font-desktop: 15sp;
+//$body2-size-font-device: 14sp;
+//$body2-size-font-desktop: 13sp;
+//$body1-size-font-device: 14sp;
+//$body1-size-font-desktop: 13sp;
+//$caption-size-font: 12sp;
+//$button-size-font: 14sp;
+
+$display4-size-font: 8em;
+$display3-size-font: 4em;
+$display2-size-font: 3.4em;
+$display1-size-font: 2.6em;
+$headline-size-font: 1.8em;
+$title-size-font: 1.42857143em;
+$subhead-size-font-device: 1.14285714em;
+$subhead-size-font-desktop: 1.071em;
+$body2-size-font-device: 1em;
+$body2-size-font-desktop: 0.929em;
+$body1-size-font-device: 1em;
+$body1-size-font-desktop: 0.929em;
+$caption-size-font: 0.85714286em;
+$button-size-font: 1em;
+
+// Minimum human touch target size
+$touch-target-size: 44px;
+
+// Responsive width
+// using iPad landscape (768px) for now as
+// this seems like a sensible default
+// and allows us to showcase the effect easily
+$responsive-width: 768px;
+
+//    ____      _
+//   / ___|___ | | ___  _   _ _ __ ___
+//  | |   / _ \| |/ _ \| | | | '__/ __|
+//  | |___ (_) | | (_) | |_| | |  \__ \
+//   \____\___/|_|\___/ \__,_|_|  |___/
+//
+
+$baseline-uq-purple:    hsl(286, 86%, 0%);
+$baseline-uq-green:     hsl(74, 100%, 0%);
+$uq-background-primary: #fafafa;
+$uq-purple:             #49075e;
+$uq-primary-light:      #7b0c9d;
+$uq-red:                hsl(337, 100%, 33%);
+$uq-blue:               #2874d7;
+$uq-text:               #333333;
+$uq-text-secondary:     #757575;
+$uq-divider:               #ccc;
+
+
+
+$uq-emerald:            hsl(113, 49%, 35%);
+$uq-warm-red:           hsl(11, 68%, 48%);
+$uq-gold:               hsl(45, 46%, 52%);
+$uq-gold-alt:           hsl(45, 46%, 37%); // this is a tweaked gold where white text is required
+
+$dark-primary:          lighten($baseline-uq-purple,20%); // Official UQ purple
+$primary:               lighten($baseline-uq-purple,33%);
+$alpha-primary:         transparentize($primary, .3);
+$accent:                lighten($baseline-uq-green, 36%);
+$uq-aqua:               #007e9e;
+$uq-aqua-hover:         #006880;
+$uq-aqua-active:        #00576b;
+$uq-aqua-800:           #004352;
+$uq-aqua-900:           #00323d;
+
+
+
+
+
+//      _          _                 _   _
+//     / \   _ __ (_)_ __ ___   __ _| |_(_) ___  _ __  ___
+//    / _ \ | '_ \| | '_ ` _ \ / _` | __| |/ _ \| '_ \/ __|
+//   / ___ \| | | | | | | | | | (_| | |_| | (_) | | | \__ \
+//  /_/   \_\_| |_|_|_| |_| |_|\__,_|\__|_|\___/|_| |_|___/
+//
+
+$transition-duration: 150ms;
+$transition-function: cubic-bezier(0.4, 0, 0.2, 1);
+$main-transition: all $transition-duration $transition-function;
+$shadow-transition: box-shadow $transition-duration $transition-function;
+$background-transition: background-color $transition-duration $transition-function;
+$outline-transition: outline $transition-duration $transition-function;
+
+//   ____  _               _
+//  / ___|| |__   __ _  __| | _____      _____
+//  \___ \| '_ \ / _` |/ _` |/ _ \ \ /\ / / __|
+//   ___) | | | | (_| | (_| | (_) \ V  V /\__ \
+//  |____/|_| |_|\__,_|\__,_|\___/ \_/\_/ |___/
+//
+
+$shadow-z-0: none;
+$shadow-z-1: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+$shadow-z-2: 0 6px 10px 0 rgba(0, 0, 0, 0.3);
+$shadow-z-3: 0 13px 25px 0 rgba(0, 0, 0, 0.3);
+$shadow-z-4: 0 20px 40px 0 rgba(0, 0, 0, 0.3);
+$shadow-z-5: 0 27px 55px 0 rgba(0, 0, 0, 0.3);

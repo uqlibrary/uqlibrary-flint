@@ -143,67 +143,16 @@
 
 </core-drawer-panel>
 
-<paper-action-dialog backdrop autoCloseDisabled layered="false" id="warning">
-  <h1>Cultural Sensitivity Warning</h1>
-  <p>We warn that there may be words and descriptions that may be culturally sensitive and which might not normally be used in certain public or community contexts. Terms and annotations that reflect the attitude of the author or the period in which the item was written, may be considered inappropriate today.</p>
-  <p>Please be aware that in some Aboriginal communities, hearing or seeing names or seeing images of deceased persons might cause sadness or distress, particularly to the relatives of these people. Aboriginal people may also have prohibitions in place on who may see certain records based on the age, or sacred or sensitive status of information in them, as it may relate to individuals of any particular Aboriginal group.</p>
-
-  <paper-button affirmative autofocus>Yes, I understand</paper-button>
-  <paper-button affirmative>No thanks</paper-button>
-</paper-action-dialog>
+<warn-dialog autoOpen cancelRedirectUrl="https://www.library.uq.edu.au/fryer-library/"></warn-dialog>
 
 <script>
 
   var previousAudioId = null;
   var currentAudioId = null;
-  var audioPlayer = document.querySelector('#audioPlayer');
+  var audioPlayer = null;
   document.addEventListener('polymer-ready', function(){
-
-    audioPlayer.addEventListener('x-audio-initialized', function() {
-      audioPlayer.play()
-    });
-
-    audioPlayer.addEventListener('x-audio-play', function() {
-      console.log(currentAudioId);
-      var _icon = document.getElementById(currentAudioId);
-      if(_icon) {
-        _icon.icon = 'av:pause-circle-outline';
-      }
-      previousAudioId = null;
-    });
-
-    audioPlayer.addEventListener('x-audio-pause', function() {
-      var _id = previousAudioId;
-      if(previousAudioId == null) {
-        _id = currentAudioId;
-      }
-
-      var _icon = document.getElementById(_id);
-      if(_icon) {
-        _icon.icon = 'av:play-circle-outline';
-      }
-    });
+    initAudioPlayer();
   });
-
-  function playRecord(sender, url) {
-    if(audioPlayer.src == url) {
-      if(audioPlayer.isPlaying) {
-        previousAudioId = currentAudioId;
-        audioPlayer.pause();
-      }
-      else {
-        audioPlayer.play();
-      }
-    }
-    audioPlayer.src = url;
-    if(sender) {
-      previousAudioId = currentAudioId;
-      currentAudioId = sender.getAttribute('id');
-    }
-  }
-
-
-
 
   function slideElements(name, type) {
     document.querySelector(name).classList.toggle(type);
@@ -248,6 +197,54 @@
   addEventListener('google-map-marker-click', function (e) {
     document.querySelector('#marker-info').openDrawer();
   });
+
+
+  function initAudioPlayer() {
+
+    audioPlayer = document.querySelector('#audioPlayer');
+
+    audioPlayer.addEventListener('x-audio-initialized', function() {
+      audioPlayer.play()
+    });
+
+    audioPlayer.addEventListener('x-audio-play', function() {
+      var _icon = document.getElementById(currentAudioId);
+      if(_icon) {
+        _icon.icon = 'av:pause-circle-outline';
+      }
+      previousAudioId = null;
+    });
+
+    audioPlayer.addEventListener('x-audio-pause', function() {
+      var _id = previousAudioId;
+      if(previousAudioId == null) {
+        _id = currentAudioId;
+      }
+      var _icon = document.getElementById(_id);
+      if(_icon) {
+        _icon.icon = 'av:play-circle-outline';
+      }
+    });
+  }
+  function playRecord(sender, url) {
+    if(audioPlayer != null) {
+      if(audioPlayer.src == url) {
+        if(audioPlayer.isPlaying) {
+          previousAudioId = currentAudioId;
+          audioPlayer.pause();
+        }
+        else {
+          audioPlayer.play();
+        }
+      }
+      audioPlayer.src = url;
+      if(sender) {
+        previousAudioId = currentAudioId;
+        currentAudioId = sender.getAttribute('id');
+      }
+    }
+  }
+
 
 </script>
 

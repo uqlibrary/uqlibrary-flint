@@ -119,17 +119,11 @@
           </div>
           <div flex>
             <img src="resources/images/list-sample.png" width="100%">
+             <core-icon-button id="audio-1" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3')"></core-icon-button >Record 1<br>
+             <core-icon-button  id="audio-2" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')"></core-icon-button>Record 2<br>
           </div>
           <div horizontal layout center-center id="player">
-            <div>
-              <paper-icon-button class="huge" icon="av:play-circle-outline" class="material-dark"></paper-icon-button>
-            </div>
-            <div flex>
-              <paper-slider></paper-slider>
-            </div>
-            <div>
-              <paper-icon-button icon="av:volume-down"></paper-icon-button>
-            </div>
+            <x-audio id="audioPlayer" showVolumeControls></x-audio>
           </div>
           <!--</div>-->
         </div>
@@ -159,6 +153,58 @@
 </paper-action-dialog>
 
 <script>
+
+  var previousAudioId = null;
+  var currentAudioId = null;
+  var audioPlayer = document.querySelector('#audioPlayer');
+  document.addEventListener('polymer-ready', function(){
+
+    audioPlayer.addEventListener('x-audio-initialized', function() {
+      audioPlayer.play()
+    });
+
+    audioPlayer.addEventListener('x-audio-play', function() {
+      console.log(currentAudioId);
+      var _icon = document.getElementById(currentAudioId);
+      if(_icon) {
+        _icon.icon = 'av:pause-circle-outline';
+      }
+      previousAudioId = null;
+    });
+
+    audioPlayer.addEventListener('x-audio-pause', function() {
+      var _id = previousAudioId;
+      if(previousAudioId == null) {
+        _id = currentAudioId;
+      }
+
+      var _icon = document.getElementById(_id);
+      if(_icon) {
+        _icon.icon = 'av:play-circle-outline';
+      }
+    });
+  });
+
+  function playRecord(sender, url) {
+    if(audioPlayer.src == url) {
+      if(audioPlayer.isPlaying) {
+        previousAudioId = currentAudioId;
+        audioPlayer.pause();
+      }
+      else {
+        audioPlayer.play();
+      }
+    }
+    audioPlayer.src = url;
+    if(sender) {
+      previousAudioId = currentAudioId;
+      currentAudioId = sender.getAttribute('id');
+    }
+  }
+
+
+
+
   function slideElements(name, type) {
     document.querySelector(name).classList.toggle(type);
   }

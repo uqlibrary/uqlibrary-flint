@@ -7,139 +7,141 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="icon" type="image/x-icon" href="resources/images/favicon.ico">
-  <script src="bower_components/webcomponentsjs/webcomponents.js"></script>
-
-  <link rel="import" href="components.html">
-  <link href="resources/theme/styles.css" rel="stylesheet">
+  <script src="../webcomponentsjs/webcomponents.js"></script>
+    <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized.html">
+  <!--<link href="resources/theme/styles.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
 </head>
 
-<body fullbleed unresolved onresize="drawerHeightFix()">
+<body fullbleed unresolved>
 
-<core-drawer-panel forceNarrow>
+<core-drawer-panel responsiveWidth="1500px">
+    <div drawer class="left-drawer">
+        <core-toolbar>
+            <div vertical layout>
+                <div horizontal layout>
+                    <div>
+                        <a href="http://www.uq.edu.au" class="uq-link"><img src="https://app.library.uq.edu.au/images/uq_theme/uq.png" id="mini-logo"></a>
+                        <a href="http://www.uq.edu.au"><img src="https://www.library.uq.edu.au/360Link/Current/uq-logo.svg" id="main-logo"></a>
+                        <a class="uq-library-header-logo" href="https://www.library.uq.edu.au">Library</a>
+                        <a class="uq-library-header-logo-mini" href="https://www.library.uq.edu.au">UQ Library</a>
+                    </div>
+                </div>
+                <div flex></div>
+            </div>
+        </core-toolbar>
 
-  <div drawer>
-    <div vertical layout id="account">
-      <div horizontal layout>
-        <div>
-          <a href="http://www.uq.edu.au" class="uq-link"><img src="https://app.library.uq.edu.au/images/uq_theme/uq.png" id="mini-logo"></a>
-          <a href="http://www.uq.edu.au"><img src="https://www.library.uq.edu.au/360Link/Current/uq-logo.svg" id="main-logo"></a>
-          <a class="uq-library-header-logo" href="https://www.library.uq.edu.au">Library</a>
-          <a class="uq-library-header-logo-mini" href="https://www.library.uq.edu.au">UQ Library</a>
-        </div>
-      </div>
-      <div flex></div>
+        <core-menu selectedAttribute="">
+            <paper-item on-tap="{{togglePage}}">
+                <core-icon icon="home"></core-icon>UQ Library</paper-item>
+            <paper-item>
+                <core-icon icon="info"></core-icon>About</paper-item>
+            <hr>
+            <paper-item>
+                <core-icon icon="help"></core-icon>Help &amp; Feedback</paper-item>
+        </core-menu>
 
     </div>
 
-    <core-menu selectedAttribute="">
-      <paper-item on-tap="{{togglePage}}">
-        <core-icon icon="home"></core-icon>UQ Library</paper-item>
-      <paper-item>
-        <core-icon icon="info"></core-icon>About</paper-item>
-
-      <!--<paper-item onclick="document.querySelector('#languages-facet').toggle();">-->
-      <!--<core-icon icon="language"></core-icon>Languages</paper-item>-->
-      <!--<core-collapse id="languages-facet">-->
-      <!--<div class="content">-->
-      <!--<div>-->
-      <!--<p>Language</p>-->
-      <!--<p>Language</p>-->
-      <!--<p>Language</p>-->
-      <!--<p>Language</p>-->
-      <!--<p>Language</p>-->
-      <!--<p>...</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</core-collapse>-->
-
-      <!--<paper-item onclick="document.querySelector('#interviewers-facet').toggle();">-->
-      <!--<core-icon icon="av:artist"></core-icon>Interviewees</paper-item>-->
-      <!--<core-collapse id="interviewers-facet">-->
-      <!--<div class="content">-->
-      <!--<div>-->
-      <!--<p>Interviewee</p>-->
-      <!--<p>Interviewee</p>-->
-      <!--<p>Interviewee</p>-->
-      <!--<p>Interviewee</p>-->
-      <!--<p>Interviewee</p>-->
-      <!--<p>...</p>-->
-      <!--</div>-->
-      <!--</div>-->
-      <!--</core-collapse>-->
-
-      <hr>
-
-      <paper-item>
-        <core-icon icon="help"></core-icon>Help &amp; Feedback</paper-item>
-
-    </core-menu>
-  </div>
-
-  <div main>
-    <template is="auto-binding">
-      <div id="clicker" on-tap="{{clickAction}}">
-        <core-toolbar>
-          <paper-icon-button icon="menu" core-drawer-toggle></paper-icon-button>
-          <div class="glow">
-            <a href="#" class="uq-header-links">Indigenous Voices</a>
-          </div>
-          <div flex>
-            <!--<paper-input-decorator label="Search for a language or speaker" id="searchInput">-->
-            <!--<input is="core-input">-->
-            <!--</paper-input-decorator>-->
-          </div>
-          <!--<paper-icon-button icon="search" id="search"></paper-icon-button>-->
-          <paper-icon-button icon="communication:clear-all" id="more" class="responsive-menu-icon"></paper-icon-button>
-        </core-toolbar>
-      </div>
-    </template>
-    <paper-tabs selected="0">
-      <paper-tab>Map</paper-tab>
-      <paper-tab>Languages</paper-tab>
-      <paper-tab>Voices</paper-tab>
-      <paper-tab>Search</paper-tab>
-    </paper-tabs>
-
-    <core-animated-pages selected="{{selected}}" transitions="slide-from-right">
-
-      <core-drawer-panel id="marker-info" rightDrawer responsiveWidth="1020px" drawerWidth="360px" disableSwipe="true">
-
-        <div drawer vertical layout>
-          <!--<div vertical layout>-->
-          <div horizontal layout center-center>
-            <div>
-              <core-icon class="huge sidebar-header-icon" icon="hardware:headset"></core-icon>
+    <core-drawer-panel main rightDrawer responsiveWidth="750px" drawerWidth="360px" disableSwipe>
+        <div drawer class="right-drawer">
+            <div horizontal layout center-center class="flint-item-info">
+                <div>
+                    <core-icon class="huge flint-header-icon" icon="hardware:headset"></core-icon>
+                </div>
+                <div flex>
+                    <h2 class="subhead">Guugu Yimithirr / Guugu Yimidhirr / Gugu Yimithirr / Kuku Yimidhirr</h2>
+                </div>
+                <div>
+                    <paper-icon-button icon="close" id="close-drawer" class="flint-responsive-menu-toggle-icon" onclick="closeDrawer()"></paper-icon-button>
+                </div>
             </div>
             <div flex>
-              <h1 class="sidebar-header">Alyawarr</h1>
+                <core-icon-button id="audio-1" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3')"></core-icon-button >Record 1<br>
+                <core-icon-button  id="audio-2" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')"></core-icon-button>Record 2<br>
             </div>
-            <div>
-              <paper-icon-button icon="close" id="close-drawer" class="responsive-menu-icon" onclick="closeDrawer()"></paper-icon-button>
+            <div horizontal layout center-center id="player">
+                <x-audio id="audioPlayer" showVolumeControls></x-audio>
             </div>
-          </div>
-          <div flex>
-            <img src="resources/images/list-sample.png" width="100%">
-             <core-icon-button id="audio-1" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3')"></core-icon-button >Record 1<br>
-             <core-icon-button  id="audio-2" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')"></core-icon-button>Record 2<br>
-          </div>
-          <div horizontal layout center-center id="player">
-            <x-audio id="audioPlayer" showVolumeControls></x-audio>
-          </div>
-          <!--</div>-->
         </div>
-
         <div main>
-          <google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6">
 
-            <!--<google-map-marker latitude="-19.265433" longitude="146.816289" clickEvents></google-map-marker>-->
-            <google-map-marker latitude="-21.392335" longitude="145.101973" clickEvents></google-map-marker>
+            <core-toolbar>
+                <paper-icon-button icon="menu" class="flint-responsive-menu-icon" onclick="closeMenu()"></paper-icon-button>
+                <div class="glow">
+                    <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
+                </div>
+            </core-toolbar>
 
-          </google-map>
+            <paper-tabs selected="0">
+                <paper-tab>Map</paper-tab>
+                <paper-tab>Languages</paper-tab>
+                <paper-tab>Voices</paper-tab>
+                <paper-tab>Search</paper-tab>
+            </paper-tabs>
+            <core-animated-pages selected="{{selected}}" transitions="slide-from-right">
+                <div>
+
+                    <!--<google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6">-->
+
+                        <!--<google-map-marker latitude="-19.265433" longitude="146.816289" clickEvents></google-map-marker>-->
+                        <!--<google-map-marker latitude="-21.392335" longitude="145.101973" clickEvents></google-map-marker>-->
+
+                    <!--</google-map>-->
+                    <div horizontal center-justified layout>
+                        <div>
+                            <div vertical layout style="height:500px">
+                                <div flex>
+                                    <div class="responsiveCard">
+                                            <div class="subhead cardSection cardTitle">&lt;!-- TODO: Uncomment the google map component here once it has been imported through uqlibrary-elements --></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div horizontal center-justified layout>
+                        <div>
+                            <div vertical layout style="height:500px">
+                                <div flex>
+                                    <div class="responsiveCard">
+                                        <div class="subhead cardSection cardTitle">&lt;!-- TODO: Add Languages Tab stuff --></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div horizontal center-justified layout>
+                        <div>
+                            <div vertical layout style="height:500px">
+                                <div flex>
+                                    <div class="responsiveCard">
+                                        <div class="subhead cardSection cardTitle">&lt;!-- TODO: Add Voices Tab stuff --></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div horizontal center-justified layout>
+                        <div>
+                            <div vertical layout style="height:500px">
+                                <div flex>
+                                    <div class="responsiveCard">
+                                        <div class="subhead cardSection cardTitle">&lt;!-- TODO: Add Search Tab stuff--></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </core-animated-pages>
         </div>
-      </core-drawer-panel>
-
-    </core-animated-pages>
-  </div>
+    </core-drawer-panel>
 
 </core-drawer-panel>
 
@@ -202,53 +204,24 @@
     }
   }
 
+  var tabs = document.querySelector('paper-tabs');
+  var pages = document.querySelector('core-animated-pages');
 
-
-
-  function slideElements(name, type) {
-    document.querySelector(name).classList.toggle(type);
-  }
+  tabs.addEventListener('core-select', function () {
+      pages.selected = tabs.selected;
+  });
 
   function closeDrawer() {
-    document.querySelector('#marker-info').togglePanel();
+      document.querySelector('core-drawer-panel [rightDrawer]').togglePanel();
   }
 
-  function clickAction(e) {
-    var t = e.target;
-    if (t.localName === 'core-toolbar') {
-      slideElements('#search', 'iconSlide');
-      slideElements('#searchInput', 'slideIn');
-    }
-
-    if (t.localName === 'paper-icon-button') {
-      if (t.id == "search") {
-        slideElements('#search', 'iconSlide');
-        slideElements('#searchInput', 'slideIn');
-      } else if (t.id == "more") {
-        document.querySelector('#marker-info').togglePanel();
-      }
-    }
+  function closeMenu() {
+      document.querySelector('core-drawer-panel').togglePanel();
   }
-
-  // temporary hack to get drawer height to equal visible height
-  function drawerHeightFix() {
-    var drawerHeight = document.querySelector('body').offsetHeight-110;
-    document.querySelector('#marker-info').style.height = (drawerHeight + "px");
-  }
-
-  addEventListener('template-bound', function (e) {
-    drawerHeightFix();
-    e.target.clickAction = clickAction;
-//          slideElements('#search', 'iconSlide');
-//          slideElements('#searchInput', 'slideIn');
-    //document.querySelector('#marker-info').openDrawer();
-//            document.querySelector('#warning').toggle();
-  });
 
   addEventListener('google-map-marker-click', function (e) {
-    document.querySelector('#marker-info').openDrawer();
+      closeDrawer();
   });
-
 </script>
 
 </body>

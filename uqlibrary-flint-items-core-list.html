@@ -184,10 +184,10 @@
 
         if (args && args.language) {
           this.language = args.language;
-          listTitle = this.language.title;
+          listTitle = this.language.cvo_title;
 
-          if (this.cacheData.languages[this.language.id]) {
-            items = this.cacheData.languages[this.language.id];
+          if (this.cacheData.languages[this.language.cvo_id]) {
+            items = this.cacheData.languages[this.language.cvo_id];
           } else {
             //get data from search api
             for(var i = 0; i < 10; i++){
@@ -206,14 +206,14 @@
               );
             }
             //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
-            this.cacheData.languages[this.language.id] = items;
+            this.cacheData.languages[this.language.cvo_id] = items;
           }
         } else if (args && args.voice) {
           this.voice = args.voice;
-          listTitle = this.voice.title;
+          listTitle = this.voice.cvo_title;
 
-          if (this.cacheData.voices[this.voice.id]) {
-            items = this.cacheData.voices[this.voice.id];
+          if (this.cacheData.voices[this.voice.cvo_id]) {
+            items = this.cacheData.voices[this.voice.cvo_id];
           } else {
             //get data from search api
             for (var i = 0; i < 10; i++) {
@@ -233,7 +233,7 @@
             }
           }
           //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
-          this.cacheData.voices[this.voice.id] = items;
+          this.cacheData.voices[this.voice.cvo_id] = items;
 
         } else if (args && args.searchTerm) {
           this.searchTerm = args.searchTerm;

@@ -2,9 +2,11 @@
 
 <template>
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
+  <uqlibrary-api-flint-voices id="voicesApiElement"></uqlibrary-api-flint-voices>
+  <uqlibrary-api-flint-languages id="languagesApiElement"></uqlibrary-api-flint-languages>
 
   <ul class="single-line-list">
-    <core-list id="itemsList" fit on-core-activate="{{itemSelected}}">
+    <core-list id="itemsList" fit on-core-activate="{{itemSelected}}" data="{{items}}" groups="{{groups}}">
       <template>
 
         <li class="list-item header" divider>
@@ -15,10 +17,10 @@
           <div class="content" relative horizontal layout>
             <paper-ripple fit></paper-ripple>
             <div flex>
-              <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
+              <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.cvo_title}}</uqlibrary-a11y-link>
             </div>
             <div>
-              ({{model.count}})
+              ({{model.cvo_count}})
             </div>
           </div>
         </li>
@@ -32,91 +34,33 @@
     Polymer('uqlibrary-flint-categories-list', {
 
       ready: function() {
-        this.currentItemRow = null;
+        var that = this;
 
         this.items = null;
         this.groups = null;
+
+        this.$.languagesApiElement.addEventListener("uqlibrary-api-flint-languages-loaded", function(data){
+          that.items = data.detail.items;
+          that.groups = data.detail.groups;
+        });
+
+        this.$.voicesApiElement.addEventListener("uqlibrary-api-flint-voices-loaded", function(data){
+          that.items = data.detail.items;
+          that.groups = data.detail.groups;
+        });
       },
 
       setData: function(args) {
 
         if (args && args.displayLanguages) {
-
           if (!this.items) {
-            this.items = [];
-            //create test data for languages and voices
-            for (var i = 0; i < 10; i++) {
-              this.items.push(
-                      {
-                        id: "re" + i,
-                        title: (i % 3) + " Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
-                        count: i * 3
-                      }
-              );
-            }
-
-            this.groups =
-                    [
-                      {
-                        length: 2,
-                        data: {
-                          label: 'A'
-                        }
-                      },
-                      {
-                        length: 3,
-                        data: {
-                          label: 'B'
-                        }
-                      },
-                      {
-                        length: 5,
-                        data: {
-                          label: 'C'
-                        }
-                      }
-                    ];
+            this.$.languagesApiElement.get();
           }
         } else if (args && args.displayVoices){
           if (!this.items) {
-            this.items = [];
-            //create test data for languages and voices
-            for (var i = 0; i < 10; i++) {
-              this.items.push(
-                      {
-                        id: "re" + i,
-                        title: (i % 3) + " Jack Conway",
-                        count: i * 2
-                      }
-              );
-            }
-
-            this.groups =
-                    [
-                      {
-                        length: 2,
-                        data: {
-                          label: 'A'
-                        }
-                      },
-                      {
-                        length: 3,
-                        data: {
-                          label: 'B'
-                        }
-                      },
-                      {
-                        length: 5,
-                        data: {
-                          label: 'C'
-                        }
-                      }
-                    ];
+            this.$.voicesApiElement.get();
           }
         }
-
-        this.$.itemsList.data = this.items;
-        this.$.itemsList.groups = this.groups;
       },
 
       itemSelected: function(event, itemRow, list) {

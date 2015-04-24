@@ -1,0 +1,242 @@
+<polymer-element name="uqlibrary-flint-items-core-list" fit vertical layout>
+
+<template>
+  <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
+
+  <style>
+
+    .three-line-icon-list .list-item.expanded {
+      height: 560px !important;
+    }
+
+  </style>
+
+  <ul class="three-line-icon-list">
+
+    <core-list id="itemsList" fit on-core-activate="{{itemSelected}}">
+      <template>
+
+        <li class="list-item header" divider horizontal layout center-center>
+
+          <div class="avatar">
+            <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
+          </div>
+
+          <div flex>
+            {{groupModel.label}}
+          </div>
+
+          <div>
+            <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
+          </div>
+
+        </li>
+
+        <li class="list-item border" data-index="{{index}}">
+
+          <div class="avatar">
+            <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
+              <core-icon-button aria-label="Play audio of {{model.title}}" data-index="{{index}}" icon="av:play-circle-outline" data-title="{{model.title}}" data-mp3="{{model.mp3}}"></core-icon-button>
+            </uqlibrary-a11y-link>
+          </div>
+
+          <div class="content" relative>
+
+            <paper-ripple fit></paper-ripple>
+
+            <div class="line1">
+              <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
+              <div style="float:right;">
+                <core-icon icon="expand-more" hidden?="{{model.showMore}}"></core-icon>
+                <core-icon icon="expand-less" hidden?="{{!model.showMore}}"></core-icon>
+              </div>
+            </div>
+
+            <div class="line2" hidden?="{{model.showMore}}">
+              <template if={{voice}}>{{model.language}}</template>
+              <template if={{searchTerm}}>{{model.language}}</template>
+              <template if={{language}}>by {{model.voice}}</template>
+            </div>
+
+            <div class="line3" hidden?="{{model.showMore}}">
+              <template if={{searchTerm}}>by {{model.voice}}</template>
+            </div>
+
+          </div>
+
+          <core-collapse id="itemDetailsCollapse" data-index="{{index}}">
+              <uqlibrary-flint-item item="{{model}}" on-tap="{{keepItemDetailsOpen}}" hidden?="{{!model.showMore}}"></uqlibrary-flint-item>
+          </core-collapse>
+
+        </li>
+      </template>
+    </core-list>
+  </ul>
+</template>
+
+<script>
+  (function() {
+    Polymer('uqlibrary-flint-items-core-list', {
+
+      ready: function() {
+        this.elementDetails = document.createElement('uqlibrary-flint-item');
+        this.currentItemRow = null;
+
+        this.language = 'Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj';
+        this.voice = '';
+        this.searchTerm = '';
+
+        var items = [];
+
+        for(var i = 0; i <= 5; i++){
+          items.push(
+            {
+              id: "re" + i,
+              title: "Translation of 'head' " + i,
+              voice: "Jack Johnson",
+              interviewer: "Flint, Elwyn Henry",
+              language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+              length: "1m 30s",
+              transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+              record: "https://espace.library.uq.edu.au/view/UQ:353892",
+              mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
+            }
+          );
+        }
+
+        //maybe store items for language/voice if search has been done before, and retrieve items locally
+        this.data = {
+          languages : {},
+          voices: {}
+        };
+
+        this.$.itemsList.data = items;
+        this.$.itemsList.groups = [
+          {
+            length: items.length,
+            data: {
+              label: this.language
+            }
+          }
+        ];
+      },
+
+      keepItemDetailsOpen: function(e, data, source) {
+        this.skipItemSelected = true;
+      },
+
+      itemSelected: function(event, itemRow, list) {
+        //do not close item details if user clicks on item details area
+        if (this.skipItemSelected){
+          this.skipItemSelected = false;
+          return;
+        }
+
+        var collapseSection = itemRow.item.querySelector("#itemDetailsCollapse");
+        if (!collapseSection.opened) {
+          itemRow.item.setAttribute("class", "list-item border expanded");
+          itemRow.data.showMore = true;
+        } else {
+          itemRow.item.setAttribute("class", "list-item border");
+          itemRow.data.showMore = false;
+        }
+
+        collapseSection.toggle();
+        this.$.itemsList.updateSize();
+      },
+
+      itemSelectedKeyPressed: function(source) {
+        if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
+          this.skipItemSelected = false;
+
+          var itemIndex = source.path[0].attributes["data-index"].value;
+          this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[3] }, null);
+        }
+      },
+
+      playRecord: function(source) {
+        //event can be triggered by keyboard or mouse, process event for either
+        if (source.path && source.path.length > 0 && source.path[0].tagName.toLowerCase() === "core-icon-button") {
+          //do not open/close item details on play/pause
+          this.skipItemSelected = true;
+          this.fire("play-record-clicked", source.path[0]);
+        } else if (source.path && source.path.length > 0 && source.path[0].children
+                && source.path[0].children[0].tagName.toLowerCase() === "core-icon-button") {
+          //do not open/close item details on play/pause
+          this.skipItemSelected = true;
+          this.fire("play-record-clicked", source.path[0].children[0]);
+        }
+      },
+
+      closeButtonHandler: function(e) {
+        //do not open/close item details on close
+        this.skipItemSelected = true;
+        this.fire("close-button-clicked", { });
+      }
+
+//      setData: function(args) {
+//        this.language = '';
+//        this.voice = '';
+//        this.searchTerm = '';
+//
+//        if (args && args.language) {
+//          this.language = args.language;
+//
+//          if (this.data.languages[this.language.id]) {
+//            this.items = this.data.languages[this.language.id];
+//          } else {
+//            //get data from search api
+//
+//            //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
+//            this.data.languages[this.language.id] = this.items;
+//          }
+//        } else if (args && args.voice) {
+//          this.voice = args.voice;
+//
+//          //save data etc...
+//        } else if (args && args.searchTerm) {
+//          this.searchTerm = args.searchTerm;
+//
+//          //save data etc...
+//        }
+//      },
+//
+//      getItem: function(itemId) {
+//        var itemDetails = this.itemsList.filter(function(item){
+//          return item.id == itemId;
+//        });
+//        itemDetails = itemDetails.length == 1 ? itemDetails[0] : null;
+//
+//        return itemDetails;
+//      },
+//
+//      selectItem: function(e, data, sender) {
+//        var itemDetails = this.getItem(sender.getAttribute("data-id"));
+//
+//        if(!itemDetails)
+//          return;
+//
+//        var collapseSection = sender.parentNode.querySelector("#collapse");
+//
+//        if (!collapseSection.opened) {
+//          //append item details if it hasn't been added yet
+//          var currentItemDetails = collapseSection.querySelector('uqlibrary-flint-item');
+//          if (!currentItemDetails) {
+//            this.elementDetails.setData(itemDetails);
+//            collapseSection.appendChild(this.elementDetails);
+//          }
+//        }
+//
+//        collapseSection.toggle();
+//      },
+//
+//      playSelectedItem: function(e, data, sender) {
+//        var itemDetails = this.getItem(sender.getAttribute("data-id"));
+//
+//        if(!itemDetails)
+//          return;
+//      }
+    });
+  })();
+</script>
+</polymer-element>

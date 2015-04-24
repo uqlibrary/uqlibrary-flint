@@ -1,0 +1,248 @@
+<link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
+<link rel="import" href="uqlibrary-flint-items-core-list.html">
+<link rel="import" href="uqlibrary-flint-item.html">
+<link rel="import" href="uqlibrary-flint-warning-dialog.html">
+
+<polymer-element name="uqlibrary-flint">
+
+  <template>
+    <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css" shim-shadowdom>
+
+    <uqlibrary-ga id="ga" appName="FlintCollection"></uqlibrary-ga>
+    <uqlibrary-api-account id="account"></uqlibrary-api-account>
+
+    <core-drawer-panel id="outerDrawerPanel" responsiveWidth="1500px">
+      <div drawer class="left-drawer">
+
+        <!-- TODO: refactor uqlibrary-menu to take a json file to display menu, anonymous user, etc -->
+        <uqlibrary-menu account="{{user}}"></uqlibrary-menu>
+
+        <!--<core-toolbar>-->
+        <!--<div vertical layout>-->
+        <!--<div horizontal layout>-->
+        <!--<div>-->
+        <!--<a href="http://www.uq.edu.au" class="uq-link"><img src="https://app.library.uq.edu.au/images/uq_theme/uq.png" id="mini-logo"></a>-->
+        <!--<a href="http://www.uq.edu.au"><img src="https://www.library.uq.edu.au/360Link/Current/uq-logo.svg" id="main-logo"></a>-->
+        <!--<a class="uq-library-header-logo" href="https://www.library.uq.edu.au">Library</a>-->
+        <!--<a class="uq-library-header-logo-mini" href="https://www.library.uq.edu.au">UQ Library</a>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div flex></div>-->
+        <!--</div>-->
+        <!--</core-toolbar>-->
+
+        <!--<core-menu selectedAttribute="">-->
+        <!--<paper-item>-->
+        <!--<core-icon icon="home"></core-icon>UQ Library</paper-item>-->
+        <!--<paper-item>-->
+        <!--<core-icon icon="info"></core-icon>About</paper-item>-->
+        <!--<hr>-->
+        <!--<paper-item>-->
+        <!--<core-icon icon="help"></core-icon>Help &amp; Feedback</paper-item>-->
+        <!--</core-menu>-->
+
+      </div>
+
+      <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="750px" drawerWidth="360px"
+                         disableSwipe>
+        <div id="itemDetailDrawer" drawer class="right-drawer">
+          <uqlibrary-flint-items-core-list id="itemsListElement"
+                                           on-close-button-clicked="{{toggleItemDetailsDrawer}}"
+                                           on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
+        </div>
+        <div main>
+          <core-toolbar>
+            <paper-icon-button icon="menu" class="flint-responsive-menu-icon"
+                               on-click="{{toggleMenuDrawer}}"></paper-icon-button>
+            <div class="glow">
+              <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
+            </div>
+          </core-toolbar>
+
+          <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
+            <paper-tab data-selected-section="mapSection">
+              <uqlibrary-a11y-link>Map</uqlibrary-a11y-link>
+            </paper-tab>
+            <paper-tab data-selected-section="languageSection">
+              <uqlibrary-a11y-link>Languages</uqlibrary-a11y-link>
+            </paper-tab>
+            <paper-tab data-selected-section="voicesSection">
+              <uqlibrary-a11y-link>Voices</uqlibrary-a11y-link></paper-tab>
+            <paper-tab data-selected-section="searchSection">
+              <uqlibrary-a11y-link>Search</uqlibrary-a11y-link></paper-tab>
+          </paper-tabs>
+
+          <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
+                               transitions="slide-from-right">
+            <section id="mapDisplaySection" data-selected-section="mapSection">
+
+              <!--<google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6">-->
+
+              <!--<google-map-marker latitude="-19.265433" longitude="146.816289" clickEvents></google-map-marker>-->
+              <!--<google-map-marker latitude="-21.392335" longitude="145.101973" clickEvents></google-map-marker>-->
+
+              <!--</google-map>-->
+
+              <div vertical layout>
+                <div class="responsiveCard">
+
+                  <div class="subhead cardSection cardTitle">
+                    TODO: Uncomment the google map component here once it has been imported through uqlibrary-elements
+                  </div>
+
+                  <a href="#" on-click="{{toggleItemDetailsDrawer}}">Open drawer</a>
+
+                  <x-audio id="audioPlayer" showVolumeControls showName></x-audio>
+
+                </div>
+              </div>
+            </section>
+
+            <section id="languageListSection" data-selected-section="languageSection">
+              <div vertical layout>
+                <div class="responsiveCard">
+                  <div class="subhead cardSection cardTitle">TODO: Add Languages Tab stuff</div>
+                  languages list goes here...<br/>
+                  languages list goes here...<br/>
+                  languages list goes here...<br/>
+                  languages list goes here...<br/>
+                  languages list goes here...<br/>
+                  languages list goes here...<br/>
+                </div>
+              </div>
+            </section>
+            <section id="voiceListSection" data-selected-section="voicesSection">
+              <div vertical layout>
+                <div class="responsiveCard">
+                  <div class="subhead cardSection cardTitle">TODO: Add Voices Tab stuff</div>
+                  voice list goes here...<br/>
+                  voice list goes here...<br/>
+                  voice list goes here...<br/>
+                  voice list goes here...<br/>
+                  voice list goes here...<br/>
+                </div>
+              </div>
+            </section>
+            <section id="searchSection" data-selected-section="searchSection">
+              <div vertical layout>
+                <div class="responsiveCard">
+                  <div class="subhead cardSection cardTitle">TODO: Add Search Tab stuff</div>
+                  search results list goes here...<br/>
+                  search results list goes here...<br/>
+                  search results list goes here...<br/>
+                  search results list goes here...<br/>
+                  search results list goes here...<br/>
+                </div>
+              </div>
+            </section>
+          </core-animated-pages>
+
+        </div>
+      </core-drawer-panel>
+
+    </core-drawer-panel>
+
+    <uqlibrary-flint-warning-dialog autoOpen
+                                    cancelRedirectUrl="https://www.library.uq.edu.au/fryer-library/"></uqlibrary-flint-warning-dialog>
+
+  </template>
+
+  <script>
+
+    (function () {
+      Polymer('uqlibrary-flint', {
+
+        // Accessibility issues fixes
+        keyboardNavigationKeys: 'space enter',
+        a11yKeyPressed: function (source, event) {
+          if (source.path && source.path.length > 0 && source.path[0].target) {
+            source.path[0].target.fire("tap");
+          }
+        },
+
+        ready: function () {
+          var that = this;
+
+          this.previousPlayRecordButton = null;
+          this.currentPlayRecordButton = null;
+
+          this.$.account.addEventListener('uqlibrary-api-account-loaded', this.accountLoaded);
+          this.$.account.get();
+
+          //setup audio player
+          this.$.audioPlayer.addEventListener('x-audio-initialized', function() {
+            console.log("x-audio-initialized");
+
+            that.$.audioPlayer.play();
+          });
+
+          this.$.audioPlayer.addEventListener('x-audio-play', function() {
+            console.log("x-audio-play");
+
+            if(that.previousPlayRecordButton) {
+              that.previousPlayRecordButton.icon = 'av:play-circle-outline';
+            }
+
+            if(that.currentPlayRecordButton) {
+              that.currentPlayRecordButton.icon = 'av:pause-circle-outline';
+            }
+
+            that.previousPlayRecordButton = that.currentPlayRecordButton;
+          });
+
+          this.$.audioPlayer.addEventListener('x-audio-pause', function() {
+            console.log("x-audio-pause");
+
+            if(that.previousPlayRecordButton) {
+              that.previousPlayRecordButton.icon = 'av:play-circle-outline';
+            }
+
+            if(that.currentPlayRecordButton) {
+              that.currentPlayRecordButton.icon = 'av:play-circle-outline';
+            }
+
+            that.previousPlayRecordButton = that.currentPlayRecordButton;
+          });
+
+        },
+
+        toggleItemDetailsDrawer: function () {
+          this.$.innerDrawerPanel.togglePanel();
+        },
+
+        toggleMenuDrawer: function () {
+          this.$.outerDrawerPanel.togglePanel();
+        },
+
+        playRecord : function(event, data, source) {
+
+          this.currentPlayRecordButton = data;
+
+          var audioFile = data.getAttribute("data-mp3");
+          var audioFileName = data.getAttribute("data-title");
+
+          console.log("playRecord: " + audioFileName);
+
+          if (this.$.audioPlayer.name === audioFileName && this.$.audioPlayer.src === audioFile) {
+            console.log("> togglePlay");
+            this.$.audioPlayer.togglePlay();
+          } else {
+            console.log("> new file");
+            this.$.audioPlayer.src = audioFile;
+            this.$.audioPlayer.name = audioFileName;
+          }
+        },
+
+        accountLoaded: function (e) {
+          var that = document.querySelector('uqlibrary-flint');
+
+          if (e.detail.hasSession) {
+            that.user = e.detail;
+          }
+        }
+
+      })
+    })();
+  </script>
+
+</polymer-element>

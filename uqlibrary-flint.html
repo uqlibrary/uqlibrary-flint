@@ -1,5 +1,6 @@
 <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
 <link rel="import" href="uqlibrary-flint-items-core-list.html">
+<link rel="import" href="uqlibrary-flint-categories-list.html">
 <link rel="import" href="uqlibrary-flint-item.html">
 <link rel="import" href="uqlibrary-flint-warning-dialog.html">
 
@@ -50,7 +51,7 @@
                                            on-close-button-clicked="{{toggleItemDetailsDrawer}}"
                                            on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
         </div>
-        <div main>
+        <div main layout vertical relative>
           <core-toolbar>
             <paper-icon-button icon="menu" class="flint-responsive-menu-icon"
                                on-click="{{toggleMenuDrawer}}"></paper-icon-button>
@@ -73,7 +74,7 @@
           </paper-tabs>
 
           <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
-                               transitions="slide-from-right">
+                               transitions="slide-from-right" flex>
             <section id="mapDisplaySection" data-selected-section="mapSection">
 
               <!--<google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6">-->
@@ -97,43 +98,27 @@
                 </div>
               </div>
             </section>
-
             <section id="languageListSection" data-selected-section="languageSection">
-              <div vertical layout>
-                <div class="responsiveCard">
-                  <div class="subhead cardSection cardTitle">TODO: Add Languages Tab stuff</div>
-                  languages list goes here...<br/>
-                  languages list goes here...<br/>
-                  languages list goes here...<br/>
-                  languages list goes here...<br/>
-                  languages list goes here...<br/>
-                  languages list goes here...<br/>
-                </div>
-              </div>
+              <uqlibrary-flint-categories-list id="languagesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
             </section>
             <section id="voiceListSection" data-selected-section="voicesSection">
-              <div vertical layout>
-                <div class="responsiveCard">
-                  <div class="subhead cardSection cardTitle">TODO: Add Voices Tab stuff</div>
-                  voice list goes here...<br/>
-                  voice list goes here...<br/>
-                  voice list goes here...<br/>
-                  voice list goes here...<br/>
-                  voice list goes here...<br/>
-                </div>
-              </div>
+              <uqlibrary-flint-categories-list id="voicesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
             </section>
             <section id="searchSection" data-selected-section="searchSection">
-              <div vertical layout>
-                <div class="responsiveCard">
-                  <div class="subhead cardSection cardTitle">TODO: Add Search Tab stuff</div>
-                  search results list goes here...<br/>
-                  search results list goes here...<br/>
-                  search results list goes here...<br/>
-                  search results list goes here...<br/>
-                  search results list goes here...<br/>
-                </div>
-              </div>
+
+              <uqlibrary-flint-items-core-list id="searchResultsListElement"
+                                               on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
+
+              <!--<div vertical layout>-->
+                <!--<div class="responsiveCard">-->
+                  <!--<div class="subhead cardSection cardTitle">TODO: Add Search Tab stuff</div>-->
+                  <!--search results list goes here...<br/>-->
+                  <!--search results list goes here...<br/>-->
+                  <!--search results list goes here...<br/>-->
+                  <!--search results list goes here...<br/>-->
+                  <!--search results list goes here...<br/>-->
+                <!--</div>-->
+              <!--</div>-->
             </section>
           </core-animated-pages>
 
@@ -203,7 +188,6 @@
 
             that.previousPlayRecordButton = that.currentPlayRecordButton;
           });
-
         },
 
         toggleItemDetailsDrawer: function () {
@@ -239,8 +223,44 @@
           if (e.detail.hasSession) {
             that.user = e.detail;
           }
-        }
+        },
 
+        currentSectionChanged : function(oldValue, newValue){
+          switch(this.currentSection) {
+            case "languageSection":
+              //setup languages list
+              this.$.languagesList.setData({ displayLanguages: true });
+              break;
+            case "voicesSection":
+              //setup voices list
+              this.$.voicesList.setData({ displayVoices: true });
+              break;
+            case "mapSection":
+              //setup map
+              console.log("mapSection selected");
+              break;
+            case "searchSection":
+              //close right panel when search is displayed - something like that, but nicer
+              //this.$.itemDetailDrawer.setAttribute("hidden", "true");
+              this.$.searchResultsListElement.setData({searchTerm: "river"});
+              //setup search
+              console.log("searchSection selected");
+              break;
+          }
+        },
+
+        categorySelected: function(e) {
+          switch(this.currentSection) {
+            case "languageSection":
+              this.$.itemsListElement.setData( { language: e.detail });
+              this.toggleItemDetailsDrawer();
+              break;
+            case "voicesSection":
+              this.$.itemsListElement.setData( { voice: e.detail });
+              this.toggleItemDetailsDrawer();
+              break;
+          }
+        }
       })
     })();
   </script>

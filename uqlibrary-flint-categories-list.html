@@ -1,0 +1,137 @@
+<polymer-element name="uqlibrary-flint-categories-list" fit vertical layout>
+
+<template>
+  <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
+
+  <ul class="single-line-list">
+    <core-list id="itemsList" fit on-core-activate="{{itemSelected}}">
+      <template>
+
+        <li class="list-item header" divider>
+            {{groupModel.label}}
+        </li>
+
+        <li class="list-item" data-index="{{index}}">
+          <div class="content" relative horizontal layout>
+            <paper-ripple fit></paper-ripple>
+            <div flex>
+              <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
+            </div>
+            <div>
+              ({{model.count}})
+            </div>
+          </div>
+        </li>
+      </template>
+    </core-list>
+  </ul>
+</template>
+
+<script>
+  (function() {
+    Polymer('uqlibrary-flint-categories-list', {
+
+      ready: function() {
+        this.currentItemRow = null;
+
+        this.items = null;
+        this.groups = null;
+      },
+
+      setData: function(args) {
+
+        if (args && args.displayLanguages) {
+
+          if (!this.items) {
+            this.items = [];
+            //create test data for languages and voices
+            for (var i = 0; i < 10; i++) {
+              this.items.push(
+                      {
+                        id: "re" + i,
+                        title: (i % 3) + " Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+                        count: i * 3
+                      }
+              );
+            }
+
+            this.groups =
+                    [
+                      {
+                        length: 2,
+                        data: {
+                          label: 'A'
+                        }
+                      },
+                      {
+                        length: 3,
+                        data: {
+                          label: 'B'
+                        }
+                      },
+                      {
+                        length: 5,
+                        data: {
+                          label: 'C'
+                        }
+                      }
+                    ];
+          }
+        } else if (args && args.displayVoices){
+          if (!this.items) {
+            this.items = [];
+            //create test data for languages and voices
+            for (var i = 0; i < 10; i++) {
+              this.items.push(
+                      {
+                        id: "re" + i,
+                        title: (i % 3) + " Jack Conway",
+                        count: i * 2
+                      }
+              );
+            }
+
+            this.groups =
+                    [
+                      {
+                        length: 2,
+                        data: {
+                          label: 'A'
+                        }
+                      },
+                      {
+                        length: 3,
+                        data: {
+                          label: 'B'
+                        }
+                      },
+                      {
+                        length: 5,
+                        data: {
+                          label: 'C'
+                        }
+                      }
+                    ];
+          }
+        }
+
+        this.$.itemsList.data = this.items;
+        this.$.itemsList.groups = this.groups;
+      },
+
+      itemSelected: function(event, itemRow, list) {
+        this.fire("category-selected", itemRow.data);
+      },
+
+      itemSelectedKeyPressed: function(source) {
+        if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
+          this.skipItemSelected = false;
+
+          var itemIndex = source.path[0].attributes["data-index"].value;
+          this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[3] }, null);
+        }
+      }
+    });
+  })();
+</script>
+</polymer-element>

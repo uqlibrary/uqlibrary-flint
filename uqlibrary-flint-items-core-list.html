@@ -86,6 +86,11 @@
         this.voice = '';
         this.searchTerm = '';
 
+        this.cacheData = {
+          languages : {},
+          voices: {}
+        };
+
         var items = [];
 
         for(var i = 0; i <= 5; i++){
@@ -103,12 +108,6 @@
             }
           );
         }
-
-        //maybe store items for language/voice if search has been done before, and retrieve items locally
-        this.data = {
-          languages : {},
-          voices: {}
-        };
 
         this.$.itemsList.data = items;
         this.$.itemsList.groups = [
@@ -172,34 +171,103 @@
         //do not open/close item details on close
         this.skipItemSelected = true;
         this.fire("close-button-clicked", { });
+      },
+
+      setData: function(args) {
+
+        this.language = '';
+        this.voice = '';
+        this.searchTerm = '';
+
+        var items = [];
+        var listTitle = '';
+
+        if (args && args.language) {
+          this.language = args.language;
+          listTitle = this.language.title;
+
+          if (this.cacheData.languages[this.language.id]) {
+            items = this.cacheData.languages[this.language.id];
+          } else {
+            //get data from search api
+            for(var i = 0; i < 10; i++){
+              items.push(
+                      {
+                        id: "re " + new Date(),
+                        title: "Translation of 'head' " + + new Date(),
+                        voice: "Jack Johnson",
+                        interviewer: "Flint, Elwyn Henry",
+                        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+                        length: "1m 30s",
+                        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+                        record: "https://espace.library.uq.edu.au/view/UQ:353892",
+                        mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
+                      }
+              );
+            }
+            //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
+            this.cacheData.languages[this.language.id] = items;
+          }
+        } else if (args && args.voice) {
+          this.voice = args.voice;
+          listTitle = this.voice.title;
+
+          if (this.cacheData.voices[this.voice.id]) {
+            items = this.cacheData.voices[this.voice.id];
+          } else {
+            //get data from search api
+            for (var i = 0; i < 10; i++) {
+              items.push(
+                      {
+                        id: "re " + new Date(),
+                        title: "Translation of 'head' " + new Date(),
+                        voice: "Jack Johnson" + new Date(),
+                        interviewer: "Flint, Elwyn Henry",
+                        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+                        length: "1m 30s",
+                        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+                        record: "https://espace.library.uq.edu.au/view/UQ:353892",
+                        mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
+                      }
+              );
+            }
+          }
+          //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
+          this.cacheData.voices[this.voice.id] = items;
+
+        } else if (args && args.searchTerm) {
+          this.searchTerm = args.searchTerm;
+          listTitle = "Search results for: " + this.searchTerm;
+
+          //get data from search api
+          for(var i = 0; i < 30; i++){
+            items.push(
+                    {
+                      id: "re " + new Date(),
+                      title: "Translation of 'head' " + + new Date(),
+                      voice: "Jack Johnson",
+                      interviewer: "Flint, Elwyn Henry",
+                      language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+                      length: "1m 30s",
+                      transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+                      record: "https://espace.library.uq.edu.au/view/UQ:353892",
+                      mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
+                    }
+            );
+          }
+        }
+
+        this.$.itemsList.data = items;
+        this.$.itemsList.groups = [
+          {
+            length: items.length,
+            data: {
+              label: listTitle
+            }
+          }
+        ];
       }
 
-//      setData: function(args) {
-//        this.language = '';
-//        this.voice = '';
-//        this.searchTerm = '';
-//
-//        if (args && args.language) {
-//          this.language = args.language;
-//
-//          if (this.data.languages[this.language.id]) {
-//            this.items = this.data.languages[this.language.id];
-//          } else {
-//            //get data from search api
-//
-//            //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
-//            this.data.languages[this.language.id] = this.items;
-//          }
-//        } else if (args && args.voice) {
-//          this.voice = args.voice;
-//
-//          //save data etc...
-//        } else if (args && args.searchTerm) {
-//          this.searchTerm = args.searchTerm;
-//
-//          //save data etc...
-//        }
-//      },
 //
 //      getItem: function(itemId) {
 //        var itemDetails = this.itemsList.filter(function(item){

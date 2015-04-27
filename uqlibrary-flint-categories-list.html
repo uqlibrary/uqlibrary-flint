@@ -34,10 +34,10 @@
     Polymer('uqlibrary-flint-categories-list', {
 
       ready: function() {
-        var that = this;
-
         this.items = null;
         this.groups = null;
+
+        var that = this;
 
         this.$.languagesApiElement.addEventListener("uqlibrary-api-flint-languages-loaded", function(data){
           that.items = data.detail.items;
@@ -51,13 +51,23 @@
       },
 
       setData: function(args) {
-
         if (args && args.displayLanguages) {
-          if (!this.items) {
+          if (args.items && args.groups) {
+            //set data passed as a parameter
+            this.items = args.items;
+            this.groups = args.groups;
+          }
+          else if (!this.items) {
+            //get data from api if no data has been passed
             this.$.languagesApiElement.get();
           }
         } else if (args && args.displayVoices){
-          if (!this.items) {
+          if (args.items && args.groups) {
+            //set data passed as a parameter
+            this.items = args.items;
+            this.groups = args.groups;
+          }else if (!this.items) {
+            //get data from api if no data has been passed
             this.$.voicesApiElement.get();
           }
         }
@@ -69,8 +79,6 @@
 
       itemSelectedKeyPressed: function(source) {
         if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
-          this.skipItemSelected = false;
-
           var itemIndex = source.path[0].attributes["data-index"].value;
           this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[3] }, null);
         }

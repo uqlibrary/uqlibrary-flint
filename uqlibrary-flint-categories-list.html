@@ -3,8 +3,7 @@
 
 <template>
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
-  <uqlibrary-api-flint-voices id="voicesApiElement"></uqlibrary-api-flint-voices>
-  <uqlibrary-api-flint-languages id="languagesApiElement"></uqlibrary-api-flint-languages>
+  <uqlibrary-api-flint-categories id="categoriesApiElement"></uqlibrary-api-flint-categories>
 
   <ul class="single-line-list">
     <core-list id="itemsList" fit on-core-activate="{{itemSelected}}" data="{{items}}" groups="{{groups}}">
@@ -21,7 +20,7 @@
               <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.cvo_title}}</uqlibrary-a11y-link>
             </div>
             <div>
-              ({{model.cvo_count}})
+              ({{model.record_count}})
             </div>
           </div>
         </li>
@@ -40,12 +39,7 @@
 
         var that = this;
 
-        this.$.languagesApiElement.addEventListener("uqlibrary-api-flint-languages-loaded", function(data){
-          that.items = data.detail.items;
-          that.groups = data.detail.groups;
-        });
-
-        this.$.voicesApiElement.addEventListener("uqlibrary-api-flint-voices-loaded", function(data){
+        this.$.categoriesApiElement.addEventListener("uqlibrary-api-flint-categories-loaded", function(data){
           that.items = data.detail.items;
           that.groups = data.detail.groups;
         });
@@ -60,7 +54,7 @@
           }
           else if (!this.items) {
             //get data from api if no data has been passed
-            this.$.languagesApiElement.get();
+            this.$.categoriesApiElement.get({getLanguages : true });
           }
         } else if (args && args.displayVoices){
           if (args.items) {
@@ -69,7 +63,7 @@
             this.groups = args.groups;
           }else if (!this.items) {
             //get data from api if no data has been passed
-            this.$.voicesApiElement.get();
+            this.$.categoriesApiElement.get({getVoices : true });
           }
         }
       },

@@ -10,38 +10,10 @@
     <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css" shim-shadowdom>
 
     <uqlibrary-ga id="ga" appName="FlintCollection"></uqlibrary-ga>
-    <uqlibrary-api-account id="account"></uqlibrary-api-account>
 
     <core-drawer-panel id="outerDrawerPanel" responsiveWidth="1500px">
       <div drawer class="left-drawer">
-
-        <!-- TODO: refactor uqlibrary-menu to take a json file to display menu, anonymous user, etc -->
-        <uqlibrary-menu account="{{user}}"></uqlibrary-menu>
-
-        <!--<core-toolbar>-->
-        <!--<div vertical layout>-->
-        <!--<div horizontal layout>-->
-        <!--<div>-->
-        <!--<a href="http://www.uq.edu.au" class="uq-link"><img src="https://app.library.uq.edu.au/images/uq_theme/uq.png" id="mini-logo"></a>-->
-        <!--<a href="http://www.uq.edu.au"><img src="https://www.library.uq.edu.au/360Link/Current/uq-logo.svg" id="main-logo"></a>-->
-        <!--<a class="uq-library-header-logo" href="https://www.library.uq.edu.au">Library</a>-->
-        <!--<a class="uq-library-header-logo-mini" href="https://www.library.uq.edu.au">UQ Library</a>-->
-        <!--</div>-->
-        <!--</div>-->
-        <!--<div flex></div>-->
-        <!--</div>-->
-        <!--</core-toolbar>-->
-
-        <!--<core-menu selectedAttribute="">-->
-        <!--<paper-item>-->
-        <!--<core-icon icon="home"></core-icon>UQ Library</paper-item>-->
-        <!--<paper-item>-->
-        <!--<core-icon icon="info"></core-icon>About</paper-item>-->
-        <!--<hr>-->
-        <!--<paper-item>-->
-        <!--<core-icon icon="help"></core-icon>Help &amp; Feedback</paper-item>-->
-        <!--</core-menu>-->
-
+        <uqlibrary-menu menuFile="flint.json"></uqlibrary-menu>
       </div>
 
       <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="750px" drawerWidth="360px"
@@ -151,9 +123,6 @@
           this.previousPlayRecordButton = null;
           this.currentPlayRecordButton = null;
 
-          this.$.account.addEventListener('uqlibrary-api-account-loaded', this.accountLoaded);
-          this.$.account.get();
-
           //setup audio player
           this.$.audioPlayer.addEventListener('x-audio-initialized', function() {
             console.log("x-audio-initialized");
@@ -214,14 +183,6 @@
             console.log("> new file");
             this.$.audioPlayer.src = audioFile;
             this.$.audioPlayer.name = audioFileName;
-          }
-        },
-
-        accountLoaded: function (e) {
-          var that = document.querySelector('uqlibrary-flint');
-
-          if (e.detail.hasSession) {
-            that.user = e.detail;
           }
         },
 

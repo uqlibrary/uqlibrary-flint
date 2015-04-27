@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-flint-categories-list-unit-test</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../uqlibrary-flint-item.html">
+</head>
+<body>
+
+<uqlibrary-flint-item></uqlibrary-flint-item>
+
+<script>
+  window.addEventListener('polymer-ready', function() {
+
+    var element = document.querySelector('uqlibrary-flint-item');
+
+    describe('unit tests for uqlibrary-flint-item', function () {
+
+      var handlers = [];
+      var item =  {
+        id: "re",
+        title: "Translation of 'head'",
+        voice: "Jack Johnson",
+        interviewer: "Flint, Elwyn Henry",
+        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+        length: "1m 30s",
+        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+        record: "https://espace.library.uq.edu.au/view/UQ:353892",
+        mp3: "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3"
+      };
+
+      before(function () {
+        element.item = item;
+      });
+
+      afterEach(function(){
+        handlers.forEach(function(item){
+          element.removeEventListener(item.event, item.handler);
+        })
+
+        handlers = [];
+      });
+
+      it('item should be set', function(done) {
+        expect(element.item.id).to.be.equal(item.id);
+        done();
+      });
+
+      it('items should be displayed', function(done) {
+        setTimeout(function () {
+          var languageDisplay = element.shadowRoot.querySelector('#itemLanguage');
+          expect(languageDisplay).not.to.be.null;
+          expect(languageDisplay.innerHTML).to.be.equal(item.language);
+          done();
+        }, 100);
+      });
+
+    });
+  });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-flint-categories-list-unit-test</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../uqlibrary-flint-categories-list.html">
+</head>
+<body>
+
+<uqlibrary-flint-categories-list></uqlibrary-flint-categories-list>
+
+<script>
+  window.addEventListener('polymer-ready', function() {
+
+    var languages = [
+      {
+        "cvo_id": "453670",
+        "cvo_title": "Yukulta \/ Gangalidda",
+        "cvo_desc": "Qld SE54-05",
+        "cvo_image_filename": null,
+        "cvo_external_id": "G34",
+        "cvo_hide": "0",
+        "cvo_order": null, "cvo_count": 15
+      },
+      {
+        "cvo_id": "453671",
+        "cvo_title": "Garrwa \/ Garrawa \/ Garawa \/ Karawa",
+        "cvo_desc": "NT SE53-08",
+        "cvo_image_filename": null,
+        "cvo_external_id": "N155",
+        "cvo_hide": "0",
+        "cvo_order": null, "cvo_count": 5
+      }
+    ];
+
+    var element = document.querySelector('uqlibrary-flint-categories-list');
+
+    describe('unit tests for uqlibrary-flint-categories-list', function () {
+
+      var handlers = [];
+
+      before(function () {
+        element.setData({ displayLanguages: true, items: languages});
+      });
+
+      afterEach(function(){
+        handlers.forEach(function(item){
+          element.removeEventListener(item.event, item.handler);
+        })
+
+        handlers = [];
+      });
+
+      it('items should be set', function(done) {
+        expect(element.items.length).to.be.equal(languages.length);
+        done();
+      });
+
+      it('items should be displayed', function(done) {
+        setTimeout(function () {
+          var list = element.shadowRoot.querySelector('#itemsList');
+          expect(list).not.to.be.null;
+
+          var displayedItems = list.querySelectorAll('li .content');
+          expect(displayedItems.length).to.be.equal(languages.length);
+
+          done();
+        }, 100);
+      });
+
+      it('selected item is returned', function(done) {
+
+        var itemSelectedHandler = function(data) {
+          expect(data.detail.cvo_id).to.be.equal(languages[0].cvo_id);
+          done();
+        };
+
+        element.addEventListener('category-selected', itemSelectedHandler);
+        handlers.push({ event: 'category-selected', handler: itemSelectedHandler});
+
+        setTimeout(function () {
+          var list = element.shadowRoot.querySelector('#itemsList');
+          var displayedItems = list.querySelectorAll('li .content uqlibrary-a11y-link');
+          displayedItems[0].fire('tap');
+        }, 100);
+
+      });
+
+    });
+  });
+
+</script>
+
+</body>
+</html>

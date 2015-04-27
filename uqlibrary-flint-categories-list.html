@@ -1,3 +1,4 @@
+<link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
 <polymer-element name="uqlibrary-flint-categories-list" fit vertical layout>
 
 <template>
@@ -52,7 +53,7 @@
 
       setData: function(args) {
         if (args && args.displayLanguages) {
-          if (args.items && args.groups) {
+          if (args.items) {
             //set data passed as a parameter
             this.items = args.items;
             this.groups = args.groups;
@@ -62,7 +63,7 @@
             this.$.languagesApiElement.get();
           }
         } else if (args && args.displayVoices){
-          if (args.items && args.groups) {
+          if (args.items) {
             //set data passed as a parameter
             this.items = args.items;
             this.groups = args.groups;

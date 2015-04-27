@@ -1,3 +1,4 @@
+<link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
 <polymer-element name="uqlibrary-flint-items-core-list" fit vertical layout>
 
 <template>
@@ -22,9 +23,7 @@
             <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
           </div>
 
-          <div flex>
-            {{groupModel.label}}
-          </div>
+          <div flex>{{groupModel.label}}</div>
 
           <div>
             <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>

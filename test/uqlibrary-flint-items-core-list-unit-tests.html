@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-flint-categories-list-unit-test</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../uqlibrary-flint-items-core-list.html">
+</head>
+<body>
+
+<uqlibrary-flint-items-core-list></uqlibrary-flint-items-core-list>
+
+<script>
+  window.addEventListener('polymer-ready', function() {
+
+    var items = [
+      {
+        id: "re1",
+        title: "Translation of 'head'",
+        voice: "Jack Johnson",
+        interviewer: "Flint, Elwyn Henry",
+        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+        length: "1m 30s",
+        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+        record: "https://espace.library.uq.edu.au/view/UQ:353892",
+        mp3: "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3"
+      },
+      {
+        id: "re2",
+        title: "Translation of 'hand'",
+        voice: "Jack Johnson",
+        interviewer: "Flint, Elwyn Henry",
+        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+        length: "1m 30s",
+        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
+        record: "https://espace.library.uq.edu.au/view/UQ:353892",
+        mp3: "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3"
+      }
+    ];
+    var language = {
+      "cvo_id": "453670",
+      "cvo_title": "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
+      "cvo_desc": "Qld SE54-05",
+      "cvo_image_filename": null,
+      "cvo_external_id": "G34",
+      "cvo_hide": "0",
+      "cvo_order": null,
+      "cvo_count": 15
+    };
+
+    var element = document.querySelector('uqlibrary-flint-items-core-list');
+
+    describe('unit tests for uqlibrary-flint-items-core-list', function () {
+
+      var handlers = [];
+
+      before(function () {
+        element.setData({ language: language });
+      });
+
+      afterEach(function(){
+        handlers.forEach(function(item){
+          element.removeEventListener(item.event, item.handler);
+        })
+
+        handlers = [];
+      });
+
+      it('list title should be set to language title', function(done) {
+        var list = element.shadowRoot.querySelector('#itemsList');
+        expect(list).not.to.be.null;
+
+        var headers = list.querySelectorAll('li.header');
+        expect(headers).not.to.be.null;
+        var topHeader = headers[0].querySelectorAll('div')[1];
+        expect(topHeader).not.to.be.null;
+
+        expect(topHeader.innerHTML).to.be.equal(language.cvo_title);
+        done();
+      });
+
+      //TODO: load items - list is displayed
+      //TODO: click item - item details are visible
+      //TODO: click audio play button - event fired
+
+    });
+  });
+
+</script>
+
+</body>
+</html>

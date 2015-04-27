@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
     <title>Tests</title>
 
-    <script src="../../webcomponentsjs/webcomponents.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+
   </head>
 
   <body>
@@ -14,7 +14,9 @@
       document.cookie="UQLMockData=enabled";
 
       WCT.loadSuites([
-
+        'uqlibrary-flint-item-unit-tests.html',
+        'uqlibrary-flint-categories-list-unit-tests.html',
+        'uqlibrary-flint-items-core-list-unit-tests.html'
       ]);
     </script>
   </body>

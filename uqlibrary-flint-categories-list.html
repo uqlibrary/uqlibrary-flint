@@ -1,10 +1,21 @@
 <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
-<polymer-element name="uqlibrary-flint-categories-list" fit vertical layout>
+<polymer-element name="uqlibrary-flint-categories-list" attributes="showMap" fit vertical layout>
 
 <template>
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
   <uqlibrary-api-flint-categories id="categoriesApiElement"></uqlibrary-api-flint-categories>
 
+  <template if="{{showMap}}">
+    <google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="5" on-google-map-marker-click="{{mapMarkerClicked}}">
+
+      <template repeat="{{language, languageIndex in items}}">
+        <google-map-marker latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}" data-index="{{languageIndex}}" clickEvents></google-map-marker>
+      </template>
+
+    </google-map>
+  </template>
+
+  <template if="{{!showMap}}">
   <ul class="single-line-list">
     <core-list id="itemsList" fit on-core-activate="{{itemSelected}}" data="{{items}}" groups="{{groups}}">
       <template>
@@ -27,6 +38,7 @@
       </template>
     </core-list>
   </ul>
+  </template>
 </template>
 
 <script>
@@ -42,6 +54,11 @@
         this.$.categoriesApiElement.addEventListener("uqlibrary-api-flint-categories-loaded", function(data){
           that.items = data.detail.items;
           that.groups = data.detail.groups;
+
+          //TODO: show first item if not on mobile phone (if on mobile phone, item will open right hand side drawer)
+          //if (that.items.length > 0) {
+          //  that.fire("category-selected", that.items[0]);
+          //}
         });
       },
 
@@ -77,6 +94,11 @@
           var itemIndex = source.path[0].attributes["data-index"].value;
           this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[3] }, null);
         }
+      },
+
+      mapMarkerClicked: function(e) {
+        var index = e.path[0].getAttribute('data-index');
+        this.fire("category-selected", this.items[index]);
       }
     });
   })();

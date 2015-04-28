@@ -48,14 +48,7 @@
           <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
                                transitions="slide-from-right" flex>
             <section id="mapDisplaySection" data-selected-section="mapSection">
-
-              <google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6" on-google-map-marker-click="{{mapMarkerClicked}}">
-
-              <google-map-marker latitude="-19.265433" longitude="146.816289" clickEvents></google-map-marker>
-              <google-map-marker latitude="-21.392335" longitude="145.101973" clickEvents></google-map-marker>
-
-              </google-map>
-
+              <uqlibrary-flint-categories-list id="mapList" showMap="true" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
             </section>
             <section id="languageListSection" data-selected-section="languageSection">
               <uqlibrary-flint-categories-list id="languagesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
@@ -107,7 +100,7 @@
         },
 
         ready: function () {
-
+          this.currentSection = "mapSection";
         },
 
         toggleItemDetailsDrawer: function () {
@@ -134,6 +127,7 @@
               break;
             case "mapSection":
               //setup map
+              this.$.mapList.setData({ displayLanguages: true });
               break;
             case "searchSection":
               //TODO: search results are displayed in main area, right hand side drawer is not required
@@ -145,6 +139,10 @@
 
         categorySelected: function(e) {
           switch(this.currentSection) {
+            case "mapSection":
+              this.$.itemsListElement.setData( { language: e.detail });
+              this.toggleItemDetailsDrawer();
+              break;
             case "languageSection":
               this.$.itemsListElement.setData( { language: e.detail });
               this.toggleItemDetailsDrawer();
@@ -154,27 +152,6 @@
               this.toggleItemDetailsDrawer();
               break;
           }
-        },
-
-        mapMarkerClicked: function(e) {
-          console.log(e);
-
-          var mockLanguage =   {
-            "cvo_id": "453670",
-            "cvo_title": "Yukulta \/ Gangalidda",
-            "cvo_desc": "Qld SE54-05",
-            "cvo_image_filename": null,
-            "cvo_external_id": "G34",
-            "cvo_hide": "0",
-            "cvo_order": null,
-            "cvo_lat": "-17.942726",
-            "cvo_long": "138.829422",
-            "record_count": "0"
-          };
-
-          this.$.itemsListElement.setData( { language: mockLanguage });
-          this.toggleItemDetailsDrawer();
-
         }
       })
     })();

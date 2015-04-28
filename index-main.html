@@ -12,8 +12,9 @@
   <title>Queensland Speech Survey</title>
   <script>
 
-    //TODO: update preloader.js not to require login or mock cookie!
-    document.cookie = "UQLMockData=enabled;";
+    //for local/mock data
+    document.cookie = "UQLMockData=enabled";
+    var ignoreSession = true;
 
     if (!('registerElement' in document
             && 'createShadowRoot' in HTMLElement.prototype

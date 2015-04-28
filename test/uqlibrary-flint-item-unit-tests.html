@@ -23,15 +23,44 @@
 
       var handlers = [];
       var item =  {
-        id: "re",
-        title: "Translation of 'head'",
-        voice: "Jack Johnson",
-        interviewer: "Flint, Elwyn Henry",
-        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
-        length: "1m 30s",
-        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
-        record: "https://espace.library.uq.edu.au/view/UQ:353892",
-        mp3: "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3"
+        "title": "Song (untitled)",
+        "pid": "UQ:353898",
+        "citation": "<a class=\"citation_author_name\" title=\"Browse by Author Name for Flint, Elwyn Henry\" href=\"\/list\/author\/Flint%2C+Elwyn+Henry\/\">Flint, Elwyn Henry<\/a> () <a class=\"citation_title\" title=\"Click to view Audio Document: Song (untitled)\" href=\"\/view\/UQ:353898\">Song (untitled)<\/a>. : . (<span class=\"citation_series\">Elwyn Flint collection, UQFL173<\/span>)",
+        "identifier": "http:\/\/espace.library.uq.edu.au\/view\/UQ:353898",
+        "description": "The Flint papers comprise written documents collected by Flint mostly as part of a long term research project in the 1960&#039;s. In the course of this Queensland speech survey, Flint recorded traditional Aboriginal Languages. This collection also documents the Yuulngu (Gupapuyngu) language. Other parts of the collection include journal articles of languages, correspondence with field-linguists and staff from academic institutions, Indonesian material, and documentation of the English spoken by Australian Aboriginal and Torres Strait Islander peoples, Australian and regional pidgins, &quot;migrants&quot; and &quot;mother-tongue&quot; people from different ages, regions or socio-economic groups.",
+        "genre": "audio\/wav",
+        "created_date": "2015-03-16T11:16:17Z",
+        "updated_date": "2015-04-27T15:50:10Z",
+        "publication_date": {},
+        "formatted_title": {},
+        "formatted_abstract": {},
+        "date_availables": {"date_available": "2015-01-01T00:00:00Z"},
+        "authors": {"author": "Flint, Elwyn Henry"},
+        "contributors": {"contributor": "Unknown participant"},
+        "isMemberOfs": {"isMemberOf": "UQ:353627"},
+        "keywords": {
+          "keyword": [
+            "Queensland Speech Survey",
+            "Aboriginal Australians -- Languages",
+            "Song"
+          ]
+        },
+        "seriess": {"series": "Elwyn Flint collection, UQFL173"},
+        "subjects": {"subject": "453687"},
+        "datastream_links": {
+          "datastream_link": [
+            "http:\/\/espace.library.uq.edu.au\/eserv.php?pid=UQ:353898&dsID=UQFL173_b50_R193L_sideA_254090.wav",
+            "http:\/\/espace.library.uq.edu.au\/eserv.php?pid=UQ:353898&dsID=presmd_UQFL173_b50_R193L_sideA_254090.xml",
+            "http:\/\/espace.library.uq.edu.au\/eserv.php?pid=UQ:353898&dsID=stream_UQFL173_b50_R193L_sideA_254090.flv"
+          ]
+        },
+        "datastreams": {
+          "datastream": [
+            "UQFL173_b50_R193L_sideA_254090.wav",
+            "presmd_UQFL173_b50_R193L_sideA_254090.xml",
+            "stream_UQFL173_b50_R193L_sideA_254090.flv"
+          ]
+        }
       };
 
       before(function () {
@@ -55,7 +84,7 @@
         setTimeout(function () {
           var languageDisplay = element.shadowRoot.querySelector('#itemLanguage');
           expect(languageDisplay).not.to.be.null;
-          expect(languageDisplay.innerHTML).to.be.equal(item.language);
+          expect(languageDisplay.innerHTML).to.be.equal(item.subjects.subject);
           done();
         }, 100);
       });

@@ -1,8 +1,10 @@
 <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
+
 <polymer-element name="uqlibrary-flint-items-core-list" fit vertical layout>
 
 <template>
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
+  <uqlibrary-api-flint-records id="recordsApiElement"></uqlibrary-api-flint-records>
 
   <style>
 
@@ -12,9 +14,9 @@
 
   </style>
 
-  <ul class="three-line-icon-list">
+  <ul class="three-line-icon-list" flex>
 
-    <core-list id="itemsList" fit on-core-activate="{{itemSelected}}">
+    <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 63px;">
       <template>
 
         <li class="list-item header" divider horizontal layout center-center>
@@ -35,7 +37,10 @@
 
           <div class="avatar">
             <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
-              <core-icon-button aria-label="Play audio of {{model.title}}" data-index="{{index}}" icon="av:play-circle-outline" data-title="{{model.title}}" data-mp3="{{model.mp3}}"></core-icon-button>
+              <!-- TODO: replace MP3 with obj binding when available -->
+              <core-icon-button aria-label="Play audio of {{model.title}}" data-index="{{index}}"
+                                icon="av:play-circle-outline" data-title="{{model.title}}"
+                                data-mp3="{{ index % 2 == 0 ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3'}}"></core-icon-button>
             </uqlibrary-a11y-link>
           </div>
 
@@ -43,22 +48,25 @@
 
             <paper-ripple fit></paper-ripple>
 
-            <div class="line1">
-              <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
-              <div style="float:right;">
+            <div class="line1" horizontal layout>
+              <div flex class="line1">
+                <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
+              </div>
+
+              <div>
                 <core-icon icon="expand-more" hidden?="{{model.showMore}}"></core-icon>
                 <core-icon icon="expand-less" hidden?="{{!model.showMore}}"></core-icon>
               </div>
             </div>
 
             <div class="line2" hidden?="{{model.showMore}}">
-              <template if={{voice}}>{{model.language}}</template>
-              <template if={{searchTerm}}>{{model.language}}</template>
-              <template if={{language}}>by {{model.voice}}</template>
+              <template if={{voice}}>{{model.subjects.subject}}</template>
+              <template if={{searchTerm}}>{{model.subjects.subject}}</template>
+              <template if={{language}}>by {{model.contributors.contributor}}</template>
             </div>
 
             <div class="line3" hidden?="{{model.showMore}}">
-              <template if={{searchTerm}}>by {{model.voice}}</template>
+              <template if={{searchTerm}}>by {{model.contributors.contributor}}</template>
             </div>
 
           </div>
@@ -71,6 +79,13 @@
       </template>
     </core-list>
   </ul>
+
+  <div style="height: 65px;" relative>
+    <div fit style="background-color: #efefef; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.37);">
+      <x-audio id="audioPlayer" showVolumeControls showName></x-audio>
+    </div>
+  </div>
+
 </template>
 
 <script>
@@ -78,11 +93,17 @@
     Polymer('uqlibrary-flint-items-core-list', {
 
       ready: function() {
-        this.elementDetails = document.createElement('uqlibrary-flint-item');
-        this.currentItemRow = null;
+        // test MP3 files
+        // "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3"
+        // "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
 
-        this.language = 'Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj';
-        this.voice = '';
+        var that = this;
+
+        this.previousPlayRecordButton = null;
+        this.currentPlayRecordButton = null;
+
+        this.language = null;
+        this.voice = null;
         this.searchTerm = '';
 
         this.cacheData = {
@@ -90,33 +111,60 @@
           voices: {}
         };
 
-        var items = [];
+        this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
 
-        for(var i = 0; i <= 5; i++){
-          items.push(
+          that.$.itemsList.data = e.detail;
+          that.$.itemsList.groups = [
             {
-              id: "re" + i,
-              title: "Translation of 'head' " + i,
-              voice: "Jack Johnson",
-              interviewer: "Flint, Elwyn Henry",
-              language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
-              length: "1m 30s",
-              transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
-              record: "https://espace.library.uq.edu.au/view/UQ:353892",
-              mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
+              length: e.detail.length,
+              data: {
+                label: that.language ? that.language.cvo_title : that.voice ? that.voice.cvo_title : that.searchTerm
+              }
             }
-          );
-        }
+          ];
 
-        this.$.itemsList.data = items;
-        this.$.itemsList.groups = [
-          {
-            length: items.length,
-            data: {
-              label: this.language
-            }
+          //save data for this session - don't need to query api again for this language or voice
+          if (that.language) {
+            that.cacheData.languages[that.language.cvo_id] = e.detail;
+          } else if (that.voice){
+            that.cacheData.voices[that.voice.cvo_title] = e.detail;
           }
-        ];
+        });
+
+        //setup audio player
+        this.$.audioPlayer.addEventListener('x-audio-initialized', function() {
+          console.log("x-audio-initialized");
+
+          that.$.audioPlayer.play();
+        });
+
+        this.$.audioPlayer.addEventListener('x-audio-play', function() {
+          console.log("x-audio-play");
+
+          if(that.previousPlayRecordButton) {
+            that.previousPlayRecordButton.icon = 'av:play-circle-outline';
+          }
+
+          if(that.currentPlayRecordButton) {
+            that.currentPlayRecordButton.icon = 'av:pause-circle-outline';
+          }
+
+          that.previousPlayRecordButton = that.currentPlayRecordButton;
+        });
+
+        this.$.audioPlayer.addEventListener('x-audio-pause', function() {
+          console.log("x-audio-pause");
+
+          if(that.previousPlayRecordButton) {
+            that.previousPlayRecordButton.icon = 'av:play-circle-outline';
+          }
+
+          if(that.currentPlayRecordButton) {
+            that.currentPlayRecordButton.icon = 'av:play-circle-outline';
+          }
+
+          that.previousPlayRecordButton = that.currentPlayRecordButton;
+        });
       },
 
       keepItemDetailsOpen: function(e, data, source) {
@@ -153,16 +201,32 @@
       },
 
       playRecord: function(source) {
+        var button = null;
+
         //event can be triggered by keyboard or mouse, process event for either
         if (source.path && source.path.length > 0 && source.path[0].tagName.toLowerCase() === "core-icon-button") {
           //do not open/close item details on play/pause
           this.skipItemSelected = true;
-          this.fire("play-record-clicked", source.path[0]);
+          button = source.path[0];
         } else if (source.path && source.path.length > 0 && source.path[0].children
                 && source.path[0].children[0].tagName.toLowerCase() === "core-icon-button") {
           //do not open/close item details on play/pause
           this.skipItemSelected = true;
-          this.fire("play-record-clicked", source.path[0].children[0]);
+          button = source.path[0].children[0];
+        }
+
+        //setup audio player, play mp3 file
+        this.currentPlayRecordButton = button;
+        var audioFile = button.getAttribute("data-mp3");
+        var audioFileName = button.getAttribute("data-title");
+
+        console.log("playRecord: " + audioFileName);
+
+        if (this.$.audioPlayer.name === audioFileName && this.$.audioPlayer.src === audioFile) {
+          this.$.audioPlayer.togglePlay();
+        } else {
+          this.$.audioPlayer.src = audioFile;
+          this.$.audioPlayer.name = audioFileName;
         }
       },
 
@@ -174,8 +238,8 @@
 
       setData: function(args) {
 
-        this.language = '';
-        this.voice = '';
+        this.language = null;
+        this.voice = null;
         this.searchTerm = '';
 
         var items = [];
@@ -183,126 +247,49 @@
 
         if (args && args.language) {
           this.language = args.language;
-          listTitle = this.language.cvo_title;
 
           if (this.cacheData.languages[this.language.cvo_id]) {
+            //get data from local cache
             items = this.cacheData.languages[this.language.cvo_id];
+            this.$.itemsList.data = items;
+            this.$.itemsList.groups = [
+              {
+                length: items.length,
+                data: {
+                  label: this.language.cvo_title
+                }
+              }
+            ];
           } else {
             //get data from search api
-            for(var i = 0; i < 10; i++){
-              items.push(
-                      {
-                        id: "re " + new Date(),
-                        title: "Translation of 'head' " + + new Date(),
-                        voice: "Jack Johnson",
-                        interviewer: "Flint, Elwyn Henry",
-                        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
-                        length: "1m 30s",
-                        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
-                        record: "https://espace.library.uq.edu.au/view/UQ:353892",
-                        mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
-                      }
-              );
-            }
-            //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
-            this.cacheData.languages[this.language.cvo_id] = items;
+            this.$.recordsApiElement.get({ language: this.language.cvo_title });
           }
         } else if (args && args.voice) {
           this.voice = args.voice;
           listTitle = this.voice.cvo_title;
 
-          if (this.cacheData.voices[this.voice.cvo_id]) {
-            items = this.cacheData.voices[this.voice.cvo_id];
+          if (this.cacheData.voices[this.voice.cvo_title]) {
+            //get data from local cache
+            items = this.cacheData.voices[this.voice.cvo_title];
+            this.$.itemsList.data = items;
+            this.$.itemsList.groups = [
+              {
+                length: items.length,
+                data: {
+                  label: this.voice.cvo_title
+                }
+              }
+            ];
           } else {
             //get data from search api
-            for (var i = 0; i < 10; i++) {
-              items.push(
-                      {
-                        id: "re " + new Date(),
-                        title: "Translation of 'head' " + new Date(),
-                        voice: "Jack Johnson" + new Date(),
-                        interviewer: "Flint, Elwyn Henry",
-                        language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
-                        length: "1m 30s",
-                        transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
-                        record: "https://espace.library.uq.edu.au/view/UQ:353892",
-                        mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
-                      }
-              );
-            }
+            this.$.recordsApiElement.get({ voice: this.voice.cvo_title });
           }
-          //save data for this session - maybe set a limit on how much should be kept... up to 5 result sets?
-          this.cacheData.voices[this.voice.cvo_id] = items;
-
         } else if (args && args.searchTerm) {
-          this.searchTerm = args.searchTerm;
-          listTitle = "Search results for: " + this.searchTerm;
-
           //get data from search api
-          for(var i = 0; i < 30; i++){
-            items.push(
-                    {
-                      id: "re " + new Date(),
-                      title: "Translation of 'head' " + + new Date(),
-                      voice: "Jack Johnson",
-                      interviewer: "Flint, Elwyn Henry",
-                      language: "Kuku Yalanji / Gugu Bujun / Koko Bujundj / Koko Bujundj / Koko Bujundj / Koko Bujundj",
-                      length: "1m 30s",
-                      transcript: "Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L) \n Researcher Speech Eat. I eat. \n Participant Speech (L) \n Researcher Speech (L)",
-                      record: "https://espace.library.uq.edu.au/view/UQ:353892",
-                      mp3: i % 2 == 0 ? "http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3" : "http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3"
-                    }
-            );
-          }
+          this.searchTerm = args.searchTerm;
+          this.$.recordsApiElement.get({ keyword: this.searchTerm });
         }
-
-        this.$.itemsList.data = items;
-        this.$.itemsList.groups = [
-          {
-            length: items.length,
-            data: {
-              label: listTitle
-            }
-          }
-        ];
       }
-
-//
-//      getItem: function(itemId) {
-//        var itemDetails = this.itemsList.filter(function(item){
-//          return item.id == itemId;
-//        });
-//        itemDetails = itemDetails.length == 1 ? itemDetails[0] : null;
-//
-//        return itemDetails;
-//      },
-//
-//      selectItem: function(e, data, sender) {
-//        var itemDetails = this.getItem(sender.getAttribute("data-id"));
-//
-//        if(!itemDetails)
-//          return;
-//
-//        var collapseSection = sender.parentNode.querySelector("#collapse");
-//
-//        if (!collapseSection.opened) {
-//          //append item details if it hasn't been added yet
-//          var currentItemDetails = collapseSection.querySelector('uqlibrary-flint-item');
-//          if (!currentItemDetails) {
-//            this.elementDetails.setData(itemDetails);
-//            collapseSection.appendChild(this.elementDetails);
-//          }
-//        }
-//
-//        collapseSection.toggle();
-//      },
-//
-//      playSelectedItem: function(e, data, sender) {
-//        var itemDetails = this.getItem(sender.getAttribute("data-id"));
-//
-//        if(!itemDetails)
-//          return;
-//      }
     });
   })();
 </script>

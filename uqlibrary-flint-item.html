@@ -16,13 +16,13 @@
   </style>
 
   <div class="subhead">Language</div>
-  <div class="body1" id="itemLanguage">{{item.language}}</div>
+  <div class="body1" id="itemLanguage">{{item.subjects.subject}}</div>
 
   <div class="subhead">Voice</div>
-  <div class="body1" id="itemVoice">{{item.voice}}</div>
+  <div class="body1" id="itemVoice">{{item.contributors.contributor}}</div>
 
-  <div class="subhead">Interviewer</div>
-  <div class="body1">{{item.interviewer}}</div>
+  <div class="subhead">Authors</div>
+  <div class="body1">{{item.authors.author}}</div>
 
   <div class="subhead">Length</div>
   <div class="body1">{{item.length}}</div>
@@ -31,7 +31,7 @@
   <div class="body1" style=""><pre style="margin: 0; padding: 4px; height: 5.5em; overflow: scroll;border: 1px solid #cccccc;">{{item.transcript}}</pre></div>
 
   <div class="subhead">eSpace record</div>
-  <div class="body1"><a href="{{item.record}}" target="_blank">{{item.record}}</a></div>
+  <div class="body1"><a href="{{item.pid}}" target="_blank">{{item.pid}}</a></div>
 
   <paper-button id="feedbackButton" class="colored" on-tap="showFeedback">Feedback</paper-button>
 

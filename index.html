@@ -1,223 +1,94 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-  <title>Queensland Speech Survey</title>
+  <meta charset="utf-8">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" user-scalable="no">
-  <meta name="mobile-web-app-capable" content="yes">
+  <!--Mobile meta tags-->
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="icon" type="image/x-icon" href="resources/images/favicon.ico">
-  <script src="../webcomponentsjs/webcomponents.js"></script>
+  <meta name="mobile-web-app-capable" content="yes">
 
-  <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
-  <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
+  <!--Short title for homescreens on mobile devices-->
+  <title>Queensland Speech Survey</title>
+  <script>
+
+    //for local/mock data
+//    document.cookie = "UQLMockData=enabled";
+    var ignoreSession = true;
+
+    if (!('registerElement' in document
+            && 'createShadowRoot' in HTMLElement.prototype
+            && 'import' in document.createElement('link')
+            && 'content' in document.createElement('template'))) {
+      document.write('<script type="text/javascript" src="../uqlibrary-elements/resources/common/jquery/dist/jquery.min.js"><\/script>');
+    }
+  </script>
+
+  <script src="../uqlibrary-elements/resources/common/preloader.js"></script>
+
+  <!--fav icons-->
+  <link rel="icon" type="image/x-icon" href="../uqlibrary-elements/resources/images/favicon.ico">
+  <link rel="icon" type="image/png" href="../uqlibrary-elements/resources/images/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="../uqlibrary-elements/resources/images/favicon-32x32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="../uqlibrary-elements/resources/images/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/png" href="../uqlibrary-elements/resources/images/favicon-16x16.png" sizes="16x16">
+
+  <!--Chrome images and icons -->
+  <link rel="manifest" href="../uqlibrary-elements/resources/common/manifest.json">
+  <link rel="icon" sizes="192x192" href="../uqlibrary-elements/resources/images/launcher-icon-4x.png">
+
+  <!--Safari & iOS icons-->
+  <link rel="apple-touch-icon" href="../uqlibrary-elements/resources/images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="57x57" href="../uqlibrary-elements/resources/images/apple-touch-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="../uqlibrary-elements/resources/images/apple-touch-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="../uqlibrary-elements/resources/images/apple-touch-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="../uqlibrary-elements/resources/images/apple-touch-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="../uqlibrary-elements/resources/images/apple-touch-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="../uqlibrary-elements/resources/images/apple-touch-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="../uqlibrary-elements/resources/images/apple-touch-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="../uqlibrary-elements/resources/images/apple-touch-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../uqlibrary-elements/resources/images/apple-touch-icon-180x180.png">
+
+  <!--Windows/IE specific data -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="msapplication-config" content="../uqlibrary-elements/resources/common/IEconfig.xml" />
+  <meta name="msapplication-TileColor" content="#49075e">
+  <meta name="msapplication-TileImage" content="../uqlibrary-elements/resources/images/mstile-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <!--common styles includes-->
+  <link rel="stylesheet" type="text/css" href="../uqlibrary-elements/resources/theme/preloader.css">
+  <link rel="stylesheet" type="text/css" href="../uqlibrary-elements/resources/theme/app.css">
+
+  <link rel="import" href="uqlibrary-flint.html">
 </head>
 
-<body fullbleed unresolved>
+<body>
 
-<core-drawer-panel responsiveWidth="1500px">
-    <div drawer class="left-drawer">
-        <core-toolbar>
-            <div vertical layout>
-                <div horizontal layout>
-                    <div>
-                        <a href="http://www.uq.edu.au" class="uq-link"><img src="https://app.library.uq.edu.au/images/uq_theme/uq.png" id="mini-logo"></a>
-                        <a href="http://www.uq.edu.au"><img src="https://www.library.uq.edu.au/360Link/Current/uq-logo.svg" id="main-logo"></a>
-                        <a class="uq-library-header-logo" href="https://www.library.uq.edu.au">Library</a>
-                        <a class="uq-library-header-logo-mini" href="https://www.library.uq.edu.au">UQ Library</a>
-                    </div>
-                </div>
-                <div flex></div>
-            </div>
-        </core-toolbar>
+  <!--preloader placeholder-->
 
-        <core-menu selectedAttribute="">
-            <paper-item on-tap="{{togglePage}}">
-                <core-icon icon="home"></core-icon>UQ Library</paper-item>
-            <paper-item>
-                <core-icon icon="info"></core-icon>About</paper-item>
-            <hr>
-            <paper-item>
-                <core-icon icon="help"></core-icon>Help &amp; Feedback</paper-item>
-        </core-menu>
-
+  <div id="unsupportedBrowser">
+    <div id="unsupportedBrowserBanner">
+      <h1 id="unsupportedBrowserHeader">Queensland Speech Survey</h1>
     </div>
 
-    <core-drawer-panel main rightDrawer responsiveWidth="750px" drawerWidth="360px" disableSwipe>
-        <div drawer class="right-drawer">
-            <div horizontal layout center-center class="flint-item-info">
-                <div>
-                    <core-icon class="huge flint-header-icon" icon="hardware:headset"></core-icon>
-                </div>
-                <div flex>
-                    <h2 class="subhead">Guugu Yimithirr / Guugu Yimidhirr / Gugu Yimithirr / Kuku Yimidhirr</h2>
-                </div>
-                <div>
-                    <paper-icon-button icon="close" id="close-drawer" class="flint-responsive-menu-toggle-icon" onclick="closeDrawer()"></paper-icon-button>
-                </div>
-            </div>
-            <div flex>
-                <core-icon-button id="audio-1" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3')"></core-icon-button >Record 1<br>
-                <core-icon-button  id="audio-2" icon="av:play-circle-outline" onclick="playRecord(this, 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')"></core-icon-button>Record 2<br>
-            </div>
-            <div horizontal layout center-center id="player">
-                <x-audio id="audioPlayer" showVolumeControls></x-audio>
-            </div>
-        </div>
-        <div main>
+    <div class="card" id="unsupportedBrowserSupportMessage">
+      <p id="loadingTitle" class="text-center">Loading ...</p>
 
-            <core-toolbar>
-                <paper-icon-button icon="menu" class="flint-responsive-menu-icon" onclick="closeMenu()"></paper-icon-button>
-                <div class="glow">
-                    <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
-                </div>
-            </core-toolbar>
+      <div id="loader">
+        <svg id="loaderImage" class="circular" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" fill="#4a075f">
+          <path opacity=".25" d="M16 0 A16 16 0 0 0 16 32 A16 16 0 0 0 16 0 M16 4 A12 12 0 0 1 16 28 A12 12 0 0 1 16 4"/>
+          <path d="M16 0 A16 16 0 0 1 32 16 L28 16 A12 12 0 0 0 16 4z">
+          </path>
+        </svg>
 
-            <paper-tabs selected="0">
-                <paper-tab>Map</paper-tab>
-                <paper-tab>Languages</paper-tab>
-                <paper-tab>Voices</paper-tab>
-                <paper-tab>Search</paper-tab>
-            </paper-tabs>
-            <core-animated-pages selected="{{selected}}" transitions="slide-from-right">
-                <div>
+      </div>
+      <p id="redirectMessage"></p>
+    </div>
+  </div>
+  <!--end preloader placeholder-->
 
-                    <!--<google-map latitude="-21.488403" longitude="147.1480151" disableDefaultUI zoom="6">-->
-
-                        <!--<google-map-marker latitude="-19.265433" longitude="146.816289" clickEvents></google-map-marker>-->
-                        <!--<google-map-marker latitude="-21.392335" longitude="145.101973" clickEvents></google-map-marker>-->
-
-                    <!--</google-map>-->
-                    <div horizontal center-justified layout>
-                        <div>
-                            <div vertical layout style="height:500px">
-                                <div flex>
-                                    <div class="responsiveCard">
-                                            <div class="subhead cardSection cardTitle">&lt;!-- TODO: Uncomment the google map component here once it has been imported through uqlibrary-elements --></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div horizontal center-justified layout>
-                        <div>
-                            <div vertical layout style="height:500px">
-                                <div flex>
-                                    <div class="responsiveCard">
-                                        <div class="subhead cardSection cardTitle">&lt;!-- TODO: Add Languages Tab stuff --></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div horizontal center-justified layout>
-                        <div>
-                            <div vertical layout style="height:500px">
-                                <div flex>
-                                    <div class="responsiveCard">
-                                        <div class="subhead cardSection cardTitle">&lt;!-- TODO: Add Voices Tab stuff --></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div horizontal center-justified layout>
-                        <div>
-                            <div vertical layout style="height:500px">
-                                <div flex>
-                                    <div class="responsiveCard">
-                                        <div class="subhead cardSection cardTitle">&lt;!-- TODO: Add Search Tab stuff--></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </core-animated-pages>
-        </div>
-    </core-drawer-panel>
-
-</core-drawer-panel>
-
-<warn-dialog autoOpen cancelRedirectUrl="https://www.library.uq.edu.au/fryer-library/"></warn-dialog>
-
-<script>
-
-  var previousAudioId = null;
-  var currentAudioId = null;
-  var audioPlayer = null;
-  document.addEventListener('polymer-ready', function(){
-    initAudioPlayer();
-  });
-
-  var tabs = document.querySelector('paper-tabs');
-  var pages = document.querySelector('core-animated-pages');
-
-  tabs.addEventListener('core-select', function () {
-      pages.selected = tabs.selected;
-  });
-
-  function closeDrawer() {
-      document.querySelector('core-drawer-panel [rightDrawer]').togglePanel();
-  }
-
-  function closeMenu() {
-      document.querySelector('core-drawer-panel').togglePanel();
-  }
-
-  addEventListener('google-map-marker-click', function (e) {
-      closeDrawer();
-  });
-
-  function initAudioPlayer() {
-      audioPlayer = document.querySelector('#audioPlayer');
-      audioPlayer.addEventListener('x-audio-initialized', function() {
-          audioPlayer.play()
-      });
-      audioPlayer.addEventListener('x-audio-play', function() {
-          var _icon = document.getElementById(currentAudioId);
-          if(_icon) {
-              _icon.icon = 'av:pause-circle-outline';
-          }
-          previousAudioId = null;
-      });
-      audioPlayer.addEventListener('x-audio-pause', function() {
-          var _id = previousAudioId;
-          if(previousAudioId == null) {
-              _id = currentAudioId;
-          }
-          var _icon = document.getElementById(_id);
-          if(_icon) {
-              _icon.icon = 'av:play-circle-outline';
-          }
-      });
-  }
-  function playRecord(sender, url) {
-      if(audioPlayer != null) {
-          if(audioPlayer.src == url) {
-              if(audioPlayer.isPlaying) {
-                  previousAudioId = currentAudioId;
-                  audioPlayer.pause();
-              }
-              else {
-                  audioPlayer.play();
-              }
-          }
-          audioPlayer.src = url;
-          if(sender) {
-              previousAudioId = currentAudioId;
-              currentAudioId = sender.getAttribute('id');
-          }
-      }
-  }
-</script>
+  <uqlibrary-flint unresolved></uqlibrary-flint>
 
 </body>
-
 </html>

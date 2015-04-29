@@ -1,121 +1,143 @@
 <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
 <polymer-element name="uqlibrary-flint-categories-list" attributes="showMap" fit vertical layout>
 
-<template>
-  <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
-  <uqlibrary-api-flint-categories id="categoriesApiElement"></uqlibrary-api-flint-categories>
+  <template>
+    <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
+    <uqlibrary-api-flint-categories id="categoriesApiElement"></uqlibrary-api-flint-categories>
 
-  <template if="{{showMap}}">
-    <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" minZoom="2" on-google-map-marker-click="{{mapMarkerClicked}}">
+    <template if="{{showMap}}">
+      <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" minZoom="4"
+                  on-google-map-marker-click="{{mapMarkerClicked}}">
 
-      <template repeat="{{language, languageIndex in items}}">
-        <google-map-marker latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}" data-index="{{languageIndex}}" clickEvents></google-map-marker>
-      </template>
+        <template repeat="{{language, languageIndex in items}}">
+          <google-map-marker latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}"
+                             data-index="{{languageIndex}}" icon="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569
+" clickEvents></google-map-marker>
+        </template>
 
-    </google-map>
+      </google-map>
+    </template>
+
+    <template if="{{!showMap}}">
+      <ul class="single-line-list">
+        <core-list id="itemsList" fit on-core-activate="{{itemSelected}}" data="{{items}}" groups="{{groups}}">
+          <template>
+
+            <li class="list-item header" divider>
+              {{groupModel.label}}
+            </li>
+
+            <li class="list-item" data-index="{{index}}">
+              <div class="content" relative horizontal layout>
+                <paper-ripple fit></paper-ripple>
+                <div flex>
+                  <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">
+                    {{model.cvo_title}}
+                  </uqlibrary-a11y-link>
+                </div>
+                <div>
+                  ({{model.record_count}})
+                </div>
+              </div>
+            </li>
+          </template>
+        </core-list>
+      </ul>
+    </template>
   </template>
 
-  <template if="{{!showMap}}">
-  <ul class="single-line-list">
-    <core-list id="itemsList" fit on-core-activate="{{itemSelected}}" data="{{items}}" groups="{{groups}}">
-      <template>
+  <script>
+    (function () {
+      var latitude = -21.488403;
+      var longitude = 147.1480151;
+      var zoom = 5;
+      var mapMarkerIconActive = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
+      var mapMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|CCCCCC';
 
-        <li class="list-item header" divider>
-            {{groupModel.label}}
-        </li>
+      Polymer('uqlibrary-flint-categories-list', {
 
-        <li class="list-item" data-index="{{index}}">
-          <div class="content" relative horizontal layout>
-            <paper-ripple fit></paper-ripple>
-            <div flex>
-              <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.cvo_title}}</uqlibrary-a11y-link>
-            </div>
-            <div>
-              ({{model.record_count}})
-            </div>
-          </div>
-        </li>
-      </template>
-    </core-list>
-  </ul>
-  </template>
-</template>
-
-<script>
-  (function() {
-    var latitude = -21.488403;
-    var longitude = 147.1480151;
-    var zoom = 5;
-
-    Polymer('uqlibrary-flint-categories-list', {
-
-      ready: function() {
-        this.items = null;
-        this.groups = null;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.zoom = zoom;
-
-        var that = this;
-
-        this.$.categoriesApiElement.addEventListener("uqlibrary-api-flint-categories-loaded", function(data){
-          that.items = data.detail.items;
-          that.groups = data.detail.groups;
-
-          //TODO: show first item if not on mobile phone (if on mobile phone, item will open right hand side drawer)
-          //if (that.items.length > 0) {
-          //  that.fire("category-selected", that.items[0]);
-          //}
-        });
-      },
-
-      recenterMap: function() {
-        if (this.showMap) {
+        ready: function () {
+          this.items = null;
+          this.groups = null;
           this.latitude = latitude;
           this.longitude = longitude;
           this.zoom = zoom;
-        }
-      },
 
-      setData: function(args) {
-        if (args && args.displayLanguages) {
-          if (args.items) {
-            //set data passed as a parameter
-            this.items = args.items;
-            this.groups = args.groups;
+          var that = this;
+
+          this.$.categoriesApiElement.addEventListener("uqlibrary-api-flint-categories-loaded", function (data) {
+            that.items = data.detail.items;
+            that.groups = data.detail.groups;
+
+            //TODO: show first item if not on mobile phone (if on mobile phone, item will open right hand side drawer)
+            //if (that.items.length > 0) {
+            //  that.fire("category-selected", that.items[0]);
+            //}
+          });
+        },
+
+        recenterMap: function () {
+          if (this.showMap) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.zoom = zoom;
           }
-          else if (!this.items) {
-            //get data from api if no data has been passed
-            this.$.categoriesApiElement.get({getLanguages : true });
+        },
+
+        setData: function (args) {
+          if (args && args.displayLanguages) {
+            if (args.items) {
+              //set data passed as a parameter
+              this.items = args.items;
+              this.groups = args.groups;
+            }
+            else if (!this.items) {
+              //get data from api if no data has been passed
+              this.$.categoriesApiElement.get({getLanguages: true});
+            }
           }
-        } else if (args && args.displayVoices){
-          if (args.items) {
-            //set data passed as a parameter
-            this.items = args.items;
-            this.groups = args.groups;
-          }else if (!this.items) {
-            //get data from api if no data has been passed
-            this.$.categoriesApiElement.get({getVoices : true });
+          else if (args && args.displayVoices) {
+            if (args.items) {
+              //set data passed as a parameter
+              this.items = args.items;
+              this.groups = args.groups;
+            }
+            else if (!this.items) {
+              //get data from api if no data has been passed
+              this.$.categoriesApiElement.get({getVoices: true});
+            }
+          }
+        },
+
+        itemSelected: function (event, itemRow, list) {
+          this.fire("category-selected", itemRow.data);
+        },
+
+        itemSelectedKeyPressed: function (source) {
+          if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
+            var itemIndex = source.path[0].attributes["data-index"].value;
+            this.itemSelected(null, {data: this.$.itemsList.data[itemIndex], item: source.path[3]}, null);
+          }
+        },
+
+        mapMarkerClicked: function (e) {
+          var index = e.path[0].getAttribute('data-index');
+          this.fire("category-selected", this.items[index]);
+          this.setActiveMapMarker(e.target);
+        },
+
+        setActiveMapMarker: function (activeMapMarker) {
+          var mapMarkers = this.shadowRoot.querySelectorAll('google-map-marker');
+
+          for (var mm in mapMarkers) {
+            if (mapMarkers.hasOwnProperty(mm)) {
+              mapMarkers[mm].icon = {
+                url: mapMarkers[mm] === activeMapMarker ? mapMarkerIconActive : mapMarkerIcon
+              };
+            }
           }
         }
-      },
-
-      itemSelected: function(event, itemRow, list) {
-        this.fire("category-selected", itemRow.data);
-      },
-
-      itemSelectedKeyPressed: function(source) {
-        if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
-          var itemIndex = source.path[0].attributes["data-index"].value;
-          this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[3] }, null);
-        }
-      },
-
-      mapMarkerClicked: function(e) {
-        var index = e.path[0].getAttribute('data-index');
-        this.fire("category-selected", this.items[index]);
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
 </polymer-element>

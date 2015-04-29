@@ -33,7 +33,7 @@
           </core-toolbar>
 
           <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
-            <paper-tab data-selected-section="mapSection" id="map">
+            <paper-tab data-selected-section="mapSection" id="mapSection">
               <uqlibrary-a11y-link>Map</uqlibrary-a11y-link>
             </paper-tab>
             <paper-tab data-selected-section="languageSection">
@@ -104,7 +104,7 @@
 
           this.currentSection = "mapSection";
 
-          this.shadowRoot.getElementById('map').addEventListener('click', function () {
+          this.shadowRoot.getElementById('mapSection').addEventListener('click', function () {
             if (that.currentSection === "mapSection") {
               that.$.mapList.recenterMap();
             }

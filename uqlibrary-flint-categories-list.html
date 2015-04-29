@@ -6,7 +6,7 @@
   <uqlibrary-api-flint-categories id="categoriesApiElement"></uqlibrary-api-flint-categories>
 
   <template if="{{showMap}}">
-    <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" on-google-map-marker-click="{{mapMarkerClicked}}">
+    <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" minZoom="2" on-google-map-marker-click="{{mapMarkerClicked}}">
 
       <template repeat="{{language, languageIndex in items}}">
         <google-map-marker latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}" data-index="{{languageIndex}}" clickEvents></google-map-marker>

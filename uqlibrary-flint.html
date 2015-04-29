@@ -30,6 +30,12 @@
             <div class="glow">
               <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
             </div>
+              <div flex>
+                  <paper-input-decorator label="Search" id="searchInput">
+                      <input is="core-input">
+                  </paper-input-decorator>
+              </div>
+              <paper-icon-button icon="search" id="search" on-tap="{{activateSearch}}"></paper-icon-button>
           </core-toolbar>
 
           <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
@@ -41,8 +47,6 @@
             </paper-tab>
             <paper-tab data-selected-section="voicesSection">
               <uqlibrary-a11y-link>Voices</uqlibrary-a11y-link></paper-tab>
-            <paper-tab data-selected-section="searchSection">
-              <uqlibrary-a11y-link>Search</uqlibrary-a11y-link></paper-tab>
           </paper-tabs>
 
           <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
@@ -109,7 +113,14 @@
               that.$.mapList.recenterMap();
             }
           });
+
+            this.shadowRoot.getElementById('search').addEventListener('click', function () {
+                document.querySelector('html /deep/ #search').classList.toggle('iconSlide');
+                document.querySelector('html /deep/ #searchInput').classList.toggle('slideIn');
+            });
         },
+
+
 
         toggleItemDetailsDrawer: function () {
           this.$.innerDrawerPanel.togglePanel();

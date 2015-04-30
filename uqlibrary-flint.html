@@ -26,7 +26,7 @@
                 <div main layout vertical relative>
                     <core-toolbar>
                         <paper-icon-button icon="menu" class="flint-responsive-menu-icon"
-                                           on-click="{{toggleMenuDrawer}}"></paper-icon-button>
+                                           on-tap="{{toggleMenuDrawer}}"></paper-icon-button>
                         <div class="glow">
                             <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
                         </div>
@@ -36,12 +36,12 @@
                                 <input is="core-input" on-keypress="{{searchKeyPress}}">
                             </paper-input-decorator>
                         </div>
-                        <paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide" on-click="{{retractSearch}}"></paper-icon-button>
-                        <paper-icon-button icon="search" id="search" on-click="{{expandSearch}}"></paper-icon-button>
+                        <paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide" on-tap="{{retractSearch}}"></paper-icon-button>
+                        <paper-icon-button icon="search" id="search" on-tap="{{expandSearch}}"></paper-icon-button>
                     </core-toolbar>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
-                        <paper-tab data-selected-section="mapSection" id="mapSection" on-click="{{centerMapIfSelected}}">
+                        <paper-tab data-selected-section="mapSection" id="mapSection" on-tap="{{centerMapIfSelected}}">
                             <uqlibrary-a11y-link>Map</uqlibrary-a11y-link>
                         </paper-tab>
                         <paper-tab data-selected-section="languageSection">

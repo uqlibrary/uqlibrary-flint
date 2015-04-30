@@ -10,8 +10,8 @@
                   on-google-map-marker-click="{{mapMarkerClicked}}" id="map">
 
         <template repeat="{{language, languageIndex in items}}">
-          <google-map-marker latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}"
-                             data-index="{{languageIndex}}" icon="http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569
+          <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}"
+                             data-index="{{languageIndex}}" icon="http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=%E2%80%A2|FE7569
 " clickEvents></google-map-marker>
         </template>
 
@@ -51,8 +51,8 @@
       var latitude = -21.488403;
       var longitude = 147.1480151;
       var zoom = 5;
-      var mapMarkerIconActive = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
-      var mapMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|CCCCCC';
+      var mapMarkerIconActive = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=%E2%80%A2|FE7569';
+      var mapMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=%E2%80%A2|CCCCCC';
 
       Polymer('uqlibrary-flint-categories-list', {
 
@@ -136,10 +136,6 @@
               };
             }
           }
-        },
-        mapMarkerClicked: function(e) {
-          var index = e.path[0].getAttribute('data-index');
-          this.fire("category-selected", this.items[index]);
         },
 
         resizeMap: function() {

@@ -33,7 +33,7 @@
                         <paper-icon-button icon="search" hidden id="search-btn"></paper-icon-button>
                         <div flex>
                             <paper-input-decorator label="Search" id="searchInput">
-                                <input is="core-input">
+                                <input is="core-input" on-keypress="{{searchKeyPress}}">
                             </paper-input-decorator>
                         </div>
                         <paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide"></paper-icon-button>
@@ -118,15 +118,6 @@
                         }
                     });
 
-                    document.querySelector('html /deep/ #searchInput input').addEventListener('keypress', function (e) {
-                          var key = e.which || e.keyCode;
-                          if (key === 13) { // 13 is enter
-                            if (this.value.length > minSearchLength) {
-                              that.searchSubmitted(this.value);
-                            }
-                          }
-                    });
-
                     this.shadowRoot.getElementById('search').addEventListener('click', function () {
                         setTimeout(function() {
                             document.querySelector('html /deep/ #toolbar-page-title').classList.toggle('iconSlide');
@@ -185,6 +176,15 @@
                 searchSubmitted: function(searchTerm) {
                     this.$.itemsListElement.setData({searchTerm: searchTerm});
                     this.toggleItemDetailsDrawer();
+                },
+
+                searchKeyPress: function(e) {
+                    var key = e.which || e.keyCode;
+                    if (key === 13) { // 13 is enter
+                      if (e.target.value.length > minSearchLength) {
+                        this.searchSubmitted(e.target.value);
+                      }
+                    }
                 },
 
                 currentSectionChanged : function(oldValue, newValue){

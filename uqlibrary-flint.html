@@ -36,8 +36,8 @@
                                 <input is="core-input" on-keypress="{{searchKeyPress}}">
                             </paper-input-decorator>
                         </div>
-                        <paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide"></paper-icon-button>
-                        <paper-icon-button icon="search" id="search"></paper-icon-button>
+                        <paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide" on-click="{{retractSearch}}"></paper-icon-button>
+                        <paper-icon-button icon="search" id="search" on-click="{{expandSearch}}"></paper-icon-button>
                     </core-toolbar>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
@@ -95,7 +95,10 @@
     <script>
 
         (function () {
-            var minSearchLength = 1;
+            var searchHideDelay = 100,
+                searchMinLength = 1,
+                searchSlideDelay = 1,
+                searchTitleSlideDelay = 225;
 
             Polymer('uqlibrary-flint', {
 
@@ -112,49 +115,51 @@
 
                     this.currentSection = "mapSection";
 
-                    this.shadowRoot.getElementById('search').addEventListener('click', function () {
-                        setTimeout(function() {
-                            document.querySelector('html /deep/ #toolbar-page-title').classList.toggle('iconSlide');
-                        },1);
-
-                        setTimeout(function() {
-                            document.querySelector('html /deep/ #toolbar-page-title').setAttribute('hidden', true);
-                        },100);
-
-                        setTimeout(function() {
-                            document.querySelector('html /deep/ #search').setAttribute('hidden', true);
-                            document.querySelector('html /deep/ #cancel').classList.toggle('slideIn');
-                            document.querySelector('html /deep/ #search').classList.toggle('iconSlide');
-                            document.querySelector('html /deep/ #searchInput').classList.toggle('slideIn');
-
-                        }, 225);
-                    });
-
-                    this.shadowRoot.getElementById('cancel').addEventListener('click', function () {
-                        setTimeout(function() {
-//                            document.querySelector('html /deep/ #toolbar-page-title').removeAttribute('hidden');
-                            document.querySelector('html /deep/ #cancel').classList.toggle('slideIn');
-                            document.querySelector('html /deep/ #search').classList.toggle('iconSlide');
-                            document.querySelector('html /deep/ #searchInput').classList.toggle('slideIn');
-                        }, 1);
-
-                        setTimeout(function() {
-                            document.querySelector('html /deep/ #toolbar-page-title').removeAttribute('hidden');
-                        },100);
-
-                        setTimeout(function() {
-                            document.querySelector('html /deep/ #search').removeAttribute('hidden');
-                            document.querySelector('html /deep/ #toolbar-page-title').classList.toggle('iconSlide');
-                        },225);
-                    });
-
                     // Fix Google map bug when window is resized and map is hidden
                     this.$.animatedPages.addEventListener('core-animated-pages-transition-end', function() {
                       if (that.currentSection == "mapSection") {
                         that.$.mapList.resizeMap();
                       }
                     });
+                },
 
+                expandSearch: function () {
+                  var that = this;
+                    setTimeout(function() {
+                      that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
+                    }, searchSlideDelay);
+
+                    setTimeout(function() {
+                      that.shadowRoot.querySelector('#toolbar-page-title').setAttribute('hidden', true);
+                    }, searchHideDelay);
+
+                    setTimeout(function() {
+                      that.shadowRoot.querySelector('#search').setAttribute('hidden', true);
+                      that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
+                      that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
+                      that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
+
+                    }, searchTitleSlideDelay);
+                },
+
+                retractSearch: function () {
+                  var that = this;
+                  setTimeout(function() {
+                    // todo: kbw - explain
+                    // document.querySelector('html /deep/ #toolbar-page-title').removeAttribute('hidden');
+                    that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
+                    that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
+                    that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
+                  }, searchSlideDelay);
+
+                  setTimeout(function() {
+                    that.shadowRoot.querySelector('#toolbar-page-title').removeAttribute('hidden');
+                  }, searchHideDelay);
+
+                  setTimeout(function() {
+                    that.shadowRoot.querySelector('#search').removeAttribute('hidden');
+                    that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
+                  }, searchTitleSlideDelay);
                 },
 
                 centerMapIfSelected: function () {
@@ -179,7 +184,7 @@
                 searchKeyPress: function(e) {
                     var key = e.which || e.keyCode;
                     if (key === 13) { // 13 is enter
-                      if (e.target.value.length > minSearchLength) {
+                      if (e.target.value.length > searchMinLength) {
                         this.searchSubmitted(e.target.value);
                       }
                     }

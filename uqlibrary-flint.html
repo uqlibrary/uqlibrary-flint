@@ -95,6 +95,8 @@
     <script>
 
         (function () {
+            var minSearchLength = 1;
+
             Polymer('uqlibrary-flint', {
 
                 // Accessibility issues fixes
@@ -114,6 +116,15 @@
                         if (that.currentSection === "mapSection") {
                             that.$.mapList.recenterMap();
                         }
+                    });
+
+                    document.querySelector('html /deep/ #searchInput input').addEventListener('keypress', function (e) {
+                          var key = e.which || e.keyCode;
+                          if (key === 13) { // 13 is enter
+                            if (this.value.length > minSearchLength) {
+                              that.searchSubmitted(this.value);
+                            }
+                          }
                     });
 
                     this.shadowRoot.getElementById('search').addEventListener('click', function () {
@@ -171,8 +182,9 @@
                     this.$.outerDrawerPanel.togglePanel();
                 },
 
-                searchSubmitted: function(e) {
-                    this.$.searchResultsListElement.setData({searchTerm: 'head'});
+                searchSubmitted: function(searchTerm) {
+                    this.$.itemsListElement.setData({searchTerm: searchTerm});
+                    this.toggleItemDetailsDrawer();
                 },
 
                 currentSectionChanged : function(oldValue, newValue){

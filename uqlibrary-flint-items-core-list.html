@@ -247,7 +247,11 @@
         var items = [];
         var listTitle = '';
 
+        // Reset data displaying for previous list
         if(this.$.itemsList.data) {
+          this.$.itemsList.data.forEach(function(item) {
+            item.showMore = false;
+          });
           var collapseItems = this.$.itemsList.querySelectorAll('.collapseItem');
           var listItems = this.$.itemsList.querySelectorAll('.listItem');
           for (i = 0; i <	collapseItems.length; i++) {

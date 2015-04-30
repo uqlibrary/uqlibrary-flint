@@ -7,7 +7,7 @@
 
     <template if="{{showMap}}">
       <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" minZoom="4"
-                  on-google-map-marker-click="{{mapMarkerClicked}}">
+                  on-google-map-marker-click="{{mapMarkerClicked}}" id="map">
 
         <template repeat="{{language, languageIndex in items}}">
           <google-map-marker latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}"

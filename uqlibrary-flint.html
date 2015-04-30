@@ -95,10 +95,17 @@
     <script>
 
         (function () {
-            var searchHideDelay = 100,
-                searchMinLength = 1,
-                searchSlideDelay = 1,
-                searchTitleSlideDelay = 225;
+            var     expandSearchFrame1 = 1,
+                    expandSearchFrame2 = 100,
+                    expandSearchFrame3 = 250,
+                    expandSearchFrame4 = 400,
+
+                    retractSearchFrame1 = 1,
+                    retractSearchFrame2 = 200,
+                    retractSearchFrame3 = 300,
+                    retractSearchFrame4 = 400,
+
+                    searchMinLength = 1;
 
             Polymer('uqlibrary-flint', {
 
@@ -127,39 +134,45 @@
                   var that = this;
                     setTimeout(function() {
                       that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
-                    }, searchSlideDelay);
+                    }, expandSearchFrame1);
 
                     setTimeout(function() {
                       that.shadowRoot.querySelector('#toolbar-page-title').setAttribute('hidden', true);
-                    }, searchHideDelay);
+                    }, expandSearchFrame2);
 
                     setTimeout(function() {
                       that.shadowRoot.querySelector('#search').setAttribute('hidden', true);
-                      that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
                       that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
+//                      that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
                       that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
 
-                    }, searchTitleSlideDelay);
+                    }, expandSearchFrame3);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
+                    }, (expandSearchFrame4));
                 },
 
                 retractSearch: function () {
                   var that = this;
                   setTimeout(function() {
-                    // todo: kbw - explain
-                    // document.querySelector('html /deep/ #toolbar-page-title').removeAttribute('hidden');
                     that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
-                    that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
-                    that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
-                  }, searchSlideDelay);
+
+                  }, retractSearchFrame1);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
+                        that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
+                    }, (retractSearchFrame2));
 
                   setTimeout(function() {
                     that.shadowRoot.querySelector('#toolbar-page-title').removeAttribute('hidden');
-                  }, searchHideDelay);
+                  }, retractSearchFrame3);
 
                   setTimeout(function() {
                     that.shadowRoot.querySelector('#search').removeAttribute('hidden');
                     that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
-                  }, searchTitleSlideDelay);
+                  }, retractSearchFrame4);
                 },
 
                 centerMapIfSelected: function () {

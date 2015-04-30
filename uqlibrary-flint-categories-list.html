@@ -7,12 +7,13 @@
 
     <template if="{{showMap}}">
       <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" minZoom="4"
-                  on-google-map-marker-click="{{mapMarkerClicked}}" id="map">
+                  on-google-map-marker-click="{{mapMarkerClicked}}" id="gmap">
 
         <template repeat="{{language, languageIndex in items}}">
-          <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}" longitude="{{language.cvo_long}}"
-                             data-index="{{languageIndex}}" icon="http://chart.apis.google.com/chart?chst=d_map_pin_letter_withshadow&chld=%E2%80%A2|FE7569
-" clickEvents></google-map-marker>
+          <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}"
+                             longitude="{{language.cvo_long}}"
+                             data-index="{{languageIndex}}" icon="[[initialMapMarkerIcon]]" clickEvents>
+          </google-map-marker>
         </template>
 
       </google-map>
@@ -56,13 +57,16 @@
 
       Polymer('uqlibrary-flint-categories-list', {
 
-        ready: function () {
+        created: function () {
           this.items = null;
           this.groups = null;
           this.latitude = latitude;
           this.longitude = longitude;
           this.zoom = zoom;
+          this.initialMapMarkerIcon = mapMarkerIconActive;
+        },
 
+        ready: function () {
           var that = this;
 
           this.$.categoriesApiElement.addEventListener("uqlibrary-api-flint-categories-loaded", function (data) {
@@ -75,6 +79,7 @@
             //}
           });
         },
+
 
         recenterMap: function () {
           if (this.showMap) {
@@ -126,6 +131,10 @@
           this.setActiveMapMarker(e.target);
         },
 
+        resizeMap: function () {
+          this.$.gmap.resize();
+        },
+
         setActiveMapMarker: function (activeMapMarker) {
           var mapMarkers = this.shadowRoot.querySelectorAll('google-map-marker');
 
@@ -134,14 +143,14 @@
               mapMarkers[mm].icon = {
                 url: mapMarkers[mm] === activeMapMarker ? mapMarkerIconActive : mapMarkerIcon
               };
+
+              if ((mapMarkers[mm] !== activeMapMarker) && mapMarkers[mm].hasOwnProperty('info')) {
+                mapMarkers[mm].info.close();
+              }
             }
           }
-        },
-
-        resizeMap: function() {
-          this.$.map.resize();
         }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
 </polymer-element>

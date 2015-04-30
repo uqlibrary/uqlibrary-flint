@@ -41,7 +41,7 @@
                     </core-toolbar>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
-                        <paper-tab data-selected-section="mapSection" id="mapSection">
+                        <paper-tab data-selected-section="mapSection" id="mapSection" on-click="{{centerMapIfSelected}}">
                             <uqlibrary-a11y-link>Map</uqlibrary-a11y-link>
                         </paper-tab>
                         <paper-tab data-selected-section="languageSection">
@@ -112,12 +112,6 @@
 
                     this.currentSection = "mapSection";
 
-                    this.shadowRoot.getElementById('mapSection').addEventListener('click', function () {
-                        if (that.currentSection === "mapSection") {
-                            that.$.mapList.recenterMap();
-                        }
-                    });
-
                     this.shadowRoot.getElementById('search').addEventListener('click', function () {
                         setTimeout(function() {
                             document.querySelector('html /deep/ #toolbar-page-title').classList.toggle('iconSlide');
@@ -163,7 +157,11 @@
 
                 },
 
-
+                centerMapIfSelected: function () {
+                    if (this.currentSection === "mapSection") {
+                      this.$.mapList.recenterMap();
+                    }
+                },
 
                 toggleItemDetailsDrawer: function () {
                     this.$.innerDrawerPanel.togglePanel();

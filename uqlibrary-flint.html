@@ -18,7 +18,7 @@
 
       <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="750px" drawerWidth="360px"
                          disableSwipe>
-        <div id="itemDetailDrawer" drawer class="right-drawer">
+        <div id="itemDetailDrawer" drawer class="right-drawer" style="margin-right: 30px;">
           <uqlibrary-flint-items-core-list id="itemsListElement"
                                            on-close-button-clicked="{{toggleItemDetailsDrawer}}"
                                            on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
@@ -50,7 +50,7 @@
           </paper-tabs>
 
           <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
-                               transitions="slide-from-right" flex>
+                               transitions="slide-from-right" flex id="animatedPages">
             <section id="mapDisplaySection" data-selected-section="mapSection">
               <uqlibrary-flint-categories-list id="mapList" showMap="true" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
             </section>
@@ -108,16 +108,24 @@
 
           this.currentSection = "mapSection";
 
+
           this.shadowRoot.getElementById('mapSection').addEventListener('click', function () {
             if (that.currentSection === "mapSection") {
               that.$.mapList.recenterMap();
             }
           });
 
-            this.shadowRoot.getElementById('search').addEventListener('click', function () {
-                document.querySelector('html /deep/ #search').classList.toggle('iconSlide');
-                document.querySelector('html /deep/ #searchInput').classList.toggle('slideIn');
-            });
+          this.shadowRoot.getElementById('search').addEventListener('click', function () {
+            document.querySelector('html /deep/ #search').classList.toggle('iconSlide');
+            document.querySelector('html /deep/ #searchInput').classList.toggle('slideIn');
+          });
+          var that = this;
+          // Fix Google map bug when window is resized and map is hidden
+          this.$.animatedPages.addEventListener('core-animated-pages-transition-end', function() {
+            if (that.currentSection == "mapSection") {
+              that.$.mapList.resizeMap();
+            }
+          });
         },
 
 

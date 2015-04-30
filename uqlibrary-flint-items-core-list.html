@@ -33,7 +33,7 @@
 
         </li>
 
-        <li class="list-item border" data-index="{{index}}">
+        <li class="list-item border listItem" data-index="{{index}}">
 
           <div class="avatar">
             <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
@@ -71,7 +71,7 @@
 
           </div>
 
-          <core-collapse id="itemDetailsCollapse" data-index="{{index}}">
+          <core-collapse class="collapseItem" id="itemDetailsCollapse" data-index="{{index}}">
               <uqlibrary-flint-item item="{{model}}" on-tap="{{keepItemDetailsOpen}}" hidden?="{{!model.showMore}}"></uqlibrary-flint-item>
           </core-collapse>
 
@@ -82,7 +82,7 @@
 
   <div style="height: 65px;" relative>
     <div fit style="background-color: #efefef; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.37);">
-      <x-audio id="audioPlayer" showVolumeControls showName></x-audio>
+      <x-audio id="audioPlayer" disabled showVolumeControls showName></x-audio>
     </div>
   </div>
 
@@ -112,6 +112,11 @@
         };
 
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
+          //Simulate different data
+          e.detail.sort(function(a,b) {
+            return (Math.random() < Math.random() ? -1 : 1)
+          });
+
 
           that.$.itemsList.data = e.detail;
           that.$.itemsList.groups = [
@@ -133,13 +138,11 @@
 
         //setup audio player
         this.$.audioPlayer.addEventListener('x-audio-initialized', function() {
-          console.log("x-audio-initialized");
-
+          that.$.audioPlayer.removeAttribute('disabled');
           that.$.audioPlayer.play();
         });
 
         this.$.audioPlayer.addEventListener('x-audio-play', function() {
-          console.log("x-audio-play");
 
           if(that.previousPlayRecordButton) {
             that.previousPlayRecordButton.icon = 'av:play-circle-outline';
@@ -153,7 +156,6 @@
         });
 
         this.$.audioPlayer.addEventListener('x-audio-pause', function() {
-          console.log("x-audio-pause");
 
           if(that.previousPlayRecordButton) {
             that.previousPlayRecordButton.icon = 'av:play-circle-outline';
@@ -179,11 +181,11 @@
         }
 
         var collapseSection = itemRow.item.querySelector("#itemDetailsCollapse");
-        if (!collapseSection.opened) {
-          itemRow.item.setAttribute("class", "list-item border expanded");
+        if (!itemRow.data.showMore) {
+          itemRow.item.setAttribute("class", "list-item border listItem expanded");
           itemRow.data.showMore = true;
         } else {
-          itemRow.item.setAttribute("class", "list-item border");
+          itemRow.item.setAttribute("class", "list-item listItem border");
           itemRow.data.showMore = false;
         }
 
@@ -244,6 +246,17 @@
 
         var items = [];
         var listTitle = '';
+
+        if(this.$.itemsList.data) {
+          var collapseItems = this.$.itemsList.querySelectorAll('.collapseItem');
+          var listItems = this.$.itemsList.querySelectorAll('.listItem');
+          for (i = 0; i <	collapseItems.length; i++) {
+            collapseItems[i].opened = false;
+          }
+          for (i = 0; i <	listItems.length; i++) {
+            listItems[i].setAttribute("class", "list-item border");
+          }
+        }
 
         if (args && args.language) {
           this.language = args.language;

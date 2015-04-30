@@ -136,8 +136,16 @@
               };
             }
           }
+        },
+        mapMarkerClicked: function(e) {
+          var index = e.path[0].getAttribute('data-index');
+          this.fire("category-selected", this.items[index]);
+        },
+
+        resizeMap: function() {
+          this.$.map.resize();
         }
-      });
-    })();
-  </script>
+    });
+  })();
+</script>
 </polymer-element>

@@ -19,7 +19,7 @@
     <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 63px;">
       <template>
 
-        <li class="list-item header" divider horizontal layout center-center>
+        <li class="list-item header" divider horizontal layout center-center on-tap="{{keepItemDetailsOpen}}">
 
           <div class="avatar">
             <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
@@ -110,6 +110,7 @@
           languages : {},
           voices: {}
         };
+
 
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
           //Simulate different data

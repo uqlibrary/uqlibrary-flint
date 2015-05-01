@@ -16,7 +16,7 @@
                 <uqlibrary-menu menuFile="flint.json"></uqlibrary-menu>
             </div>
 
-            <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="750px" drawerWidth="360px"
+            <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
                                disableSwipe>
                 <div id="itemDetailDrawer" drawer class="right-drawer">
                     <uqlibrary-flint-items-core-list id="itemsListElement"
@@ -120,6 +120,16 @@
                 ready: function () {
                     var that = this;
 
+                    var responsiveWidth = parseInt(this.$.innerDrawerPanel.responsiveWidth);
+
+                    if (responsiveWidth > window.innerWidth) {
+                        this.$.innerDrawerPanel.drawerWidth = "95%";
+                    } else if (responsiveWidth <= window.innerWidth) {
+                        this.$.innerDrawerPanel.drawerWidth = "50%";
+                    }
+
+                    window.addEventListener('resize', this.onWindowResize);
+
                     this.currentSection = "mapSection";
 
                     // Fix Google map bug when window is resized and map is hidden
@@ -151,6 +161,8 @@
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
                     }, (expandSearchFrame4));
+
+                    that.shadowRoot.querySelector('paper-input-decorator').setAttribute('focused', true);
                 },
 
                 retractSearch: function () {

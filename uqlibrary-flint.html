@@ -25,7 +25,7 @@
                 </div>
                 <div main layout vertical relative>
                     <core-toolbar>
-                        <paper-icon-button icon="menu" class="flint-responsive-menu-icon"
+                        <paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"
                                            on-tap="{{toggleMenuDrawer}}"></paper-icon-button>
                         <div class="glow">
                             <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
@@ -95,15 +95,17 @@
     <script>
 
         (function () {
-            var     expandSearchFrame1 = 1,
-                    expandSearchFrame2 = 100,
-                    expandSearchFrame3 = 250,
-                    expandSearchFrame4 = 400,
+            var     expandSearchFrame0 = 1,
+                    expandSearchFrame1 = 250,
+                    expandSearchFrame2 = 400,
+                    expandSearchFrame3 = 500,
+                    expandSearchFrame4 = 600,
 
-                    retractSearchFrame1 = 1,
-                    retractSearchFrame2 = 200,
-                    retractSearchFrame3 = 300,
-                    retractSearchFrame4 = 400,
+                    retractSearchFrame0 = 1,
+                    retractSearchFrame1 = 250,
+                    retractSearchFrame2 = 400,
+                    retractSearchFrame3 = 500,
+                    retractSearchFrame4 = 600,
 
                     searchMinLength = 1;
 
@@ -142,27 +144,33 @@
 
                 expandSearch: function () {
                   var that = this;
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#hamburgerMenuButton').classList.toggle('iconSlide');
+                    }, expandSearchFrame0);
+
                     setTimeout(function() {
                       that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
                     }, expandSearchFrame1);
 
                     setTimeout(function() {
+                        that.shadowRoot.querySelector('#hamburgerMenuButton').setAttribute('hidden', true);
                       that.shadowRoot.querySelector('#toolbar-page-title').setAttribute('hidden', true);
                     }, expandSearchFrame2);
 
                     setTimeout(function() {
                       that.shadowRoot.querySelector('#search').setAttribute('hidden', true);
                       that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
-//                      that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
                       that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
 
                     }, expandSearchFrame3);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
+                        // TODO: search input should receive focus at this point
                     }, (expandSearchFrame4));
 
-                    that.shadowRoot.querySelector('paper-input-decorator').setAttribute('focused', true);
+
                 },
 
                 retractSearch: function () {
@@ -170,21 +178,26 @@
                   setTimeout(function() {
                     that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
 
-                  }, retractSearchFrame1);
+                  }, retractSearchFrame0);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
                         that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
-                    }, (retractSearchFrame2));
+                    }, (retractSearchFrame1));
 
                   setTimeout(function() {
                     that.shadowRoot.querySelector('#toolbar-page-title').removeAttribute('hidden');
-                  }, retractSearchFrame3);
+                      that.shadowRoot.querySelector('#hamburgerMenuButton').removeAttribute('hidden');
+                  }, retractSearchFrame2);
 
                   setTimeout(function() {
                     that.shadowRoot.querySelector('#search').removeAttribute('hidden');
                     that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
-                  }, retractSearchFrame4);
+                  }, retractSearchFrame3);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#hamburgerMenuButton').classList.toggle('iconSlide');
+                    }, retractSearchFrame4);
                 },
 
                 centerMapIfSelected: function () {

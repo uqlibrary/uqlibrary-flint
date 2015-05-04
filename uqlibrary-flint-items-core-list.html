@@ -38,9 +38,12 @@
           <div class="avatar">
             <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
               <!-- TODO: replace MP3 with obj binding when available -->
-              <core-icon-button aria-label="Play audio of {{model.title}}" data-index="{{index}}"
+              <paper-icon-button
+                                class="audioControlButton"
+                                role="button" aria-label="Play audio of {{model.title}}" data-index="{{index}}"
                                 icon="av:play-circle-outline" data-title="{{model.title}}"
-                                data-mp3="{{ index % 2 == 0 ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3'}}"></core-icon-button>
+                                data-mp3="{{ index % 2 == 0 ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3'}}"></paper-icon-button>
+
             </uqlibrary-a11y-link>
           </div>
 
@@ -121,6 +124,7 @@
 
 
           that.$.itemsList.data = e.detail;
+          that.setPlayingRecord();
           that.$.itemsList.groups = [
             {
               length: e.detail.length,
@@ -208,12 +212,12 @@
         var button = null;
 
         //event can be triggered by keyboard or mouse, process event for either
-        if (source.path && source.path.length > 0 && source.path[0].tagName.toLowerCase() === "core-icon-button") {
+        if (source.path && source.path.length > 0 && source.path[0].tagName.toLowerCase() === "paper-icon-button") {
           //do not open/close item details on play/pause
           this.skipItemSelected = true;
           button = source.path[0];
         } else if (source.path && source.path.length > 0 && source.path[0].children
-                && source.path[0].children[0].tagName.toLowerCase() === "core-icon-button") {
+                && source.path[0].children[0].tagName.toLowerCase() === "paper-icon-button") {
           //do not open/close item details on play/pause
           this.skipItemSelected = true;
           button = source.path[0].children[0];
@@ -249,19 +253,21 @@
         var items = [];
         var listTitle = '';
 
+        var that = this;
         // Reset data displaying for previous list
         if(this.$.itemsList.data) {
-          this.$.itemsList.data.forEach(function(item) {
-            item.showMore = false;
-          });
+
+
           var collapseItems = this.$.itemsList.querySelectorAll('.collapseItem');
           var listItems = this.$.itemsList.querySelectorAll('.listItem');
-          for (i = 0; i <	collapseItems.length; i++) {
+          for (var i = 0; i <	collapseItems.length; i++) {
             collapseItems[i].opened = false;
+
           }
-          for (i = 0; i <	listItems.length; i++) {
+          for (var i = 0; i <	listItems.length; i++) {
             listItems[i].setAttribute("class", "list-item border");
           }
+
         }
 
         if (args && args.language) {
@@ -271,6 +277,7 @@
             //get data from local cache
             items = this.cacheData.languages[this.language.cvo_id];
             this.$.itemsList.data = items;
+            this.setPlayingRecord();
             this.$.itemsList.groups = [
               {
                 length: items.length,
@@ -291,6 +298,7 @@
             //get data from local cache
             items = this.cacheData.voices[this.voice.cvo_title];
             this.$.itemsList.data = items;
+            this.setPlayingRecord();
             this.$.itemsList.groups = [
               {
                 length: items.length,
@@ -307,6 +315,30 @@
           //get data from search api
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });
+        }
+      },
+
+      setPlayingRecord: function() {
+        if(this.$.itemsList.data) {
+          var soundPlaying = null;
+          var that = this;
+          this.$.itemsList.data.forEach(function(item, index) {
+            item.showMore = false;
+
+            if(item.title == that.$.audioPlayer.name) {
+              soundPlaying = index;
+            }
+          });
+
+          var playButtons = this.$.itemsList.querySelectorAll('paper-icon-button.audioControlButton');
+          for (var i = 0; i <	playButtons.length; i++) {
+            if(i == soundPlaying) {
+              playButtons[i].icon = 'av:pause-circle-outline';
+            } else {
+              playButtons[i].icon = 'av:play-circle-outline';
+            }
+          }
+
         }
       }
     });

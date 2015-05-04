@@ -193,10 +193,6 @@
               mapMarkers[mm].icon = {
                 url: mapMarkers[mm] === activeMapMarker ? mapMarkerIconActive : mapMarkerIcon
               };
-
-              if ((mapMarkers[mm] !== activeMapMarker) && mapMarkers[mm].hasOwnProperty('info')) {
-                mapMarkers[mm].info.close();
-              }
             }
           }
         }

@@ -39,6 +39,9 @@
 
       Polymer('uqlibrary-flint-google-map', {
 
+        /**
+         * Initialisation
+         */
         created: function () {
           this.items = null;
           this.initialMapMarkerIcon = mapMarkerIconActive;
@@ -46,6 +49,12 @@
           this.isTouchDevice = is_touch_device();
         },
 
+        /**
+         * Look through all the elements and return a
+         * lat lng bounds enclosing them all
+         *
+         * @returns {google.maps.LatLngBounds}
+         */
         getLatLngBounds: function () {
           var mapMarkers = this.getMapMarkers();
           var bounds = new google.maps.LatLngBounds();
@@ -58,19 +67,29 @@
           return bounds;
         },
 
+        /**
+         * Return a HTML element group of current map markers
+         *
+         * @returns {NodeList|*}
+         */
         getMapMarkers: function () {
           return this.shadowRoot.querySelectorAll('google-map-marker');
         },
 
+        /**
+         * Run the map initialisation
+         */
         mapReady: function () {
           var allowedBounds = this.getLatLngBounds();
           var lastValidCenter = this.$.gmap.map.getCenter();
           var that = this;
 
+          // listen for event, currently triggered from map tab header
           document.addEventListener('uqlibrary-flint-map-center-tap', function () {
             that.recenterMap();
           });
 
+          // ensure that Yury can't scroll all the way to Belarus
           google.maps.event.addListener(this.$.gmap.map, 'center_changed', function () {
             if (allowedBounds.contains(this.getCenter())) {
               // still within valid bounds, so save the last valid position
@@ -118,6 +137,9 @@
           }
         },
 
+        /**
+         * Set map back to initial state
+         */
         recenterMap: function () {
           this.$.gmap.map.fitBounds(this.getLatLngBounds());
         },

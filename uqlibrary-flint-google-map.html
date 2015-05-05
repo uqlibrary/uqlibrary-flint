@@ -62,19 +62,6 @@
           return this.shadowRoot.querySelectorAll('google-map-marker');
         },
 
-        getMapOptions: function () {
-          var mapOptions = this.super();
-
-          mapOptions.mapTypeControl = true;
-          mapOptions.overviewMapControl = true;
-          mapOptions.panControl = true;
-          mapOptions.scaleControl = true;
-          mapOptions.streetViewControl = true;
-          mapOptions.zoomControl = true;
-
-          return mapOptions;
-        },
-
         mapReady: function () {
           var allowedBounds = this.getLatLngBounds();
           var lastValidCenter = this.$.gmap.map.getCenter();

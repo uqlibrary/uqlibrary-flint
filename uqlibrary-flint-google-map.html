@@ -1,0 +1,149 @@
+<link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
+<polymer-element name="uqlibrary-flint-google-map" extends="google-map" attributes="items">
+  <template>
+    <google-map minZoom="4" on-google-map-ready="{{mapReady}}" map="{{map}}" id="gmap" fitToMarkers>
+
+      <template repeat="{{language, languageIndex in items}}">
+        <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}"
+                           longitude="{{language.cvo_long}}"
+                           data-index="{{languageIndex}}" icon="[[initialMapMarkerIcon]]" clickEvents mouseEvents
+                           on-google-map-marker-mouseover="{{markerHoverHandler}}"
+                           on-google-map-marker-click="{{mapMarkerClicked}}"
+            >
+          <core-collapse opened>
+            <div layout horizontal onclick="showDetails({{languageIndex}})">
+              <div self-center flex>{{language.cvo_title}}</div>
+              <div>
+                <core-icon icon="chevron-right" hidden?="{{!isTouchDevice}}"></core-icon>
+              </div>
+            </div>
+          </core-collapse>
+
+        </google-map-marker>
+      </template>
+
+    </google-map>
+  </template>
+  <script>
+
+    function showDetails(el) {
+      var item = document.querySelector("uqlibrary-flint /deep/ google-map-marker[data-index='" + el + "']");
+      if (item != null) {
+        item.fire('google-map-marker-click');
+      }
+    }
+
+    (function () {
+      var mapMarkerIconActive = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
+      var mapMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|CCCCCC';
+
+      Polymer('uqlibrary-flint-google-map', {
+
+        created: function () {
+          this.items = null;
+          this.initialMapMarkerIcon = mapMarkerIconActive;
+          this.openedMarker = null;
+          this.isTouchDevice = is_touch_device();
+        },
+
+        ready: function () {
+        },
+
+        mapReady: function () {
+          var allowedBounds = this.getLatLngBounds();
+          var lastValidCenter = this.$.gmap.map.getCenter();
+          var that = this;
+
+          document.addEventListener('uqlibrary-flint-map-center-tap', function() {
+            that.recenterMap();
+          });
+
+          google.maps.event.addListener(this.$.gmap.map, 'center_changed', function () {
+            if (allowedBounds.contains(this.getCenter())) {
+              // still within valid bounds, so save the last valid position
+              lastValidCenter = this.getCenter();
+              return;
+            }
+
+            // not valid anymore => return to last valid position
+            this.panTo(lastValidCenter);
+          });
+        },
+
+        recenterMap: function () {
+          this.$.gmap.map.fitBounds(this.getLatLngBounds());
+        },
+
+        mapMarkerClicked: function (e, sender, marker) {
+          var showDetails = true;
+          var index = e.path[0].getAttribute('data-index');
+
+          if (this.isTouchDevice) {
+            if (this.openedMarker == null || this.openedMarker.getAttribute('data-index') != index) {
+              this.openedMarker = e.target;
+              showDetails = false;
+            }
+          }
+          if (marker.marker.info != null) {
+            this.openedMarker = marker;
+          }
+          this.setActiveMapMarker(e.target);
+          if (showDetails) {
+            this.fire("category-selected", this.items[index]);
+          }
+
+        },
+
+        markerHoverHandler: function (e, sender, marker) {
+          if (!this.isTouchDevice && marker.info != null) {
+            this.openedMarker = e.target;
+          }
+        },
+
+        openedMarkerChanged: function (oldValue, newValue) {
+          if (oldValue || newValue == null) {
+            oldValue.info.close(oldValue.map, oldValue.marker);
+          }
+          if (newValue) {
+            newValue.info.open(newValue.map, newValue.marker);
+          }
+        },
+
+        resizeMap: function () {
+          this.$.gmap.resize();
+        },
+
+        getMapMarkers: function () {
+          return this.shadowRoot.querySelectorAll('google-map-marker');
+        },
+
+        setActiveMapMarker: function (activeMapMarker) {
+          var mapMarkers = this.getMapMarkers();
+
+          for (var i = 0, l = mapMarkers.length; i < l; i++) {
+            mapMarkers[i].icon = {
+              url: mapMarkers[i] === activeMapMarker ? mapMarkerIconActive : mapMarkerIcon
+            };
+          }
+        },
+
+        getLatLngBounds: function () {
+          var mapMarkers = this.getMapMarkers();
+          var bounds = new google.maps.LatLngBounds();
+
+          for (var i = 0, l = mapMarkers.length; i < l; i++) {
+            var ll = new google.maps.LatLng(mapMarkers[i].latitude, mapMarkers[i].longitude);
+            bounds.extend(ll);
+          }
+
+          return bounds;
+        }
+      });
+    })();
+    // Small hack to define if this is a touchscreen device
+    function is_touch_device() {
+      return 'ontouchstart' in window // works on most browsers
+          || 'onmsgesturechange' in window; // works on ie10
+    }
+  </script>
+</polymer-element>

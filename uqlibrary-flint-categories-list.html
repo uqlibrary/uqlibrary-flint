@@ -6,9 +6,7 @@
     <uqlibrary-api-flint-categories id="categoriesApiElement"></uqlibrary-api-flint-categories>
 
     <template if="{{showMap}}">
-      <google-map latitude="{{latitude}}" longitude="{{longitude}}" disableDefaultUI zoom="{{zoom}}" minZoom="4"
-                  on-google-map-ready="{{mapReady}}"
-                  id="gmap">
+      <google-map disableDefaultUI minZoom="4" on-google-map-ready="{{mapReady}}" map="{{map}}" id="gmap" fitToMarkers>
 
         <template repeat="{{language, languageIndex in items}}">
           <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}"
@@ -16,7 +14,7 @@
                              data-index="{{languageIndex}}" icon="[[initialMapMarkerIcon]]" clickEvents mouseEvents
                              on-google-map-marker-mouseover="{{markerHoverHandler}}"
                              on-google-map-marker-click="{{mapMarkerClicked}}"
-                              >
+              >
             <core-collapse opened>
               <div layout horizontal onclick="showDetails({{languageIndex}})">
                 <div self-center flex>{{language.cvo_title}}</div>
@@ -24,7 +22,7 @@
                   <core-icon icon="chevron-right" hidden?="{{!isTouchDevice}}"></core-icon>
                 </div>
               </div>
-              </core-collapse>
+            </core-collapse>
 
           </google-map-marker>
         </template>
@@ -63,16 +61,13 @@
   <script>
 
     function showDetails(el) {
-      var item = document.querySelector("uqlibrary-flint /deep/ google-map-marker[data-index='"+el+"']");
-      if(item != null) {
+      var item = document.querySelector("uqlibrary-flint /deep/ google-map-marker[data-index='" + el + "']");
+      if (item != null) {
         item.fire('google-map-marker-click');
       }
     }
 
     (function () {
-      var latitude = -21.488403;
-      var longitude = 147.1480151;
-      var zoom = 5;
       var mapMarkerIconActive = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
       var mapMarkerIcon = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|CCCCCC';
 
@@ -81,9 +76,6 @@
         created: function () {
           this.items = null;
           this.groups = null;
-          this.latitude = latitude;
-          this.longitude = longitude;
-          this.zoom = zoom;
           this.initialMapMarkerIcon = mapMarkerIconActive;
           this.openedMarker = null;
           this.isTouchDevice = is_touch_device();
@@ -103,11 +95,25 @@
           });
         },
 
+        mapReady: function () {
+          var allowedBounds = this.getLatLngBounds();
+          var lastValidCenter = this.$.gmap.map.getCenter();
+
+          google.maps.event.addListener(this.$.gmap.map, 'center_changed', function () {
+            if (allowedBounds.contains(this.getCenter())) {
+              // still within valid bounds, so save the last valid position
+              lastValidCenter = this.getCenter();
+              return;
+            }
+
+            // not valid anymore => return to last valid position
+            this.panTo(lastValidCenter);
+          });
+        },
+
         recenterMap: function () {
           if (this.showMap) {
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.zoom = zoom;
+            this.$.gmap.map.fitBounds(this.getLatLngBounds());
           }
         },
 
@@ -151,33 +157,33 @@
           var showDetails = true;
           var index = e.path[0].getAttribute('data-index');
 
-          if(this.isTouchDevice) {
-            if(this.openedMarker == null || this.openedMarker.getAttribute('data-index') != index) {
+          if (this.isTouchDevice) {
+            if (this.openedMarker == null || this.openedMarker.getAttribute('data-index') != index) {
               this.openedMarker = e.target;
               showDetails = false;
             }
           }
-          if(marker.marker.info != null) {
+          if (marker.marker.info != null) {
             this.openedMarker = marker;
           }
           this.setActiveMapMarker(e.target);
-          if(showDetails) {
+          if (showDetails) {
             this.fire("category-selected", this.items[index]);
           }
 
         },
-        markerHoverHandler: function(e, sender, marker) {
-          if(!this.isTouchDevice && marker.info != null) {
+        markerHoverHandler: function (e, sender, marker) {
+          if (!this.isTouchDevice && marker.info != null) {
             this.openedMarker = e.target;
           }
         },
 
-        openedMarkerChanged: function(oldValue, newValue) {
-          if(oldValue || newValue == null) {
+        openedMarkerChanged: function (oldValue, newValue) {
+          if (oldValue || newValue == null) {
             oldValue.info.close(oldValue.map, oldValue.marker);
           }
-          if(newValue) {
-              newValue.info.open(newValue.map, newValue.marker);
+          if (newValue) {
+            newValue.info.open(newValue.map, newValue.marker);
           }
         },
 
@@ -185,8 +191,12 @@
           this.$.gmap.resize();
         },
 
+        getMapMarkers: function () {
+          return this.shadowRoot.querySelectorAll('google-map-marker');
+        },
+
         setActiveMapMarker: function (activeMapMarker) {
-          var mapMarkers = this.shadowRoot.querySelectorAll('google-map-marker');
+          var mapMarkers = this.getMapMarkers();
 
           for (var mm in mapMarkers) {
             if (mapMarkers.hasOwnProperty(mm)) {
@@ -195,13 +205,26 @@
               };
             }
           }
+        },
+
+        getLatLngBounds: function () {
+          var mapMarkers = this.getMapMarkers();
+          var bounds = new google.maps.LatLngBounds();
+
+          for (var i = 0, l = mapMarkers.length; i < l; i++) {
+            var ll = new google.maps.LatLng(mapMarkers[i].latitude, mapMarkers[i].longitude);
+            bounds.extend(ll);
+          }
+
+          return bounds;
         }
       });
     })();
     // Small hack to define if this is a touchscreen device
     function is_touch_device() {
       return 'ontouchstart' in window // works on most browsers
-        || 'onmsgesturechange' in window; // works on ie10
-    };
+          || 'onmsgesturechange' in window; // works on ie10
+    }
+    ;
   </script>
 </polymer-element>

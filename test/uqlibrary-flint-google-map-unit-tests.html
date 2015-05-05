@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-flint-categories-list-unit-test</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../uqlibrary-flint-google-map.html">
+</head>
+<body>
+
+<uqlibrary-flint-google-map></uqlibrary-flint-google-map>
+
+<script>
+  window.addEventListener('polymer-ready', function() {
+
+    var items = [
+      {
+      "cvo_id": "453670",
+      "cvo_title": "Yukulta \/ Gangalidda",
+      "cvo_desc": "Qld SE54-05",
+      "cvo_image_filename": null,
+      "cvo_external_id": "G34",
+      "cvo_hide": "0",
+      "cvo_order": null,
+      "cvo_lat": "-17.942726",
+      "cvo_long": "138.829422",
+      "record_count": "0"
+    },
+      {
+        "cvo_id": "453671",
+        "cvo_title": "Something \/ Else",
+        "cvo_desc": "Qld SE54-06",
+        "cvo_image_filename": null,
+        "cvo_external_id": "G35",
+        "cvo_hide": "0",
+        "cvo_order": null,
+        "cvo_lat": "-18.942726",
+        "cvo_long": "137.829422",
+        "record_count": "0"
+      }
+    ];
+
+    var element = document.querySelector('uqlibrary-flint-google-map');
+
+    describe('unit tests for uqlibrary-flint-google-map', function () {
+
+      before(function () {
+        element.items = items;
+      });
+
+      afterEach(function(){
+      });
+
+      it('should create a map marker for each item', function(done) {
+        setTimeout(function () {
+          var elements = element.getMapMarkers();
+          expect(elements).to.have.length(2);
+          done();
+        }, 100);
+      });
+
+    });
+  });
+
+</script>
+
+</body>
+</html>

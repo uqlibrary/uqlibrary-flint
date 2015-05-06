@@ -49,23 +49,9 @@
 
                 </div>
                 <div main layout vertical relative class="main">
-                    <!--<core-toolbar>-->
-                        <!--<paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"-->
-                                           <!--on-tap="{{toggleMenuDrawer}}"></paper-icon-button>-->
-                        <!--<div class="glow">-->
-                            <!--<h1 flex id="toolbar-page-title">Indigenous Voices</h1>-->
-                        <!--</div>-->
-                        <!--<paper-icon-button icon="search" hidden id="search-btn"></paper-icon-button>-->
-                        <!--<div flex>-->
-                            <!--<paper-input-decorator label="Search" id="searchInput">-->
-                                <!--<input is="core-input" on-keypress="{{searchKeyPress}}">-->
-                            <!--</paper-input-decorator>-->
-                        <!--</div>-->
-                        <!--<paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide" on-tap="{{retractSearch}}"></paper-icon-button>-->
-                        <!--<paper-icon-button icon="search" id="search" on-tap="{{expandSearch}}"></paper-icon-button>-->
-                    <!--</core-toolbar>-->
                     <core-toolbar>
 
+                        <!--Initial toolbar UI which is visible by default-->
                         <div id="hamburgerMenuIcon"><paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"
                                            on-tap="{{toggleMenuDrawer}}"></paper-icon-button></div>
                         <div flex id="toolbarTitle" class="glow">
@@ -73,14 +59,14 @@
                         </div>
                         <div id="expandSearch"><paper-icon-button icon="search" on-tap="{{activateSearch}}"></paper-icon-button></div>
 
+                        <!--Search UI which is only visible after user clicks 'search'-->
                         <div hidden id="backArrow" class="offCanvas"><paper-icon-button icon="arrow-back" on-tap="{{deactivateSearch}}"></paper-icon-button></div>
                         <div hidden flex id="left-flex" class="offCanvas">
                             <paper-input-decorator label="Search">
                                 <input is="core-input" on-keypress="{{searchKeyPress}}">
                             </paper-input-decorator>
                         </div>
-                        <div hidden id="right-flex" class="offCanvas"><paper-icon-button icon="search" id="searchButton" on-tap="{{searchSubmitted}}"></paper-icon-button></div>
-
+                        <div hidden id="right-flex" class="offCanvas"><paper-icon-button icon="search" id="searchButton" on-tap="{{performSearch}}"></paper-icon-button></div>
                     </core-toolbar>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
@@ -258,8 +244,11 @@
                     this.toggleItemDetailsDrawer();
                 },
 
+                performSearch: function() {
+                    this.searchSubmitted(this.shadowRoot.querySelector('input').value);
+                },
+
                 searchKeyPress: function(e) {
-                    console.log(e.target.value.length);
                     var key = e.which || e.keyCode;
                     if (key === 13) { // 13 is enter
                         if (e.target.value.length > searchMinLength) {

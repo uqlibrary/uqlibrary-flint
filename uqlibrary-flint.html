@@ -234,6 +234,7 @@
 
                 searchSubmitted: function(searchTerm) {
                     this.$.itemsListElement.setData({searchTerm: searchTerm});
+                    this.displayListSection();
                     this.toggleItemDetailsDrawer();
                 },
 

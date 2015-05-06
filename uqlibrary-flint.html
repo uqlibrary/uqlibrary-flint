@@ -14,7 +14,7 @@
 
         <core-drawer-panel id="outerDrawerPanel" responsiveWidth="1500px">
             <div drawer class="left-drawer">
-                <uqlibrary-menu menuFile="flint.json"></uqlibrary-menu>
+                <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
             </div>
 
             <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
@@ -24,7 +24,17 @@
                   <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
                                        transitions="slide-from-right" id="animatedDrawerPages">
                     <section id="infoSection" data-selected-section="infoSection">
-                      <h4 class="text-container">About this collection</h4>
+                      <div horizontal layout>
+                        <h4 class="text-container" flex>About this collection</h4>
+
+                        <div>
+                        <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
+                                        on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
+                        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
+                        </div>
+
+                      </div>
+
                       <p class="text-container body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam mattis sagittis.
                         Praesent sed nulla ac nulla tristique imperdiet sit amet sit amet leo. Vestibulum magna diam, pretium vulputate rutrum vel,
                         eleifend eu elit. Nunc id ligula ut augue vehicula congue. Sed ipsum velit, mattis et neque a, porta mattis lorem. Cras nunc magna,
@@ -45,8 +55,6 @@
                                             on-back-button-clicked="{{displayListSection}}"></uqlibrary-flint-item>
                     </section>
                   </core-animated-pages>
-
-
                 </div>
                 <div main layout vertical relative class="main">
                     <core-toolbar>
@@ -124,11 +132,6 @@
 
                 // Accessibility issues fixes
                 keyboardNavigationKeys: 'space enter',
-                a11yKeyPressed: function (source, event) {
-                    if (source.path && source.path.length > 0 && source.path[0].target) {
-                        source.path[0].target.fire("tap");
-                    }
-                },
 
                 ready: function () {
                   var that = this;
@@ -231,7 +234,6 @@
                 },
 
                 toggleItemDetailsDrawer: function () {
-                  this.currentDrawerSection = 'itemsListSection';
                   this.$.innerDrawerPanel.togglePanel();
                 },
 
@@ -306,8 +308,15 @@
                 this.currentDrawerSection = 'itemsListSection';
               },
 
-              displayInfoSection: function(e) {
-                this.currentDrawerSection = 'infoSection';
+              menuLinkClicked: function(e) {
+                switch(e.detail) {
+                  case "#about":
+                    this.currentDrawerSection = 'infoSection';
+
+                    this.toggleMenuDrawer();
+                    this.toggleItemDetailsDrawer();
+                    break;
+                }
               }
             })
         })();

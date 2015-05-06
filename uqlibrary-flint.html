@@ -108,21 +108,7 @@
     <script>
 
         (function () {
-            var     expandSearchFrame0 = 1,
-                    expandSearchFrame1 = 250,
-                    expandSearchFrame2 = 350,
-                    expandSearchFrame3 = 450,
-                    expandSearchFrame4 = 600,
-
-                    animationFrameLength = 150;
-
-                    retractSearchFrame0 = 1,
-                    retractSearchFrame1 = 250,
-                    retractSearchFrame2 = 350,
-                    retractSearchFrame3 = 450,
-                    retractSearchFrame4 = 550,
-
-                    searchMinLength = 1;
+            var     animationFrameLength = 150;
 
             Polymer('uqlibrary-flint', {
 
@@ -178,7 +164,7 @@
                     that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
                     that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
                     that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
-                    }, expandSearchFrame0);
+                    }, animationFrameLength*0);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#hamburgerMenuIcon').setAttribute('hidden', true);
@@ -187,13 +173,13 @@
                         that.shadowRoot.querySelector('#backArrow').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#left-flex').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#right-flex').removeAttribute('hidden');
-                    }, expandSearchFrame1);
+                    }, animationFrameLength);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
-                    }, expandSearchFrame2);
+                    }, animationFrameLength*2);
 
                 },
 
@@ -204,7 +190,7 @@
                         that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
-                    }, expandSearchFrame0);
+                    }, animationFrameLength*0);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#hamburgerMenuIcon').removeAttribute('hidden');
@@ -213,13 +199,13 @@
                         that.shadowRoot.querySelector('#backArrow').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#left-flex').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#right-flex').setAttribute('hidden', true);
-                    }, expandSearchFrame1);
+                    }, animationFrameLength);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
                         that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
                         that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
-                    }, expandSearchFrame2);
+                    }, animationFrameLength*2);
 
                 },
 

@@ -1,7 +1,7 @@
 <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
 <polymer-element name="uqlibrary-flint-google-map" extends="google-map" attributes="items">
   <template>
-    <google-map minZoom="4" on-google-map-ready="{{mapReady}}" map="{{map}}" id="gmap" fitToMarkers>
+    <google-map minZoom="4" on-google-map-ready="{{mapReady}}" map="{{map}}" id="gmap" disableDefaultUI fitToMarkers>
 
       <template repeat="{{language, languageIndex in items}}">
         <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}"
@@ -39,6 +39,9 @@
 
       Polymer('uqlibrary-flint-google-map', {
 
+        /**
+         * Initialisation
+         */
         created: function () {
           this.items = null;
           this.initialMapMarkerIcon = mapMarkerIconActive;
@@ -46,18 +49,50 @@
           this.isTouchDevice = is_touch_device();
         },
 
-        ready: function () {
+        /**
+         * Look through all the elements and return a
+         * lat lng bounds enclosing them all
+         *
+         * @returns {google.maps.LatLngBounds}
+         */
+        getLatLngBounds: function () {
+          var mapMarkers = this.getMapMarkers();
+          var bounds = new google.maps.LatLngBounds();
+
+          for (var i = 0, l = mapMarkers.length; i < l; i++) {
+            var ll = new google.maps.LatLng(mapMarkers[i].latitude, mapMarkers[i].longitude);
+            bounds.extend(ll);
+          }
+
+          return bounds;
         },
 
+        /**
+         * Return a HTML element group of current map markers
+         *
+         * @returns {NodeList|*}
+         */
+        getMapMarkers: function () {
+          return this.shadowRoot.querySelectorAll('google-map-marker');
+        },
+
+        /**
+         * Run the map initialisation
+         */
         mapReady: function () {
           var allowedBounds = this.getLatLngBounds();
           var lastValidCenter = this.$.gmap.map.getCenter();
           var that = this;
 
-          document.addEventListener('uqlibrary-flint-map-center-tap', function() {
+          this.$.gmap.map.set('overviewMapControl', true);
+          this.$.gmap.map.set('overviewMapControlOptions', {opened: true});
+
+          // listen for event, currently triggered from map tab header
+          document.addEventListener('uqlibrary-flint-map-center-tap', function () {
             that.recenterMap();
           });
 
+          // ensure that Yury can't scroll all the way to Belarus
           google.maps.event.addListener(this.$.gmap.map, 'center_changed', function () {
             if (allowedBounds.contains(this.getCenter())) {
               // still within valid bounds, so save the last valid position
@@ -68,10 +103,6 @@
             // not valid anymore => return to last valid position
             this.panTo(lastValidCenter);
           });
-        },
-
-        recenterMap: function () {
-          this.$.gmap.map.fitBounds(this.getLatLngBounds());
         },
 
         mapMarkerClicked: function (e, sender, marker) {
@@ -109,12 +140,15 @@
           }
         },
 
-        resizeMap: function () {
-          this.$.gmap.resize();
+        /**
+         * Set map back to initial state
+         */
+        recenterMap: function () {
+          this.$.gmap.map.fitBounds(this.getLatLngBounds());
         },
 
-        getMapMarkers: function () {
-          return this.shadowRoot.querySelectorAll('google-map-marker');
+        resizeMap: function () {
+          this.$.gmap.resize();
         },
 
         setActiveMapMarker: function (activeMapMarker) {
@@ -125,18 +159,6 @@
               url: mapMarkers[i] === activeMapMarker ? mapMarkerIconActive : mapMarkerIcon
             };
           }
-        },
-
-        getLatLngBounds: function () {
-          var mapMarkers = this.getMapMarkers();
-          var bounds = new google.maps.LatLngBounds();
-
-          for (var i = 0, l = mapMarkers.length; i < l; i++) {
-            var ll = new google.maps.LatLng(mapMarkers[i].latitude, mapMarkers[i].longitude);
-            bounds.extend(ll);
-          }
-
-          return bounds;
         }
       });
     })();

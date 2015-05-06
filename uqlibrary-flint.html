@@ -25,20 +25,39 @@
                                                      on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
                 </div>
                 <div main layout vertical relative class="main">
+                    <!--<core-toolbar>-->
+                        <!--<paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"-->
+                                           <!--on-tap="{{toggleMenuDrawer}}"></paper-icon-button>-->
+                        <!--<div class="glow">-->
+                            <!--<h1 flex id="toolbar-page-title">Indigenous Voices</h1>-->
+                        <!--</div>-->
+                        <!--<paper-icon-button icon="search" hidden id="search-btn"></paper-icon-button>-->
+                        <!--<div flex>-->
+                            <!--<paper-input-decorator label="Search" id="searchInput">-->
+                                <!--<input is="core-input" on-keypress="{{searchKeyPress}}">-->
+                            <!--</paper-input-decorator>-->
+                        <!--</div>-->
+                        <!--<paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide" on-tap="{{retractSearch}}"></paper-icon-button>-->
+                        <!--<paper-icon-button icon="search" id="search" on-tap="{{expandSearch}}"></paper-icon-button>-->
+                    <!--</core-toolbar>-->
                     <core-toolbar>
-                        <paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"
-                                           on-tap="{{toggleMenuDrawer}}"></paper-icon-button>
-                        <div class="glow">
-                            <h1 flex id="toolbar-page-title">Indigenous Voices</h1>
+
+                        <div id="hamburgerMenuIcon"><paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"
+                                           on-tap="{{toggleMenuDrawer}}"></paper-icon-button></div>
+                        <div flex id="toolbarTitle" class="glow">
+                            <h1 id="toolbar-page-title">Indigenous Voices</h1>
                         </div>
-                        <paper-icon-button icon="search" hidden id="search-btn"></paper-icon-button>
-                        <div flex>
-                            <paper-input-decorator label="Search" id="searchInput">
+                        <div id="expandSearch"><paper-icon-button icon="search" on-tap="{{activateSearch}}"></paper-icon-button></div>
+
+                        <div hidden id="backArrow" class="offCanvas"><paper-icon-button icon="arrow-back" on-tap="{{deactivateSearch}}"></paper-icon-button></div>
+                        <div hidden id="left-flex" class="offCanvas"><paper-icon-button icon="search" id="searchButton" on-tap="{{searchSubmitted}}"></paper-icon-button></div>
+                        <div hidden flex id="middle-flex" class="offCanvas">
+                            <paper-input-decorator label="Search">
                                 <input is="core-input" on-keypress="{{searchKeyPress}}">
                             </paper-input-decorator>
                         </div>
-                        <paper-icon-button icon="cancel" id="cancel" class="cancelIconSlide" on-tap="{{retractSearch}}"></paper-icon-button>
-                        <paper-icon-button icon="search" id="search" on-tap="{{expandSearch}}"></paper-icon-button>
+                        <div hidden id="right-flex" class="offCanvas"><paper-icon-button icon="close" id="clearButton" on-tap="{{clearSearch}}"></paper-icon-button></div>
+
                     </core-toolbar>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
@@ -100,7 +119,7 @@
                     expandSearchFrame1 = 250,
                     expandSearchFrame2 = 350,
                     expandSearchFrame3 = 450,
-                    expandSearchFrame4 = 550,
+                    expandSearchFrame4 = 600,
 
                     retractSearchFrame0 = 1,
                     retractSearchFrame1 = 250,
@@ -141,6 +160,67 @@
                             that.$.mapList.resizeMap();
                         }
                     });
+                },
+
+                activateSearch: function() {
+                    var that = this;
+
+                    setTimeout(function() {
+                    that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
+                    that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
+                    that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
+                    }, expandSearchFrame0);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#hamburgerMenuIcon').setAttribute('hidden', true);
+                        that.shadowRoot.querySelector('#toolbarTitle').setAttribute('hidden', true);
+                        that.shadowRoot.querySelector('#expandSearch').setAttribute('hidden', true);
+                        that.shadowRoot.querySelector('#backArrow').removeAttribute('hidden');
+                        that.shadowRoot.querySelector('#left-flex').removeAttribute('hidden');
+                        that.shadowRoot.querySelector('#middle-flex').removeAttribute('hidden');
+                        that.shadowRoot.querySelector('#right-flex').removeAttribute('hidden');
+                    }, expandSearchFrame1);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
+                        that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
+                        that.shadowRoot.querySelector('#middle-flex').classList.toggle('offCanvas');
+                        that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
+                    }, expandSearchFrame2);
+
+                },
+
+                deactivateSearch: function() {
+                    var that = this;
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
+                        that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
+                        that.shadowRoot.querySelector('#middle-flex').classList.toggle('offCanvas');
+                        that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
+                    }, expandSearchFrame0);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#hamburgerMenuIcon').removeAttribute('hidden');
+                        that.shadowRoot.querySelector('#toolbarTitle').removeAttribute('hidden');
+                        that.shadowRoot.querySelector('#expandSearch').removeAttribute('hidden');
+                        that.shadowRoot.querySelector('#backArrow').setAttribute('hidden', true);
+                        that.shadowRoot.querySelector('#left-flex').setAttribute('hidden', true);
+                        that.shadowRoot.querySelector('#middle-flex').setAttribute('hidden', true);
+                        that.shadowRoot.querySelector('#right-flex').setAttribute('hidden', true);
+                    }, expandSearchFrame1);
+
+                    setTimeout(function() {
+                        that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
+                        that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
+                        that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
+                    }, expandSearchFrame2);
+
+                },
+
+                clearSearch: function() {
+                    var that = this;
+                    that.shadowRoot.querySelector('input').value = "";
                 },
 
                 expandSearch: function () {

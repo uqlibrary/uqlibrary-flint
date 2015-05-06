@@ -24,24 +24,27 @@
                   <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
                                        transitions="slide-from-right" id="animatedDrawerPages">
                     <section id="infoSection" data-selected-section="infoSection">
+
                       <div horizontal layout>
-                        <h4 class="text-container" flex>About this collection</h4>
+                        <h4 class="text-container"><core-icon icon="info"></core-icon>About this collection</h4>
 
                         <div>
-                        <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
-                                        on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
-                        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
+                          <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
+                                          on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
+                          <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
                         </div>
 
                       </div>
 
-                      <p class="text-container body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam mattis sagittis.
-                        Praesent sed nulla ac nulla tristique imperdiet sit amet sit amet leo. Vestibulum magna diam, pretium vulputate rutrum vel,
-                        eleifend eu elit. Nunc id ligula ut augue vehicula congue. Sed ipsum velit, mattis et neque a, porta mattis lorem. Cras nunc magna,
-                        interdum consequat orci et, tincidunt auctor elit. Phasellus dignissim metus ex, at imperdiet massa auctor eget.
-                        Nulla ac dui tristique, ornare justo elementum, congue lorem. Fusce hendrerit egestas mauris, nec ullamcorper enim iaculis non.
-                        Duis malesuada eget orci vitae rutrum. Nullam eget viverra lorem. Nullam ut felis egestas leo lobortis pulvinar. Suspendisse potenti.
-                      </p>
+                        <p class="text-container body1"><b>Indigenous Voices</b><br>By Elwyn Flint</p>
+
+                        <p class="text-container body1">
+                          The Flint Papers comprise some 24 boxes of written documents compiled and collected by the late Elwyn Flint,
+                          most of them as part of a long-term research project he carried out mainly in the 1960s known as the
+                          Queensland Speech Survey funded by the Australian Research Council.<br><br>
+                        <b>To begin, try selecting a language or voice to see all of its associated recordings.</b><br><br>
+                        You can play any item from the list of recordings, and continue to look through the collection while the item is playing.</p>
+
                     </section>
                     <section id="itemsListSection" data-selected-section="itemsListSection">
                       <uqlibrary-flint-items-core-list id="itemsListElement"
@@ -114,19 +117,7 @@
     <script>
 
         (function () {
-            var     expandSearchFrame0 = 1,
-                    expandSearchFrame1 = 250,
-                    expandSearchFrame2 = 350,
-                    expandSearchFrame3 = 450,
-                    expandSearchFrame4 = 600,
-
-                    retractSearchFrame0 = 1,
-                    retractSearchFrame1 = 250,
-                    retractSearchFrame2 = 350,
-                    retractSearchFrame3 = 450,
-                    retractSearchFrame4 = 550,
-
-                    searchMinLength = 1;
+            var     animationFrameLength = 150;
 
             Polymer('uqlibrary-flint', {
 
@@ -177,7 +168,7 @@
                     that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
                     that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
                     that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
-                    }, expandSearchFrame0);
+                    }, animationFrameLength*0);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#hamburgerMenuIcon').setAttribute('hidden', true);
@@ -186,13 +177,13 @@
                         that.shadowRoot.querySelector('#backArrow').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#left-flex').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#right-flex').removeAttribute('hidden');
-                    }, expandSearchFrame1);
+                    }, animationFrameLength);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
-                    }, expandSearchFrame2);
+                    }, animationFrameLength*2);
 
                 },
 
@@ -203,7 +194,7 @@
                         that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
-                    }, expandSearchFrame0);
+                    }, animationFrameLength*0);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#hamburgerMenuIcon').removeAttribute('hidden');
@@ -212,13 +203,13 @@
                         that.shadowRoot.querySelector('#backArrow').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#left-flex').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#right-flex').setAttribute('hidden', true);
-                    }, expandSearchFrame1);
+                    }, animationFrameLength);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
                         that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
                         that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
-                    }, expandSearchFrame2);
+                    }, animationFrameLength*2);
 
                 },
 

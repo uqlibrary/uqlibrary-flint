@@ -93,6 +93,11 @@
             var itemIndex = source.path[0].attributes["data-index"].value;
             this.itemSelected(null, {data: this.$.itemsList.data[itemIndex], item: source.path[3]}, null);
           }
+        },
+
+        resizeMap: function() {
+          if (this.shadowRoot.querySelector('uqlibrary-flint-google-map'))
+            this.shadowRoot.querySelector('uqlibrary-flint-google-map').resizeMap();
         }
 
       });

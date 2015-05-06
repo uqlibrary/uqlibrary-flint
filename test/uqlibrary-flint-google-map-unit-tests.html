@@ -15,21 +15,21 @@
 <uqlibrary-flint-google-map></uqlibrary-flint-google-map>
 
 <script>
-  window.addEventListener('polymer-ready', function() {
+  window.addEventListener('polymer-ready', function () {
 
     var items = [
       {
-      "cvo_id": "453670",
-      "cvo_title": "Yukulta \/ Gangalidda",
-      "cvo_desc": "Qld SE54-05",
-      "cvo_image_filename": null,
-      "cvo_external_id": "G34",
-      "cvo_hide": "0",
-      "cvo_order": null,
-      "cvo_lat": "-17.942726",
-      "cvo_long": "138.829422",
-      "record_count": "0"
-    },
+        "cvo_id": "453670",
+        "cvo_title": "Yukulta \/ Gangalidda",
+        "cvo_desc": "Qld SE54-05",
+        "cvo_image_filename": null,
+        "cvo_external_id": "G34",
+        "cvo_hide": "0",
+        "cvo_order": null,
+        "cvo_lat": "-17.942726",
+        "cvo_long": "138.829422",
+        "record_count": "0"
+      },
       {
         "cvo_id": "453671",
         "cvo_title": "Something \/ Else",
@@ -52,10 +52,10 @@
         element.items = items;
       });
 
-      afterEach(function(){
+      afterEach(function () {
       });
 
-      it('should create a map marker for each item', function(done) {
+      it('should create a map marker for each item', function (done) {
         setTimeout(function () {
           var elements = element.getMapMarkers();
           expect(elements).to.have.length(2);

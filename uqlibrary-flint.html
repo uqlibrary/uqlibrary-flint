@@ -50,13 +50,12 @@
                         <div id="expandSearch"><paper-icon-button icon="search" on-tap="{{activateSearch}}"></paper-icon-button></div>
 
                         <div hidden id="backArrow" class="offCanvas"><paper-icon-button icon="arrow-back" on-tap="{{deactivateSearch}}"></paper-icon-button></div>
-                        <div hidden id="left-flex" class="offCanvas"><paper-icon-button icon="search" id="searchButton" on-tap="{{searchSubmitted}}"></paper-icon-button></div>
-                        <div hidden flex id="middle-flex" class="offCanvas">
+                        <div hidden flex id="left-flex" class="offCanvas">
                             <paper-input-decorator label="Search">
                                 <input is="core-input" on-keypress="{{searchKeyPress}}">
                             </paper-input-decorator>
                         </div>
-                        <div hidden id="right-flex" class="offCanvas"><paper-icon-button icon="close" id="clearButton" on-tap="{{clearSearch}}"></paper-icon-button></div>
+                        <div hidden id="right-flex" class="offCanvas"><paper-icon-button icon="search" id="searchButton" on-tap="{{searchSubmitted}}"></paper-icon-button></div>
 
                     </core-toolbar>
 
@@ -83,19 +82,6 @@
                             <uqlibrary-flint-categories-list id="voicesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
                         </section>
                         <section id="searchSection" data-selected-section="searchSection" vertical layout>
-
-                            <div style="height: 60px;" relative>
-                                <div fit style="background-color: #fff; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.37); text-align: center;">
-                                    Search box goes here... <paper-button class="colored" on-tap="{{searchSubmitted}}">Search</paper-button>
-                                    <!-- something like that:
-                                    <uqlibrary-flint-search id="searchElement" on-search-submitted="{{searchSubmitted}}" />
-
-                                    searchSubmitted: function(e) {
-                                      this.$.searchResultsListElement.setData({searchTerm: e.data});
-                                    }
-                                    -->
-                                </div>
-                            </div>
 
                             <uqlibrary-flint-items-core-list id="searchResultsListElement"
                                                              on-play-record-clicked="{{playRecord}}" flex style="margin-top: 60px;"></uqlibrary-flint-items-core-list>
@@ -177,14 +163,12 @@
                         that.shadowRoot.querySelector('#expandSearch').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#backArrow').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#left-flex').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#middle-flex').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#right-flex').removeAttribute('hidden');
                     }, expandSearchFrame1);
 
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
-                        that.shadowRoot.querySelector('#middle-flex').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
                     }, expandSearchFrame2);
 
@@ -196,7 +180,6 @@
                     setTimeout(function() {
                         that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
-                        that.shadowRoot.querySelector('#middle-flex').classList.toggle('offCanvas');
                         that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
                     }, expandSearchFrame0);
 
@@ -206,7 +189,6 @@
                         that.shadowRoot.querySelector('#expandSearch').removeAttribute('hidden');
                         that.shadowRoot.querySelector('#backArrow').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#left-flex').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#middle-flex').setAttribute('hidden', true);
                         that.shadowRoot.querySelector('#right-flex').setAttribute('hidden', true);
                     }, expandSearchFrame1);
 
@@ -221,64 +203,6 @@
                 clearSearch: function() {
                     var that = this;
                     that.shadowRoot.querySelector('input').value = "";
-                },
-
-                expandSearch: function () {
-                    var that = this;
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#hamburgerMenuButton').classList.toggle('iconSlide');
-                    }, expandSearchFrame0);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
-                    }, expandSearchFrame1);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#hamburgerMenuButton').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#toolbar-page-title').setAttribute('hidden', true);
-                    }, expandSearchFrame2);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#search').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
-                        that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
-
-                    }, expandSearchFrame3);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
-                        // TODO: search input should receive focus at this point
-                    }, (expandSearchFrame4));
-
-
-                },
-
-                retractSearch: function () {
-                    var that = this;
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#cancel').classList.toggle('slideIn');
-
-                    }, retractSearchFrame0);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#search').classList.toggle('iconSlide');
-                        that.shadowRoot.querySelector('#searchInput').classList.toggle('slideIn');
-                    }, (retractSearchFrame1));
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#toolbar-page-title').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#hamburgerMenuButton').removeAttribute('hidden');
-                    }, retractSearchFrame2);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#search').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#toolbar-page-title').classList.toggle('iconSlide');
-                    }, retractSearchFrame3);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#hamburgerMenuButton').classList.toggle('iconSlide');
-                    }, retractSearchFrame4);
                 },
 
                 centerMapIfSelected: function () {
@@ -301,6 +225,7 @@
                 },
 
                 searchKeyPress: function(e) {
+                    console.log(e.target.value.length);
                     var key = e.which || e.keyCode;
                     if (key === 13) { // 13 is enter
                         if (e.target.value.length > searchMinLength) {

@@ -4,36 +4,55 @@
 <template>
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
 
-  <style>
-    .subhead
-    {
-      padding-bottom: 4px;
-    }
-    .body1
-    {
-      padding-bottom: 16px;
-    }
-  </style>
+    <ul class="three-line-icon-list" flex>
+        <li class="list-item header border" divider horizontal layout center-center>
+          <div class="avatar">
+            <core-a11y-keys id="a11yBackButton" target="{{$.backButton}}" keys="{{keyboardNavigationKeys}}"
+                            on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
+            <paper-icon-button aria-label="Back to list" icon="arrow-back" id="backButton" on-click="{{backButtonHandler}}"></paper-icon-button>
+          </div>
 
-  <div class="subhead">Language</div>
-  <div class="body1" id="itemLanguage">{{item.subjects.subject}}</div>
+          <div flex>{{item.title}}</div>
+          <div>
+            <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
+                            on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
+            <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
+          </div>
+        </li>
+    </ul>
 
-  <div class="subhead">Voice</div>
-  <div class="body1" id="itemVoice">{{item.contributors.contributor}}</div>
+  <div class="text-container">
+    <style>
+      .subhead
+      {
+        padding-bottom: 4px;
+      }
+      .body1
+      {
+        padding-bottom: 16px;
+      }
+    </style>
 
-  <div class="subhead">Authors</div>
-  <div class="body1">{{item.authors.author}}</div>
+    <div class="subhead">Language</div>
+    <div class="body1" id="itemLanguage">{{item.subjects.subject}}</div>
 
-  <div class="subhead">Length</div>
-  <div class="body1">{{item.length}}</div>
+    <div class="subhead">Voice</div>
+    <div class="body1" id="itemVoice">{{item.contributors.contributor}}</div>
 
-  <div class="subhead">Transcript</div>
-  <div class="body1" style=""><pre style="margin: 0; padding: 4px; height: 5.5em; overflow: scroll;border: 1px solid #cccccc;">{{item.transcript}}</pre></div>
+    <div class="subhead">Authors</div>
+    <div class="body1">{{item.authors.author}}</div>
 
-  <div class="subhead">eSpace record</div>
-  <div class="body1"><a href="{{item.pid}}" target="_blank">{{item.pid}}</a></div>
+    <div class="subhead">Length</div>
+    <div class="body1">{{item.length}}</div>
 
-  <paper-button id="feedbackButton" class="colored" raised on-tap="{{showFeedback}}">Feedback</paper-button>
+    <div class="subhead">Transcript</div>
+    <div class="body1" style="">{{item.transcript}}</div>
+
+    <div class="subhead">eSpace record</div>
+    <div class="body1"><a href="{{item.pid}}" target="_blank">{{item.pid}}</a></div>
+
+    <paper-button id="feedbackButton" class="colored" raised on-tap="{{showFeedback}}">Feedback</paper-button>
+  </div>
 
 </template>
 
@@ -41,13 +60,29 @@
   (function() {
     Polymer('uqlibrary-flint-item', {
 
+      // Accessibility issues fixes
+      keyboardNavigationKeys: 'space enter',
+
+      a11yKeyPressed: function(source, event) {
+        if (source.path && source.path.length > 0 && source.path[0].target) {
+          source.path[0].target.click();
+        }
+      },
+
       ready: function() {
         this.item = {};
       },
 
       showFeedback: function() {
-        console.log("showFeedback");
-          window.location.href = "mailto:webmaster@library.uq.edu.au";
+        window.location.href = "mailto:webmaster@library.uq.edu.au?subject=" + this.item.pid;
+      },
+
+      backButtonHandler: function() {
+        this.fire("back-button-clicked", { });
+      },
+
+      closeButtonHandler: function() {
+        this.fire("close-button-clicked", { });
       }
 
     });

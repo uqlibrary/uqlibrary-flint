@@ -6,15 +6,8 @@
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
   <uqlibrary-api-flint-records id="recordsApiElement"></uqlibrary-api-flint-records>
 
-  <style>
-
-    .three-line-icon-list .list-item.expanded {
-      height: 560px !important;
-    }
-
-  </style>
-
   <ul class="three-line-icon-list" flex>
+
 
     <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 63px;">
       <template>
@@ -28,10 +21,13 @@
           <div flex>{{groupModel.label}}</div>
 
           <div>
+            <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
+                            on-keys-pressed="{{ closeButtonHandler }}"></core-a11y-keys>
             <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
           </div>
 
         </li>
+
 
         <li class="list-item border listItem" data-index="{{index}}">
 
@@ -49,36 +45,27 @@
 
           <div class="content" relative>
 
-              <!--Taking out ripple for now because it doesn't look quite right if it doesn't ripple across the entire item (including the 'play' button) -->
-            <!--<paper-ripple fit></paper-ripple>-->
-
             <div class="line1" horizontal layout>
               <div flex class="line1">
                 <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
               </div>
 
               <div>
-                <core-icon icon="expand-more" hidden?="{{model.showMore}}"></core-icon>
-                <core-icon icon="expand-less" hidden?="{{!model.showMore}}"></core-icon>
+                <core-icon icon="chevron-right"></core-icon>
               </div>
             </div>
 
-            <div class="line2" hidden?="{{model.showMore}}">
+            <div class="line2">
               <template if={{voice}}>{{model.subjects.subject}}</template>
               <template if={{searchTerm}}>{{model.subjects.subject}}</template>
               <template if={{language}}>by {{model.contributors.contributor}}</template>
             </div>
 
-            <div class="line3" hidden?="{{model.showMore}}">
+            <div class="line3">
               <template if={{searchTerm}}>by {{model.contributors.contributor}}</template>
             </div>
 
           </div>
-
-          <core-collapse class="collapseItem" id="itemDetailsCollapse" data-index="{{index}}">
-              <uqlibrary-flint-item item="{{model}}" on-tap="{{keepItemDetailsOpen}}" hidden?="{{!model.showMore}}"></uqlibrary-flint-item>
-          </core-collapse>
-
         </li>
       </template>
     </core-list>
@@ -95,6 +82,9 @@
 <script>
   (function() {
     Polymer('uqlibrary-flint-items-core-list', {
+
+      // Accessibility issues fixes
+      keyboardNavigationKeys: 'space enter',
 
       ready: function() {
         // test MP3 files
@@ -186,24 +176,14 @@
           return;
         }
 
-        var collapseSection = itemRow.item.querySelector("#itemDetailsCollapse");
-        if (!itemRow.data.showMore) {
-          itemRow.item.setAttribute("class", "list-item border listItem expanded");
-          itemRow.data.showMore = true;
-        } else {
-          itemRow.item.setAttribute("class", "list-item listItem border");
-          itemRow.data.showMore = false;
-        }
-
-        collapseSection.toggle();
-        this.$.itemsList.updateSize();
+        this.fire("item-selected", { item: itemRow.data });
       },
 
       itemSelectedKeyPressed: function(source) {
-        if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
+        if (source.path && source.path.length > 0 && (source.path[2].attributes["data-index"] || source.path[0].attributes["data-index"])) {
           this.skipItemSelected = false;
 
-          var itemIndex = source.path[0].attributes["data-index"].value;
+          var itemIndex = source.path[2].attributes["data-index"] ? source.path[2].attributes["data-index"].value : source.path[0].attributes["data-index"].value;
           this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[4] }, null);
         }
       },
@@ -227,8 +207,6 @@
         this.currentPlayRecordButton = button;
         var audioFile = button.getAttribute("data-mp3");
         var audioFileName = button.getAttribute("data-title");
-
-        console.log("playRecord: " + audioFileName);
 
         if (this.$.audioPlayer.name === audioFileName && this.$.audioPlayer.src === audioFile) {
           this.$.audioPlayer.togglePlay();
@@ -254,21 +232,6 @@
         var listTitle = '';
 
         var that = this;
-        // Reset data displaying for previous list
-        if(this.$.itemsList.data) {
-
-
-          var collapseItems = this.$.itemsList.querySelectorAll('.collapseItem');
-          var listItems = this.$.itemsList.querySelectorAll('.listItem');
-          for (var i = 0; i <	collapseItems.length; i++) {
-            collapseItems[i].opened = false;
-
-          }
-          for (var i = 0; i <	listItems.length; i++) {
-            listItems[i].setAttribute("class", "list-item border");
-          }
-
-        }
 
         if (args && args.language) {
           this.language = args.language;
@@ -323,8 +286,6 @@
           var soundPlaying = null;
           var that = this;
           this.$.itemsList.data.forEach(function(item, index) {
-            item.showMore = false;
-
             if(item.title == that.$.audioPlayer.name) {
               soundPlaying = index;
             }

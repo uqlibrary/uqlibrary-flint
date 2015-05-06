@@ -20,9 +20,33 @@
             <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
                                disableSwipe>
                 <div id="itemDetailDrawer" drawer class="right-drawer">
-                    <uqlibrary-flint-items-core-list id="itemsListElement"
-                                                     on-close-button-clicked="{{toggleItemDetailsDrawer}}"
-                                                     on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
+
+                  <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
+                                       transitions="slide-from-right" id="animatedDrawerPages">
+                    <section id="infoSection" data-selected-section="infoSection">
+                      <h4 class="text-container">About this collection</h4>
+                      <p class="text-container body1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc aliquam mattis sagittis.
+                        Praesent sed nulla ac nulla tristique imperdiet sit amet sit amet leo. Vestibulum magna diam, pretium vulputate rutrum vel,
+                        eleifend eu elit. Nunc id ligula ut augue vehicula congue. Sed ipsum velit, mattis et neque a, porta mattis lorem. Cras nunc magna,
+                        interdum consequat orci et, tincidunt auctor elit. Phasellus dignissim metus ex, at imperdiet massa auctor eget.
+                        Nulla ac dui tristique, ornare justo elementum, congue lorem. Fusce hendrerit egestas mauris, nec ullamcorper enim iaculis non.
+                        Duis malesuada eget orci vitae rutrum. Nullam eget viverra lorem. Nullam ut felis egestas leo lobortis pulvinar. Suspendisse potenti.
+                      </p>
+                    </section>
+                    <section id="itemsListSection" data-selected-section="itemsListSection">
+                      <uqlibrary-flint-items-core-list id="itemsListElement"
+                                                       on-close-button-clicked="{{toggleItemDetailsDrawer}}"
+                                                       on-item-selected="{{displayItemDetails}}"
+                                                       on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
+                    </section>
+                    <section id="itemSection" data-selected-section="itemSection">
+                      <uqlibrary-flint-item id="itemElement"
+                                            on-close-button-clicked="{{toggleItemDetailsDrawer}}"
+                                            on-back-button-clicked="{{displayListSection}}"></uqlibrary-flint-item>
+                    </section>
+                  </core-animated-pages>
+
+
                 </div>
                 <div main layout vertical relative class="main">
                     <core-toolbar>
@@ -62,24 +86,6 @@
                         </section>
                         <section id="voiceListSection" data-selected-section="voicesSection">
                             <uqlibrary-flint-categories-list id="voicesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
-                        </section>
-                        <section id="searchSection" data-selected-section="searchSection" vertical layout>
-
-                            <div style="height: 60px;" relative>
-                                <div fit style="background-color: #fff; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 0 1px 4px 0px rgba(0, 0, 0, 0.37); text-align: center;">
-                                    Search box goes here... <paper-button class="colored" on-tap="{{searchSubmitted}}">Search</paper-button>
-                                    <!-- something like that:
-                                    <uqlibrary-flint-search id="searchElement" on-search-submitted="{{searchSubmitted}}" />
-
-                                    searchSubmitted: function(e) {
-                                      this.$.searchResultsListElement.setData({searchTerm: e.data});
-                                    }
-                                    -->
-                                </div>
-                            </div>
-
-                            <uqlibrary-flint-items-core-list id="searchResultsListElement"
-                                                             on-play-record-clicked="{{playRecord}}" flex style="margin-top: 60px;"></uqlibrary-flint-items-core-list>
                         </section>
                     </core-animated-pages>
 
@@ -121,7 +127,23 @@
                 },
 
                 ready: function () {
-                    var that = this;
+                  var that = this;
+
+                  that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
+                  that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
+
+                    window.addEventListener('resize', function() {
+                      that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
+                      that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
+
+                      var responsiveWidth = parseInt(that.$.innerDrawerPanel.responsiveWidth);
+
+                      if (responsiveWidth > window.innerWidth) {
+                        that.$.innerDrawerPanel.drawerWidth = "95%";
+                      } else if (responsiveWidth <= window.innerWidth) {
+                        that.$.innerDrawerPanel.drawerWidth = "50%";
+                      }
+                    });
 
                     var responsiveWidth = parseInt(this.$.innerDrawerPanel.responsiveWidth);
 
@@ -130,8 +152,6 @@
                     } else if (responsiveWidth <= window.innerWidth) {
                         this.$.innerDrawerPanel.drawerWidth = "50%";
                     }
-
-                    window.addEventListener('resize', this.onWindowResize);
 
                     this.currentSection = "mapSection";
 
@@ -208,7 +228,8 @@
                 },
 
                 toggleItemDetailsDrawer: function () {
-                    this.$.innerDrawerPanel.togglePanel();
+                  this.currentDrawerSection = 'itemsListSection';
+                  this.$.innerDrawerPanel.togglePanel();
                 },
 
                 toggleMenuDrawer: function () {
@@ -230,7 +251,8 @@
                 },
 
                 currentSectionChanged : function(oldValue, newValue){
-                    switch(this.currentSection) {
+
+                  switch(this.currentSection) {
                         case "languageSection":
                             //setup languages list
                             this.$.languagesList.setData({ displayLanguages: true });
@@ -242,11 +264,6 @@
                         case "mapSection":
                             //setup map
                             this.$.mapList.setData({ displayLanguages: true });
-                            break;
-                        case "searchSection":
-                            //TODO: search results are displayed in main area, right hand side drawer is not required
-                            //close right panel when search is displayed - something like that, but nicer
-                            //this.$.itemDetailDrawer.setAttribute("hidden", "true");
                             break;
                     }
                 },
@@ -266,7 +283,22 @@
                             this.toggleItemDetailsDrawer();
                             break;
                     }
-                }
+
+                  this.currentDrawerSection = 'itemsListSection';
+                },
+
+              displayItemDetails: function(e) {
+                this.currentDrawerSection = 'itemSection';
+                this.$.itemElement.item = e.detail.item;
+              },
+
+              displayListSection: function(e) {
+                this.currentDrawerSection = 'itemsListSection';
+              },
+
+              displayInfoSection: function(e) {
+                this.currentDrawerSection = 'infoSection';
+              }
             })
         })();
     </script>

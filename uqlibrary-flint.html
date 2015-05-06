@@ -245,7 +245,10 @@
                 },
 
                 performSearch: function() {
-                    this.searchSubmitted(this.shadowRoot.querySelector('input').value);
+                    var searchTerms = this.shadowRoot.querySelector('input').value;
+                    if (searchTerms.length > 0) {
+                        this.searchSubmitted(searchTerms);
+                    }
                 },
 
                 searchKeyPress: function(e) {

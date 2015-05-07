@@ -5,21 +5,20 @@
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
 
   <ul class="three-line-icon-list">
-    <li class="list-item header border">
+    <li class="list-item header border" style="padding-bottom: 0px;" horizontal layout center-center>
+
       <div class="avatar">
         <core-a11y-keys id="a11yBackButton" target="{{$.backButton}}" keys="{{keyboardNavigationKeys}}"
                         on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
         <paper-icon-button aria-label="Back to list" icon="arrow-back" id="backButton" on-click="{{backButtonHandler}}"></paper-icon-button>
       </div>
-      <div class="content" horizontal layout center-center>
-        <div flex>{{item.title}}</div>
-        <div>
-          <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
-                          on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
-          <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
-        </div>
-      </div>
 
+      <div flex>{{item.title}}</div>
+      <div>
+        <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
+                        on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
+        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
+      </div>
     </li>
   </ul>
 

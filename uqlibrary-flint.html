@@ -14,7 +14,7 @@
 
         <core-drawer-panel id="outerDrawerPanel" responsiveWidth="1500px">
             <div drawer class="left-drawer">
-                <uqlibrary-menu menuFile="flint.json"></uqlibrary-menu>
+                <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
             </div>
 
             <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
@@ -24,7 +24,17 @@
                   <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
                                        transitions="slide-from-right" id="animatedDrawerPages">
                     <section id="infoSection" data-selected-section="infoSection">
-                      <h4 class="text-container"><core-icon icon="info"></core-icon>About this collection</h4>
+
+                      <div horizontal layout>
+                        <h4 class="text-container"><core-icon icon="info"></core-icon>About this collection</h4>
+
+                        <div>
+                          <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
+                                          on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
+                          <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
+                        </div>
+
+                      </div>
 
                         <p class="text-container body1"><b>Indigenous Voices</b><br>By Elwyn Flint</p>
 
@@ -34,6 +44,7 @@
                           Queensland Speech Survey funded by the Australian Research Council.<br><br>
                         <b>To begin, try selecting a language or voice to see all of its associated recordings.</b><br><br>
                         You can play any item from the list of recordings, and continue to look through the collection while the item is playing.</p>
+
                     </section>
                     <section id="itemsListSection" data-selected-section="itemsListSection">
                       <uqlibrary-flint-items-core-list id="itemsListElement"
@@ -47,8 +58,6 @@
                                             on-back-button-clicked="{{displayListSection}}"></uqlibrary-flint-item>
                     </section>
                   </core-animated-pages>
-
-
                 </div>
                 <div main layout vertical relative class="main">
                         <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
@@ -98,11 +107,6 @@
 
                 // Accessibility issues fixes
                 keyboardNavigationKeys: 'space enter',
-                a11yKeyPressed: function (source, event) {
-                    if (source.path && source.path.length > 0 && source.path[0].target) {
-                        source.path[0].target.fire("tap");
-                    }
-                },
 
                 ready: function () {
                   var that = this;
@@ -148,7 +152,6 @@
                 },
 
                 toggleItemDetailsDrawer: function () {
-                  this.currentDrawerSection = 'itemsListSection';
                   this.$.innerDrawerPanel.togglePanel();
                 },
 
@@ -157,7 +160,6 @@
                 },
 
                 performSearch: function(e) {
-                    console.log('performedSEarch');
                     this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
                     this.toggleItemDetailsDrawer();
                 },
@@ -208,8 +210,15 @@
                 this.currentDrawerSection = 'itemsListSection';
               },
 
-              displayInfoSection: function(e) {
-                this.currentDrawerSection = 'infoSection';
+              menuLinkClicked: function(e) {
+                switch(e.detail) {
+                  case "#about":
+                    this.currentDrawerSection = 'infoSection';
+
+                    this.toggleMenuDrawer();
+                    this.toggleItemDetailsDrawer();
+                    break;
+                }
               }
             })
         })();

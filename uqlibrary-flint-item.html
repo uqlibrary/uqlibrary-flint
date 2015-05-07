@@ -4,55 +4,76 @@
 <template>
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
 
-    <ul class="three-line-icon-list" flex>
-        <li class="list-item header border" divider horizontal layout center-center>
-          <div class="avatar">
-            <core-a11y-keys id="a11yBackButton" target="{{$.backButton}}" keys="{{keyboardNavigationKeys}}"
-                            on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
-            <paper-icon-button aria-label="Back to list" icon="arrow-back" id="backButton" on-click="{{backButtonHandler}}"></paper-icon-button>
-          </div>
+  <ul class="three-line-icon-list">
+    <li class="list-item header border" style="padding-bottom: 0px;" horizontal layout center-center>
 
-          <div flex>{{item.title}}</div>
-          <div>
-            <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
-                            on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
-            <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
-          </div>
-        </li>
+      <div class="avatar">
+        <core-a11y-keys id="a11yBackButton" target="{{$.backButton}}" keys="{{keyboardNavigationKeys}}"
+                        on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
+        <paper-icon-button aria-label="Back to list" icon="arrow-back" id="backButton" on-click="{{backButtonHandler}}"></paper-icon-button>
+      </div>
+
+      <div flex>{{item.title}}</div>
+      <div>
+        <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
+                        on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
+        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
+      </div>
+    </li>
+  </ul>
+
+  <ul class="two-line-list">
+    <li class="list-item">
+      <div class="content">
+        <div class="line1">Language</div>
+        <div class="line2" id="itemLanguage">{{item.subject_lookups.subject_lookup}}</div>
+      </div>
+    </li>
+
+    <li class="list-item">
+      <div class="content">
+        <div class="line1">Voice</div>
+        <div class="line2">{{item.contributors.contributor}}</div>
+      </div>
+    </li>
+
+    <li class="list-item">
+      <div class="content">
+        <div class="line1">Authors</div>
+        <div class="line2">{{item.authors.author}}</div>
+      </div>
+    </li>
+
+    <li class="list-item border">
+      <div class="content">
+        <div class="line1">eSpace Record</div>
+        <div class="line2"><a href="{{item.pid}}" target="_blank">{{item.pid}}</a></div>
+      </div>
+    </li>
+
+    <template if="{{item.transcript.transcript}}">
+      <li class="list-item border" style="height: auto; overflow:visible;">
+
+        <div class="content">
+          <div class="line1">Transcript</div>
+          <span class="text">
+            <ul>
+              <template repeat="{{line in item.lines}}">
+                <li>{{ line }}</li>
+              </template>
+            </ul>
+          </span>
+        </div>
+    </li>
+    </template>
+
+    <li class="list-item">
+      <div class="text-container text-center">
+        <paper-button id="feedbackButton" class="colored" raised on-tap="{{showFeedback}}">Feedback</paper-button>
+      </div>
+    </li>
+
     </ul>
-
-  <div class="text-container">
-    <style>
-      .subhead
-      {
-        padding-bottom: 4px;
-      }
-      .body1
-      {
-        padding-bottom: 16px;
-      }
-    </style>
-
-    <div class="subhead">Language</div>
-    <div class="body1" id="itemLanguage">{{item.subjects.subject}}</div>
-
-    <div class="subhead">Voice</div>
-    <div class="body1" id="itemVoice">{{item.contributors.contributor}}</div>
-
-    <div class="subhead">Authors</div>
-    <div class="body1">{{item.authors.author}}</div>
-
-    <div class="subhead">Length</div>
-    <div class="body1">{{item.length}}</div>
-
-    <div class="subhead">Transcript</div>
-    <div class="body1" style="">{{item.transcript}}</div>
-
-    <div class="subhead">eSpace record</div>
-    <div class="body1"><a href="{{item.pid}}" target="_blank">{{item.pid}}</a></div>
-
-    <paper-button id="feedbackButton" class="colored" raised on-tap="{{showFeedback}}">Feedback</paper-button>
-  </div>
 
 </template>
 
@@ -66,6 +87,13 @@
       a11yKeyPressed: function(source, event) {
         if (source.path && source.path.length > 0 && source.path[0].target) {
           source.path[0].target.click();
+        }
+      },
+
+      itemChanged: function(oldValue, newValue) {
+        //split transcript into lines based on HTML breaks
+        if (this.item && this.item.transcript && this.item.transcript.transcript) {
+          this.item.lines = this.item.transcript.transcript.split('<br \/>').filter(function(line) { return line; });
         }
       },
 

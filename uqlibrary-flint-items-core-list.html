@@ -6,9 +6,14 @@
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
   <uqlibrary-api-flint-records id="recordsApiElement"></uqlibrary-api-flint-records>
 
+  <template if="{{showNoResults}}">
+    <div class="text-container body1">
+      TODO: update design/words/etc <br>
+      No results found for search term "{{searchTerm}}", please, modify your search term and try again.
+    </div>
+  </template>
+
   <ul class="three-line-icon-list" flex>
-
-
     <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 63px;">
       <template>
 
@@ -56,8 +61,8 @@
             </div>
 
             <div class="line2">
-              <template if={{voice}}>{{model.subjects.subject}}</template>
-              <template if={{searchTerm}}>{{model.subjects.subject}}</template>
+              <template if={{voice}}>{{model.subject_lookups.subject_lookup}}</template>
+              <template if={{searchTerm}}>{{model.subject_lookups.subject_lookup}}</template>
               <template if={{language}}>by {{model.contributors.contributor}}</template>
             </div>
 
@@ -70,6 +75,8 @@
       </template>
     </core-list>
   </ul>
+
+
 
   <div style="height: 65px;" relative>
     <div fit style="background-color: #efefef; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.37);">
@@ -112,6 +119,7 @@
             return (Math.random() < Math.random() ? -1 : 1)
           });
 
+          that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
 
           that.$.itemsList.data = e.detail;
           that.setPlayingRecord();
@@ -119,7 +127,7 @@
             {
               length: e.detail.length,
               data: {
-                label: that.language ? that.language.cvo_title : that.voice ? that.voice.cvo_title : that.searchTerm
+                label: that.language ? that.language.cvo_title : that.voice ? that.voice.cvo_title : "Search results for: " + that.searchTerm + " (" + e.detail.length + " items found) "
               }
             }
           ];

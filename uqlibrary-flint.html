@@ -60,25 +60,11 @@
                   </core-animated-pages>
                 </div>
                 <div main layout vertical relative class="main">
-                    <core-toolbar>
-
-                        <!--Initial toolbar UI which is visible by default-->
-                        <div id="hamburgerMenuIcon"><paper-icon-button icon="menu" id="hamburgerMenuButton" class="flint-responsive-menu-icon"
-                                           on-tap="{{toggleMenuDrawer}}"></paper-icon-button></div>
-                        <div flex id="toolbarTitle" class="glow">
-                            <h1 id="toolbar-page-title">Indigenous Voices</h1>
-                        </div>
-                        <div id="expandSearch"><paper-icon-button icon="search" on-tap="{{activateSearch}}"></paper-icon-button></div>
-
-                        <!--Search UI which is only visible after user clicks 'search'-->
-                        <div hidden id="backArrow" class="offCanvas"><paper-icon-button icon="arrow-back" on-tap="{{deactivateSearch}}"></paper-icon-button></div>
-                        <div hidden flex id="left-flex" class="offCanvas">
-                            <paper-input-decorator label="Search">
-                                <input is="core-input" on-keypress="{{searchKeyPress}}">
-                            </paper-input-decorator>
-                        </div>
-                        <div hidden id="right-flex" class="offCanvas"><paper-icon-button icon="search" id="searchButton" on-tap="{{performSearch}}"></paper-icon-button></div>
-                    </core-toolbar>
+                        <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
+                                           on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
+                                           on-uqlibrary-toolbar-search-key-pressed="{{performSearch}}"
+                                           appTitle="Indigenous Voices"
+                                           appTitleLink="#"></uqlibrary-toolbar>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
                         <paper-tab data-selected-section="mapSection" id="mapSection" on-tap="{{centerMapIfSelected}}">
@@ -117,8 +103,6 @@
     <script>
 
         (function () {
-            var     animationFrameLength = 150;
-
             Polymer('uqlibrary-flint', {
 
                 // Accessibility issues fixes
@@ -161,63 +145,6 @@
                     });
                 },
 
-                activateSearch: function() {
-                    var that = this;
-
-                    setTimeout(function() {
-                    that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
-                    that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
-                    that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
-                    }, animationFrameLength*0);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#hamburgerMenuIcon').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#toolbarTitle').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#expandSearch').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#backArrow').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#left-flex').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#right-flex').removeAttribute('hidden');
-                    }, animationFrameLength);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
-                        that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
-                        that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
-                    }, animationFrameLength*2);
-
-                },
-
-                deactivateSearch: function() {
-                    var that = this;
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#backArrow').classList.toggle('offCanvas');
-                        that.shadowRoot.querySelector('#left-flex').classList.toggle('offCanvas');
-                        that.shadowRoot.querySelector('#right-flex').classList.toggle('offCanvas');
-                    }, animationFrameLength*0);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#hamburgerMenuIcon').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#toolbarTitle').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#expandSearch').removeAttribute('hidden');
-                        that.shadowRoot.querySelector('#backArrow').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#left-flex').setAttribute('hidden', true);
-                        that.shadowRoot.querySelector('#right-flex').setAttribute('hidden', true);
-                    }, animationFrameLength);
-
-                    setTimeout(function() {
-                        that.shadowRoot.querySelector('#hamburgerMenuIcon').classList.toggle('iconSlide');
-                        that.shadowRoot.querySelector('#toolbarTitle').classList.toggle('iconSlide');
-                        that.shadowRoot.querySelector('#expandSearch').classList.toggle('iconSlide');
-                    }, animationFrameLength*2);
-
-                },
-
-                clearSearch: function() {
-                    var that = this;
-                    that.shadowRoot.querySelector('input').value = "";
-                },
-
                 centerMapIfSelected: function () {
                     if (this.currentSection === "mapSection") {
                         this.fire('uqlibrary-flint-map-center-tap');
@@ -232,26 +159,9 @@
                     this.$.outerDrawerPanel.togglePanel();
                 },
 
-                searchSubmitted: function(searchTerm) {
-                    this.$.itemsListElement.setData({searchTerm: searchTerm});
-                    this.displayListSection();
+                performSearch: function(e) {
+                    this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
                     this.toggleItemDetailsDrawer();
-                },
-
-                performSearch: function() {
-                    var searchTerms = this.shadowRoot.querySelector('input').value;
-                    if (searchTerms.length > 0) {
-                        this.searchSubmitted(searchTerms);
-                    }
-                },
-
-                searchKeyPress: function(e) {
-                    var key = e.which || e.keyCode;
-                    if (key === 13) { // 13 is enter
-                        if (e.target.value.length > searchMinLength) {
-                            this.searchSubmitted(e.target.value);
-                        }
-                    }
                 },
 
                 currentSectionChanged : function(oldValue, newValue){

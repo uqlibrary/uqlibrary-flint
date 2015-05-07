@@ -13,8 +13,14 @@
     </div>
   </template>
 
+  <div id="audioPlayersHolder">
+    <template repeat="{{item, index in $.itemsList.data}}">
+      <x-audio hidden id="audio-{{index}}" name="{{item.title}}" src="{{ item.mp3 }}" ></x-audio>
+    </template>
+  </div>
+
   <ul class="three-line-icon-list" flex>
-    <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 63px;">
+    <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style=" margin-bottom: 83px;">
       <template>
 
         <li class="list-item header border" divider horizontal layout center-center on-tap="{{keepItemDetailsOpen}}">
@@ -37,15 +43,17 @@
         <li class="list-item border listItem" data-index="{{index}}">
 
           <div class="avatar">
-            <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
-              <!-- TODO: replace MP3 with obj binding when available -->
+            <!--<uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
+
               <paper-icon-button
                                 class="audioControlButton"
                                 role="button" aria-label="Play audio of {{model.title}}" data-index="{{index}}"
                                 icon="av:play-circle-outline" data-title="{{model.title}}"
                                 data-mp3="{{ index % 2 == 0 ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3'}}"></paper-icon-button>
 
-            </uqlibrary-a11y-link>
+            </uqlibrary-a11y-link>-->
+            <!--<x-audio name="{{model.title}}" src="{{ model.mp3 }}"></x-audio>-->
+            <div class="audio-holder"></div>
           </div>
 
           <div class="content" relative>
@@ -76,14 +84,6 @@
     </core-list>
   </ul>
 
-
-
-  <div style="height: 65px;" relative>
-    <div fit style="background-color: #efefef; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.37);">
-      <x-audio id="audioPlayer" disabled showVolumeControls showName></x-audio>
-    </div>
-  </div>
-
 </template>
 
 <script>
@@ -106,71 +106,57 @@
         this.language = null;
         this.voice = null;
         this.searchTerm = '';
-
         this.cacheData = {
           languages : {},
           voices: {}
         };
+        this.currentRecordPlayingTitle = null,
+        this.currentActivePlayer = null,
+        this.activePlayer = null,
+
 
 
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
-          //Simulate different data
+
+          var data = e.detail;
+
+          //Simulate different data for testing
           e.detail.sort(function(a,b) {
             return (Math.random() < Math.random() ? -1 : 1)
           });
 
-          that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
+          for(var i=0; i < e.detail.length; i++) {
+            e.detail[i].mp3 = (Math.random() < Math.random() ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')
+          }
 
-          that.$.itemsList.data = e.detail;
-          that.setPlayingRecord();
+          var randomData = e.detail.slice(0, Math.floor((Math.random() * e.detail.length) + 1));
+          data = randomData; // TODO: remove simulating for real data
+
+          that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
+          that.$.itemsList.data = data;
+          that.setAudioRecords();
           that.$.itemsList.groups = [
             {
-              length: e.detail.length,
+              length: data.length,
               data: {
-                label: that.language ? that.language.cvo_title : that.voice ? that.voice.cvo_title : "Search results for: " + that.searchTerm + " (" + e.detail.length + " items found) "
+                label: that.language ? that.language.cvo_title : that.voice ? that.voice.cvo_title : "Search results for: " + that.searchTerm + " (" + data.length + " items found) "
               }
             }
           ];
 
           //save data for this session - don't need to query api again for this language or voice
           if (that.language) {
-            that.cacheData.languages[that.language.cvo_id] = e.detail;
+            that.cacheData.languages[that.language.cvo_id] = data;
           } else if (that.voice){
-            that.cacheData.voices[that.voice.cvo_title] = e.detail;
+            that.cacheData.voices[that.voice.cvo_title] = data;
           }
         });
 
-        //setup audio player
-        this.$.audioPlayer.addEventListener('x-audio-initialized', function() {
-          that.$.audioPlayer.removeAttribute('disabled');
-          that.$.audioPlayer.play();
+
+        this.addEventListener('x-audio-play', function(e) {
+          that.currentRecordPlayingTitle = e.path[0].name;
         });
 
-        this.$.audioPlayer.addEventListener('x-audio-play', function() {
-
-          if(that.previousPlayRecordButton) {
-            that.previousPlayRecordButton.icon = 'av:play-circle-outline';
-          }
-
-          if(that.currentPlayRecordButton) {
-            that.currentPlayRecordButton.icon = 'av:pause-circle-outline';
-          }
-
-          that.previousPlayRecordButton = that.currentPlayRecordButton;
-        });
-
-        this.$.audioPlayer.addEventListener('x-audio-pause', function() {
-
-          if(that.previousPlayRecordButton) {
-            that.previousPlayRecordButton.icon = 'av:play-circle-outline';
-          }
-
-          if(that.currentPlayRecordButton) {
-            that.currentPlayRecordButton.icon = 'av:play-circle-outline';
-          }
-
-          that.previousPlayRecordButton = that.currentPlayRecordButton;
-        });
       },
 
       keepItemDetailsOpen: function(e, data, source) {
@@ -196,7 +182,7 @@
         }
       },
 
-      playRecord: function(source) {
+     /* playRecord: function(source) {
         var button = null;
 
         //event can be triggered by keyboard or mouse, process event for either
@@ -216,13 +202,13 @@
         var audioFile = button.getAttribute("data-mp3");
         var audioFileName = button.getAttribute("data-title");
 
-        if (this.$.audioPlayer.name === audioFileName && this.$.audioPlayer.src === audioFile) {
+        if (this.$.audioPlayerMirror.xaudio === audioFileName && this.$.audioPlayer.src === audioFile) {
           this.$.audioPlayer.togglePlay();
         } else {
           this.$.audioPlayer.src = audioFile;
           this.$.audioPlayer.name = audioFileName;
         }
-      },
+      },*/
 
       closeButtonHandler: function(e) {
         //do not open/close item details on close
@@ -248,7 +234,7 @@
             //get data from local cache
             items = this.cacheData.languages[this.language.cvo_id];
             this.$.itemsList.data = items;
-            this.setPlayingRecord();
+            this.setAudioRecords();
             this.$.itemsList.groups = [
               {
                 length: items.length,
@@ -269,7 +255,7 @@
             //get data from local cache
             items = this.cacheData.voices[this.voice.cvo_title];
             this.$.itemsList.data = items;
-            this.setPlayingRecord();
+            this.setAudioRecords();
             this.$.itemsList.groups = [
               {
                 length: items.length,
@@ -289,24 +275,22 @@
         }
       },
 
-      setPlayingRecord: function() {
-        if(this.$.itemsList.data) {
-          var soundPlaying = null;
-          var that = this;
-          this.$.itemsList.data.forEach(function(item, index) {
-            if(item.title == that.$.audioPlayer.name) {
-              soundPlaying = index;
-            }
-          });
 
-          var playButtons = this.$.itemsList.querySelectorAll('paper-icon-button.audioControlButton');
-          for (var i = 0; i <	playButtons.length; i++) {
-            if(i == soundPlaying) {
-              playButtons[i].icon = 'av:pause-circle-outline';
-            } else {
-              playButtons[i].icon = 'av:play-circle-outline';
+      // This is necessary because core list doesn't work properly with x-audio elements
+      setAudioRecords: function() {
+        if(this.$.itemsList.data) {
+          var that = this;
+          setTimeout(function() {
+            var audioPLayers = that.$.audioPlayersHolder.querySelectorAll('x-audio');
+            var listItems = that.$.itemsList.querySelectorAll('.audio-holder');
+            for (var i = 0; i <	audioPLayers.length; i++) {
+              while (listItems[i].firstChild) {
+                listItems[i].removeChild(listItems[i].firstChild);
+              }
+              audioPLayers[i].hidden = false;
+              listItems[i].appendChild(audioPLayers[i]);
             }
-          }
+          }, 0);
 
         }
       }

@@ -58,13 +58,30 @@
                                             on-back-button-clicked="{{displayListSection}}"></uqlibrary-flint-item>
                     </section>
                   </core-animated-pages>
+
+                  <div id="activePlayerWrapper">
+                    <div layout vertical fit>
+
+                      <div>
+                        <x-audio-mirror id="audioPlayerMirror" disabled showVolumeControls showSeekControl></x-audio-mirror>
+                      </div>
+                      <div class="currentlyPlayingTitle" hidden?="{{!activePlayer}}">
+                        Currently playing: {{$.audioPlayerMirror.name}}
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
                 <div main layout vertical relative class="main">
+
                         <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
                                            on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
                                            on-uqlibrary-toolbar-search-key-pressed="{{performSearch}}"
                                            appTitle="Indigenous Voices"
                                            appTitleLink="#"></uqlibrary-toolbar>
+                  <div id="headerPlayerMirrorWrapper" hidden?="{{!activePlayer || !$.innerDrawerPanel.narrow || searchActivated}}">
+                    <x-audio-mirror id="headerPlayerMirror" showVolumeControls></x-audio-mirror>
+                  </div>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
                         <paper-tab data-selected-section="mapSection" id="mapSection" on-tap="{{centerMapIfSelected}}">
@@ -107,6 +124,13 @@
 
                 // Accessibility issues fixes
                 keyboardNavigationKeys: 'space enter',
+                a11yKeyPressed: function (source, event) {
+                    if (source.path && source.path.length > 0 && source.path[0].target) {
+                        source.path[0].target.fire("tap");
+                    }
+                },
+                activePlayer: null,
+                searchActivated: false,
 
                 ready: function () {
                   var that = this;
@@ -143,6 +167,24 @@
                             that.$.mapList.resizeMap();
                         }
                     });
+
+                    this.addEventListener('x-audio-play', function(e, source) {
+                      var newPlayer = e.path[0];
+                      if(that.activePlayer != null &&  that.activePlayer != e.path[0]) {
+                        that.activePlayer.pause();
+                        if(that.activePlayer.audio.volume == 0)
+                          newPlayer.mute();
+                        else {
+                          newPlayer.setVolume(that.activePlayer.volume);
+                        }
+                        that.activePlayer.audio.load();
+                      }
+                      that.activePlayer = newPlayer;
+                      that.$.audioPlayerMirror.xaudio = newPlayer;
+                      that.$.headerPlayerMirror.xaudio = newPlayer;
+                    });
+
+
                 },
 
                 centerMapIfSelected: function () {

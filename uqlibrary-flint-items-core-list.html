@@ -7,13 +7,35 @@
   <uqlibrary-api-flint-records id="recordsApiElement"></uqlibrary-api-flint-records>
 
   <template if="{{showNoResults}}">
-    <div class="text-container body1">
-      TODO: update design/words/etc <br>
-      No results found for search term "{{searchTerm}}", please, modify your search term and try again.
-    </div>
+    <ul class="three-line-icon-list">
+      <li class="list-item header border" horizontal layout center-center>
+
+        <div class="avatar">
+          <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
+        </div>
+
+        <div flex>Search results</div>
+        <div>
+          <core-a11y-keys target="{{$.closeNoResultsButton}}" keys="{{keyboardNavigationKeys}}"
+                          on-keys-pressed="{{ closeButtonHandler }}"></core-a11y-keys>
+          <paper-icon-button aria-label="Close panel" icon="close" id="closeNoResultsButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
+        </div>
+      </li>
+      <li class="list-item">
+        <div class="content">
+          <div class="line3">
+            0 items found for the search: '{{searchTerm}}'.
+          </div>
+          <div class="line3">
+            Please, update your query and search again.
+          </div>
+        </div>
+      </li>
+    </ul>
   </template>
 
-  <ul class="three-line-icon-list" flex>
+  <template if="{{!showNoResults}}">
+    <ul class="three-line-icon-list" flex>
     <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 63px;">
       <template>
 
@@ -76,13 +98,13 @@
     </core-list>
   </ul>
 
-
-
-  <div style="height: 65px;" relative>
-    <div fit style="background-color: #efefef; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.37);">
-      <x-audio id="audioPlayer" disabled showVolumeControls showName></x-audio>
+    <div style="height: 65px;" relative>
+      <div fit style="background-color: #efefef; border: 0px #999 solid; border-width: 0px 0 0 0; box-shadow: 6px 6px 6px 6px rgba(0, 0, 0, 0.37);">
+        <x-audio id="audioPlayer" disabled showVolumeControls showName></x-audio>
+      </div>
     </div>
-  </div>
+
+  </template>
 
 </template>
 

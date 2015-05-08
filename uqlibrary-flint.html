@@ -205,13 +205,14 @@
                 },
 
                 performSearch: function(e) {
-                    this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
-                    this.toggleItemDetailsDrawer();
+                    if (e.detail.searchTerm != "") {
+                        this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
+                        this.toggleItemDetailsDrawer();
+                    }
                 },
 
                 keyPerformSearch: function(e) {
-                    console.log(e.detail.keyPressed);
-                    if (e.detail.keyPressed == 13) {
+                    if ((e.detail.keyPressed == 13) && (e.detail.searchTerm != "")) {
                         this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
                         this.toggleItemDetailsDrawer();
                     }

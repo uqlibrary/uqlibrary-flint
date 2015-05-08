@@ -306,13 +306,15 @@
           setTimeout(function() {
             var audioPLayers = that.$.audioPlayersHolder.querySelectorAll('x-audio');
             var listItems = that.$.itemsList.querySelectorAll('.audio-holder');
-            for (var i = 0; i <	audioPLayers.length; i++) {
-              while (listItems[i].firstChild) {
-                listItems[i].removeChild(listItems[i].firstChild);
+              if (listItems.length > 0) {
+                  for (var i = 0; i <	audioPLayers.length; i++) {
+                      while (listItems[i].firstChild) {
+                          listItems[i].removeChild(listItems[i].firstChild);
+                      }
+                      audioPLayers[i].hidden = false;
+                      listItems[i].appendChild(audioPLayers[i]);
+                  }
               }
-              audioPLayers[i].hidden = false;
-              listItems[i].appendChild(audioPLayers[i]);
-            }
           }, 0);
 
         }

@@ -6,8 +6,7 @@
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
   <uqlibrary-api-flint-records id="recordsApiElement"></uqlibrary-api-flint-records>
 
-  <template if="{{showNoResults}}">
-    <ul class="three-line-icon-list">
+    <ul hidden?="{{!showNoResults}}" class="three-line-icon-list">
       <li class="list-item header border" horizontal layout center-center>
 
         <div class="avatar">
@@ -32,8 +31,6 @@
         </div>
       </li>
     </ul>
-  </template>
-
 
   <div id="audioPlayersHolder">
     <template repeat="{{item, index in $.itemsList.data}}">
@@ -41,8 +38,8 @@
     </template>
   </div>
 
-  <template if="{{!showNoResults}}">
-    <ul class="three-line-icon-list" flex>
+  <!--<template if="{{!showNoResults}}">-->
+    <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
       <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 83px;">
       <template>
 
@@ -96,7 +93,7 @@
       </template>
     </core-list>
   </ul>
-  </template>
+  <!--</template>-->
 </template>
 
 <script>

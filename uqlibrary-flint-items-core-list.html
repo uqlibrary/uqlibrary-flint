@@ -132,19 +132,6 @@
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
 
           var data = e.detail;
-
-          //Simulate different data for testing
-          e.detail.sort(function(a,b) {
-            return (Math.random() < Math.random() ? -1 : 1)
-          });
-
-          for(var i=0; i < e.detail.length; i++) {
-            e.detail[i].mp3 = (Math.random() < Math.random() ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')
-          }
-
-          var randomData = e.detail.slice(0, Math.floor((Math.random() * e.detail.length) + 1));
-          data = randomData; // TODO: remove simulating for real data
-
           that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
           that.$.itemsList.data = data;
           that.setAudioRecords();

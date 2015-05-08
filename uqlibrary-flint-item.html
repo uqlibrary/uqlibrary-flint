@@ -5,29 +5,29 @@
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
 
   <ul class="three-line-icon-list">
-    <li class="list-item header border" style="padding-bottom: 0px;" horizontal layout center-center>
-
-      <div class="avatar">
-        <core-a11y-keys id="a11yBackButton" target="{{$.backButton}}" keys="{{keyboardNavigationKeys}}"
-                        on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
-        <paper-icon-button aria-label="Back to list" icon="arrow-back" id="backButton" on-click="{{backButtonHandler}}"></paper-icon-button>
+    <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px;" horizontal layout>
+      <x-audio id="audio" name="{{item.title}}" src="{{ item.mp3 }}" style="height: 45px;width:45px;"></x-audio>
+      <div class="content" style="margin-left: 0px;" flex horizontal layout center-centre>
+        <div>
+        {{item.title}}
+        </div>
       </div>
-
-      <div flex>{{item.title}}</div>
       <div>
         <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
                         on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
-        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{closeButtonHandler}}"></paper-icon-button>
+        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" on-click="{{backButtonHandler}}"></paper-icon-button>
       </div>
     </li>
   </ul>
 
-  <ul class="two-line-list">
-    <li class="list-item">
-      <div class="content">
+  <ul class="two-line-list" style="padding-bottom: 100px;">
+
+    <li class="list-item" horizontal layout>
+      <div class="content" flex>
         <div class="line1">Language</div>
         <div class="line2" id="itemLanguage">{{item.subject_lookups.subject_lookup}}</div>
       </div>
+
     </li>
 
     <li class="list-item">
@@ -47,7 +47,7 @@
     <li class="list-item border">
       <div class="content">
         <div class="line1">eSpace Record</div>
-        <div class="line2"><a href="{{item.pid}}" target="_blank">{{item.pid}}</a></div>
+        <div class="line2"><a href="https://espace.library.uq.edu.au/view/{{item.pid}}" target="_blank">{{item.pid}}</a></div>
       </div>
     </li>
 

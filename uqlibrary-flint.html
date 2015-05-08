@@ -25,20 +25,23 @@
                                        transitions="slide-from-right" id="animatedDrawerPages">
                     <section id="infoSection" data-selected-section="infoSection">
 
-                      <div horizontal layout>
-                        <h4 class="text-container"><core-icon icon="info"></core-icon>About this collection</h4>
-
-                        <div>
-                          <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
-                                          on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
-                          <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
-                        </div>
-
-                      </div>
+                      <ul class="three-line-icon-list">
+                        <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px;" horizontal layout>
+                          <div class="avatar">
+                            <core-icon icon="info" aria-label="information about this application" style="height: 45px; width: 45px;"></core-icon>
+                          </div>
+                          <div class="content" style="margin-left: 0px;" flex>About this collection</div>
+                          <div>
+                            <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
+                                            on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
+                            <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
+                          </div>
+                        </li>
+                      </ul>
 
                         <p class="text-container body1"><b>Indigenous Voices</b><br>By Elwyn Flint</p>
 
-                        <p class="text-container body1">
+                        <p class="text-container body1" style="padding-bottom: 100px;">
                           The Flint Papers comprise some 24 boxes of written documents compiled and collected by the late Elwyn Flint,
                           most of them as part of a long-term research project he carried out mainly in the 1960s known as the
                           Queensland Speech Survey funded by the Australian Research Council.<br><br>

@@ -38,8 +38,7 @@
     </template>
   </div>
 
-  <!--<template if="{{!showNoResults}}">-->
-    <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
+  <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
       <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 83px;">
       <template>
 
@@ -93,7 +92,6 @@
       </template>
     </core-list>
   </ul>
-  <!--</template>-->
 </template>
 
 <script>
@@ -127,6 +125,12 @@
 
 
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
+
+          //TODO: remove when items will have their own MP3 files
+          //adding test mp3 files
+          for(var i=0; i < e.detail.length; i++) {
+            e.detail[i].mp3 = (Math.random() < Math.random() ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')
+          }
 
           var data = e.detail;
           that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;

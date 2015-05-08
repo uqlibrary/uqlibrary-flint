@@ -9,7 +9,7 @@
       <x-audio id="audio" name="{{item.title}}" src="{{ item.mp3 }}" style="height: 45px;width:45px;"></x-audio>
       <div class="content" style="margin-left: 0px;" flex horizontal layout center-centre>
         <div>
-        {{item.title}}
+        {{item.title_t}}
         </div>
       </div>
       <div>
@@ -25,7 +25,7 @@
     <li class="list-item" horizontal layout>
       <div class="content" flex>
         <div class="line1">Language</div>
-        <div class="line2" id="itemLanguage">{{item.subject_lookups.subject_lookup}}</div>
+        <div class="line2" id="itemLanguage">{{item.subject_mi_lookup[0]}}</div>
       </div>
 
     </li>
@@ -33,25 +33,25 @@
     <li class="list-item">
       <div class="content">
         <div class="line1">Voice</div>
-        <div class="line2">{{item.contributors.contributor}}</div>
+        <div class="line2">{{item.contributor_mt[0]}}</div>
       </div>
     </li>
 
     <li class="list-item">
       <div class="content">
         <div class="line1">Authors</div>
-        <div class="line2">{{item.authors.author}}</div>
+        <div class="line2">{{item.author_mt[0]}}</div>
       </div>
     </li>
 
     <li class="list-item border">
       <div class="content">
         <div class="line1">eSpace Record</div>
-        <div class="line2"><a href="https://espace.library.uq.edu.au/view/{{item.pid}}" target="_blank">{{item.pid}}</a></div>
+        <div class="line2"><a href="https://espace.library.uq.edu.au/view/{{item.id}}" target="_blank">{{item.id}}</a></div>
       </div>
     </li>
 
-    <template if="{{item.transcript.transcript}}">
+    <template if="{{item.transcript_t}}">
       <li class="list-item border" style="height: auto; overflow:visible;">
 
         <div class="content">
@@ -92,8 +92,8 @@
 
       itemChanged: function(oldValue, newValue) {
         //split transcript into lines based on HTML breaks
-        if (this.item && this.item.transcript && this.item.transcript.transcript) {
-          this.item.lines = this.item.transcript.transcript.split('<br \/>').filter(function(line) { return line; });
+        if (this.item && this.item.transcript_t && this.item.transcript_t) {
+          this.item.lines = this.item.transcript_t.split('<br \/>').filter(function(line) { return line; });
         }
       },
 
@@ -102,7 +102,7 @@
       },
 
       showFeedback: function() {
-        window.location.href = "mailto:webmaster@library.uq.edu.au?subject=" + this.item.pid;
+        window.location.href = "mailto:webmaster@library.uq.edu.au?subject=" + this.item.id;
       },
 
       backButtonHandler: function() {

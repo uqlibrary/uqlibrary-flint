@@ -37,7 +37,7 @@
 
   <div id="audioPlayersHolder">
     <template repeat="{{item, index in $.itemsList.data}}">
-      <x-audio hidden id="audio-{{index}}" name="{{item.title}}" src="{{ item.mp3 }}" ></x-audio>
+      <x-audio hidden id="audio-{{index}}" name="{{item.title_t}}" src="{{ item.mp3 }}" ></x-audio>
     </template>
   </div>
 
@@ -66,16 +66,6 @@
         <li class="list-item border listItem" data-index="{{index}}">
 
           <div class="avatar">
-            <!--<uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ playRecord }}">
-
-              <paper-icon-button
-                                class="audioControlButton"
-                                role="button" aria-label="Play audio of {{model.title}}" data-index="{{index}}"
-                                icon="av:play-circle-outline" data-title="{{model.title}}"
-                                data-mp3="{{ index % 2 == 0 ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3'}}"></paper-icon-button>
-
-            </uqlibrary-a11y-link>-->
-            <!--<x-audio name="{{model.title}}" src="{{ model.mp3 }}"></x-audio>-->
             <div class="audio-holder"></div>
           </div>
 
@@ -83,7 +73,7 @@
 
             <div class="line1" horizontal layout>
               <div flex class="line1">
-                <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title}}</uqlibrary-a11y-link>
+                <uqlibrary-a11y-link data-index="{{index}}" on-tap="{{ itemSelectedKeyPressed }}">{{model.title_t}}</uqlibrary-a11y-link>
               </div>
 
               <div>
@@ -92,13 +82,13 @@
             </div>
 
             <div class="line2">
-              <template if={{voice}}>{{model.subject_lookups.subject_lookup}}</template>
-              <template if={{searchTerm}}>{{model.subject_lookups.subject_lookup}}</template>
-              <template if={{language}}>by {{model.contributors.contributor}}</template>
+              <template if={{voice}}>{{model.subject_mi_lookup[0]}}</template>
+              <template if={{searchTerm}}>{{model.subject_mi_lookup[0]}}</template>
+              <template if={{language}}>by {{model.contributor_mt[0]}}</template>
             </div>
 
             <div class="line3">
-              <template if={{searchTerm}}>by {{model.contributors.contributor}}</template>
+              <template if={{searchTerm}}>by {{model.contributor_mt[0]}}</template>
             </div>
 
           </div>

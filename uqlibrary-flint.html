@@ -207,6 +207,7 @@
                 performSearch: function(e) {
                     if (e.detail.searchTerm != "") {
                         this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
+                        this.currentDrawerSection = 'itemsListSection';
                         this.toggleItemDetailsDrawer();
                     }
                 },
@@ -214,6 +215,7 @@
                 keyPerformSearch: function(e) {
                     if ((e.detail.keyPressed == 13) && (e.detail.searchTerm != "")) {
                         this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
+                        this.currentDrawerSection = 'itemsListSection';
                         this.toggleItemDetailsDrawer();
                     }
                 },

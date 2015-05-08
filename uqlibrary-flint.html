@@ -68,8 +68,8 @@
                       <div>
                         <x-audio-mirror id="audioPlayerMirror" disabled showVolumeControls showSeekControl></x-audio-mirror>
                       </div>
-                      <div class="currentlyPlayingTitle" hidden?="{{!activePlayer}}">
-                        Currently playing: {{$.audioPlayerMirror.name}}
+                      <div class="currentlyPlayingTitle">
+                        Currently playing: {{$.audioPlayerMirror.name || 'No file selected'}}
                       </div>
                     </div>
                   </div>
@@ -81,7 +81,9 @@
                                            on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
                                            on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"
                                            appTitle="Indigenous Voices"
-                                           appTitleLink="#"></uqlibrary-toolbar>
+                                           appTitleLink="#">
+                        </uqlibrary-toolbar>
+
                   <div id="headerPlayerMirrorWrapper" hidden?="{{!activePlayer || !$.innerDrawerPanel.narrow || searchActivated}}">
                     <x-audio-mirror id="headerPlayerMirror" showVolumeControls></x-audio-mirror>
                   </div>

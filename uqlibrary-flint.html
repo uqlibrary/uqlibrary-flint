@@ -137,7 +137,8 @@
                 activeAudioSrc: null,
                 activeAudioMirror: null,
                 searchActivated: false,
-              isIOS: false,
+                isIOS: false,
+
                 ready: function () {
                   var that = this;
                   this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
@@ -293,10 +294,12 @@
               displayItemDetails: function(e) {
                 this.currentDrawerSection = 'itemSection';
                 this.$.itemElement.item = e.detail.item;
+                this.fire('uqlibrary-flint-request-current-audio');
               },
 
               displayListSection: function(e) {
                 this.currentDrawerSection = 'itemsListSection';
+                this.fire('uqlibrary-flint-request-current-audio');
               },
 
               menuLinkClicked: function(e) {

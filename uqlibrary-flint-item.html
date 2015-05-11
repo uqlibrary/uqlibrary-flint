@@ -95,7 +95,6 @@
         //split transcript into lines based on HTML breaks
         if (this.item && this.item.transcript_t && this.item.transcript_t) {
           this.item.lines = this.item.transcript_t.split('<br \/>').filter(function(line) { return line; });
-          this.fire('uqlibrary-flint-request-current-audio');
         }
       },
 
@@ -103,8 +102,10 @@
         this.item = {};
         var that = this;
         document.addEventListener('uqlibrary-flint-response-current-audio', function(e) {
-            if(e.detail.audio != null && that.playingSrc == e.detail.audio.src) {
+            if(e.detail.audio != null && that.item.mp3 == e.detail.audio.src) {
                 that.isPlaying = true;
+            } else {
+              that.isPlaying = false;
             }
         });
 

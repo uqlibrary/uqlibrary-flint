@@ -169,9 +169,16 @@
           }
         });
 
-          document.addEventListener('x-audio-player-pause', function(e) {
+        document.addEventListener('x-audio-player-pause', function(e) {
           that.playingSrc=null;
-      });
+        });
+
+        document.addEventListener('uqlibrary-flint-response-current-audio', function(e) {
+          if(e.detail.audio != null) {
+            that.playingSrc = e.detail.audio.src;
+            that.previousPlayingSrc = that.playingSrc;
+          }
+        });
 
       },
 

@@ -113,7 +113,7 @@
 
         this.previousPlayRecordButton = null;
         this.currentPlayRecordButton = null;
-
+        this.skipItemSelected = false;
         this.language = null;
         this.voice = null;
         this.searchTerm = '';
@@ -140,7 +140,6 @@
           var data = e.detail;
           that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
           that.$.itemsList.data = data;
-          that.setAudioRecords();
           that.$.itemsList.groups = [
             {
               length: data.length,
@@ -183,6 +182,10 @@
       },
 
       toggleAudioPlay: function(e, sender) {
+        if (this.skipItemSelected){
+          this.skipItemSelected = false;
+          return;
+        }
         //e.stopImmediatePropagation();
         var _el = e.path[0];
 
@@ -276,7 +279,6 @@
             //get data from local cache
             items = this.cacheData.languages[this.language.cvo_id];
             this.$.itemsList.data = items;
-            this.setAudioRecords();
             this.$.itemsList.groups = [
               {
                 length: items.length,
@@ -297,7 +299,6 @@
             //get data from local cache
             items = this.cacheData.voices[this.voice.cvo_title];
             this.$.itemsList.data = items;
-            this.setAudioRecords();
             this.$.itemsList.groups = [
               {
                 length: items.length,
@@ -315,28 +316,6 @@
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });
         }
-      },
-
-
-      // This is necessary because core list doesn't work properly with x-audio elements
-      setAudioRecords: function() {
-      /*  if(this.$.itemsList.data) {
-          var that = this;
-          setTimeout(function() {
-            var audioPLayers = that.$.audioPlayersHolder.querySelectorAll('x-audio');
-            var listItems = that.$.itemsList.querySelectorAll('.audio-holder');
-              if (listItems.length > 0) {
-                  for (var i = 0; i <	audioPLayers.length; i++) {
-                      while (listItems[i].firstChild) {
-                          listItems[i].removeChild(listItems[i].firstChild);
-                      }
-                      audioPLayers[i].hidden = false;
-                      listItems[i].appendChild(audioPLayers[i]);
-                  }
-              }
-          }, 0);
-
-        }*/
       }
     });
   })();

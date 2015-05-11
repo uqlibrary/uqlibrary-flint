@@ -6,7 +6,7 @@
 
   <ul class="three-line-icon-list">
     <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px; padding: 24px" horizontal layout>
-        <paper-icon-button icon="{{isPlaying ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}" on-click="{{toggleAudioPlay}}"></paper-icon-button>
+        <paper-icon-button class="playerButton" icon="{{isPlaying ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}" on-click="{{toggleAudioPlay}}"></paper-icon-button>
         <div class="content" style="margin-left: 0px;" flex horizontal layout center-centre>
         <div>
         {{item.title_t}}

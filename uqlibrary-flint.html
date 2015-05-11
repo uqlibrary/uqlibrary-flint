@@ -84,7 +84,7 @@
                                            appTitleLink="#">
                         </uqlibrary-toolbar>
 
-                  <div id="headerPlayerMirrorWrapper" hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
+                  <div id="headerPlayerMirrorWrapper" class="{{isIOS ? 'ios' : ''}}" hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
                     <x-audio-mirror id="headerPlayerMirror" showVolumeControls?="{{!isIOS}}"></x-audio-mirror>
                   </div>
 

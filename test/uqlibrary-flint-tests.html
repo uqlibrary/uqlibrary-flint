@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-flint-categories-list-unit-test</title>
+
+  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../uqlibrary-flint.html">
+</head>
+<body>
+
+<uqlibrary-flint></uqlibrary-flint>
+
+<script>
+  window.addEventListener('polymer-ready', function() {
+
+    var element = document.querySelector('uqlibrary-flint');
+
+    describe('integration tests for uqlibrary-flint', function () {
+
+      before(function () {
+      });
+
+      afterEach(function(){
+      });
+
+      it('should load uqlibrary-flint element', function(done) {
+        setTimeout(function () {
+          expect(element).not.to.be.null;
+          done();
+        }, 1000);
+      });
+
+      describe('warning dialog testing', function () {
+        it('should display warning dialog', function (done) {
+          var warningElement = element.shadowRoot.querySelector('uqlibrary-flint-warning-dialog');
+          expect(warningElement).not.to.be.null;
+
+          var warningDialog = warningElement.shadowRoot.querySelector('#warning');
+          expect(warningDialog).not.to.be.null;
+
+          var warningStyle = warningDialog.getAttribute('style');
+          expect(warningStyle.indexOf('display: none')).equals(-1);
+
+          done();
+        });
+
+        it('should hide warning dialog', function (done) {
+
+        var warningElement = element.shadowRoot.querySelector('uqlibrary-flint-warning-dialog');
+        var warningDialog = warningElement.shadowRoot.querySelector('#warning');
+          var confirmButton = warningDialog.querySelector('#confirmButton');
+          expect(confirmButton).not.to.be.null;
+
+          //confirm warning dialog
+          confirmButton.fire('tap');
+
+          setTimeout(function () {
+            var warningStyle = warningDialog.getAttribute('style');
+            expect(warningStyle.indexOf('display: none')).not.equals(-1);
+            done();
+          }, 100);
+        });
+      });
+
+      describe('map display testing', function () {
+
+        it('should select map tab in tabs', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          expect(paperTabs).not.to.be.null;
+
+          var tab = paperTabs.querySelector('#mapSection');
+          expect(tab).not.to.be.null;
+          expect(tab.getAttribute('class')).equals('core-selected');
+
+          done();
+        });
+
+        it('should select map section in pages', function (done) {
+          var section = element.shadowRoot.querySelector('#mapDisplaySection');
+          expect(section).not.to.be.null;
+          expect(section.getAttribute('class')).equals('core-selected');
+          done();
+        });
+
+        it('should display markers on the map', function (done) {
+          var mapMarkers = element.shadowRoot.querySelectorAll('#mapList /deep/ google-map-marker');
+          expect(mapMarkers.length).not.to.equal(0);
+
+          //TODO: click on marker
+          setTimeout(function() {
+
+            done();
+          }, 10000);
+        });
+      });
+
+      describe('languages list testing', function () {
+
+        it('should select languages tab in tabs', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          expect(paperTabs).not.to.be.null;
+
+          var tab = paperTabs.querySelector('paper-tab[data-selected-section="languageSection"]');
+          expect(tab).not.to.be.null;
+
+          tab.fire('tap');
+
+          setTimeout(function() {
+            expect(tab.getAttribute('class')).equals('core-selected');
+            done();
+          }, 100);
+        });
+
+        it('should select languages list section in pages', function (done) {
+          var section = element.shadowRoot.querySelector('#languageListSection');
+          expect(section).not.to.be.null;
+          expect(section.getAttribute('class')).equals('core-selected');
+          done();
+        });
+
+        it('items should be displayed', function (done) {
+          setTimeout(function () {
+            done();
+          }, 100);
+        });
+      });
+
+      describe('voices list testing', function () {
+
+        it('should select voices tab in tabs', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          expect(paperTabs).not.to.be.null;
+
+          var tab = paperTabs.querySelector('paper-tab[data-selected-section="voicesSection"]');
+          expect(tab).not.to.be.null;
+
+          tab.fire('tap');
+
+          setTimeout(function() {
+            expect(tab.getAttribute('class')).equals('core-selected');
+            done();
+          }, 100);
+        });
+
+        it('should select voices list section in pages', function (done) {
+          var section = element.shadowRoot.querySelector('#voiceListSection');
+          expect(section).not.to.be.null;
+          expect(section.getAttribute('class')).equals('core-selected');
+          done();
+        });
+
+        it('items should be displayed', function (done) {
+          setTimeout(function () {
+            done();
+          }, 100);
+        });
+      });
+
+      describe('search testing', function () {
+        it('items should be displayed', function (done) {
+          setTimeout(function () {
+            done();
+          }, 100);
+        });
+      });
+    });
+  });
+
+</script>
+
+</body>
+</html>

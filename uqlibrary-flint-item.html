@@ -6,8 +6,8 @@
 
   <ul class="three-line-icon-list">
     <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px; padding: 24px" horizontal layout>
-      <x-audio id="audio" name="{{item.title}}" src="{{ item.mp3 }}" style="height: 45px;width:45px;"></x-audio>
-      <div class="content" style="margin-left: 0px;" flex horizontal layout center-centre>
+        <paper-icon-button icon="{{isPlaying ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}" on-click="{{toggleAudioPlay}}"></paper-icon-button>
+        <div class="content" style="margin-left: 0px;" flex horizontal layout center-centre>
         <div>
         {{item.title_t}}
         </div>
@@ -83,6 +83,8 @@
       // Accessibility issues fixes
       keyboardNavigationKeys: 'space enter',
 
+      playingId: null,
+
       a11yKeyPressed: function(source, event) {
         if (source.path && source.path.length > 0 && source.path[0].target) {
           source.path[0].target.click();
@@ -93,11 +95,27 @@
         //split transcript into lines based on HTML breaks
         if (this.item && this.item.transcript_t && this.item.transcript_t) {
           this.item.lines = this.item.transcript_t.split('<br \/>').filter(function(line) { return line; });
+          this.fire('uqlibrary-flint-request-current-audio');
         }
       },
 
       ready: function() {
         this.item = {};
+        var that = this;
+        document.addEventListener('uqlibrary-flint-response-current-audio', function(e) {
+            if(e.detail.audio != null && that.playingSrc == e.detail.audio.src) {
+                that.isPlaying = true;
+            }
+        });
+
+      document.addEventListener('x-audio-player-play', function(e) {
+            that.isPlaying = true;
+      });
+
+      document.addEventListener('x-audio-player-pause', function(e) {
+          that.isPlaying = false;
+      });
+
       },
 
       showFeedback: function() {
@@ -110,7 +128,20 @@
 
       closeButtonHandler: function() {
         this.fire("close-button-clicked", { });
-      }
+      },
+
+      toggleAudioPlay: function(e, sender) {
+        var _el = e.path[0];
+        if(_el.icon == 'av:play-circle-outline') {
+            _el.icon = 'av:pause-circle-outline';
+            var _src = this.item.mp3;
+            this.fire('x-audio-list-play', {src: _src, name: this.item.title_t});
+        } else {
+            _el.icon = 'close';
+            this.fire('x-audio-list-pause');
+        }
+
+      },
 
     });
   })();

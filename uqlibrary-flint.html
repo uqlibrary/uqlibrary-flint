@@ -66,10 +66,10 @@
                     <div layout vertical fit>
 
                       <div>
-                        <x-audio-mirror id="audioPlayerMirror" disabled showVolumeControls showSeekControl></x-audio-mirror>
+                        <x-audio id="audioPlayer" disabled showVolumeControls?="{{!isIOS}}" showSeekControl></x-audio>
                       </div>
                       <div class="currentlyPlayingTitle">
-                        Currently playing: {{$.audioPlayerMirror.name || '--'}}
+                        Currently playing: {{$.audioPlayer.name || '--'}}
                       </div>
                     </div>
                   </div>
@@ -84,8 +84,8 @@
                                            appTitleLink="#">
                         </uqlibrary-toolbar>
 
-                  <div id="headerPlayerMirrorWrapper" hidden?="{{!activePlayer || !$.innerDrawerPanel.narrow || searchActivated}}">
-                    <x-audio-mirror id="headerPlayerMirror" showVolumeControls></x-audio-mirror>
+                  <div id="headerPlayerMirrorWrapper" hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
+                    <x-audio-mirror id="headerPlayerMirror" showVolumeControls?="{{!isIOS}}"></x-audio-mirror>
                   </div>
 
                     <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
@@ -123,7 +123,6 @@
     </template>
 
     <script>
-
         (function () {
             Polymer('uqlibrary-flint', {
 
@@ -135,11 +134,13 @@
                     }
                 },
                 activePlayer: null,
+                activeAudioSrc: null,
+                activeAudioMirror: null,
                 searchActivated: false,
-
+              isIOS: false,
                 ready: function () {
                   var that = this;
-
+                  this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
                   that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
                   that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
 
@@ -173,24 +174,54 @@
                         }
                     });
 
-                    this.addEventListener('x-audio-play', function(e, source) {
-                      var newPlayer = e.path[0];
-                      if(that.activePlayer != null &&  that.activePlayer != e.path[0]) {
-                        that.activePlayer.pause();
-                        if(that.activePlayer.audio.volume == 0)
-                          newPlayer.mute();
-                        else {
-                          newPlayer.setVolume(that.activePlayer.volume);
-                        }
-                        that.activePlayer.audio.load();
+                    this.addEventListener('x-audio-initialized', function(e, source) {
+                        that.$.audioPlayer.disabled = false;
+                        that.$.headerPlayerMirror.xaudio = that.$.audioPlayer;
+                        that.activeAudioSrc = that.$.audioPlayer.src;
+
+                        that.$.audioPlayer.play();
+                        that.activePlayer = that.$.audioPlayer;
+
+                    });
+
+                    this.addEventListener('x-audio-list-pause', function(e) {
+                      that.$.audioPlayer.pause();
+                  });
+
+                  this.addEventListener('x-audio-list-play', function(e, source) {
+                      if(that.activeAudioSrc && (that.activeAudioSrc != e.detail.src) || that.activeAudioSrc == null)  {
+                          if(that.$.audioPlayer.src) {
+                            that.$.audioPlayer.pause();
+                          }
+                          that.$.audioPlayer.setSrc(e.detail.src);
+                          that.$.audioPlayer.name = e.detail.name;
                       }
-                      that.activePlayer = newPlayer;
-                      that.$.audioPlayerMirror.xaudio = newPlayer;
-                      that.$.headerPlayerMirror.xaudio = newPlayer;
+                      else {
+                          that.$.audioPlayer.play();
+                      }
+
+                      if( that.activeAudioMirror != null) {
+                          that.activeAudioMirror.togglePlay();
+                      }
+                  });
+
+                    this.$.audioPlayer.addEventListener('x-audio-play', function(e) {
+                        that.fire('x-audio-player-play', {audio: that.$.audioPlayer.audio});
+                    });
+
+                    this.$.audioPlayer.addEventListener('x-audio-pause', function(e) {
+                        that.fire('x-audio-player-pause', {audio: that.$.audioPlayer.audio});
+                    });
+
+                    document.addEventListener('uqlibrary-flint-request-current-audio', function(e) {
+                        that.fire('uqlibrary-flint-response-current-audio', {audio: that.$.audioPlayer.audio})
                     });
 
 
                 },
+
+
+
 
                 centerMapIfSelected: function () {
                     if (this.currentSection === "mapSection") {

@@ -32,11 +32,11 @@
       </li>
     </ul>
 
-  <div id="audioPlayersHolder">
+  <!--<div id="audioPlayersHolder">
     <template repeat="{{item, index in $.itemsList.data}}">
       <x-audio hidden id="audio-{{index}}" name="{{item.title_t}}" src="{{ item.mp3 }}" ></x-audio>
     </template>
-  </div>
+  </div>-->
 
   <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
       <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 83px;">
@@ -59,10 +59,13 @@
         </li>
 
 
-        <li class="list-item border listItem" data-index="{{index}}">
+        <li class="list-item border listItem" data-index="{{index}}" data-id="{{model.id}}" data-mp3="{{model.mp3}}" data-name="{{model.title_t}}">
 
           <div class="avatar">
-            <div class="audio-holder"></div>
+            <div class="audio-holder">
+                <paper-icon-button icon="{{model.mp3 == playingSrc ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}" on-click="{{toggleAudioPlay}}"></paper-icon-button>
+
+            </div>
           </div>
 
           <div class="content" relative>
@@ -121,6 +124,8 @@
         this.currentRecordPlayingTitle = null,
         this.currentActivePlayer = null,
         this.activePlayer = null,
+        this.playingSrc = null,
+        this.previousPlayingSrc = null,
 
 
 
@@ -154,9 +159,38 @@
         });
 
 
-        this.addEventListener('x-audio-play', function(e) {
-          that.currentRecordPlayingTitle = e.path[0].name;
+        document.addEventListener('x-audio-player-play', function(e) {
+          //that.currentRecordPlayingTitle = e.path[0].name;
+
+          if(that.previousPlayingSrc != null) {
+            that.playingSrc = that.previousPlayingSrc;
+          } else {
+            that.playingSrc = e.detail.audio.src;
+          }
         });
+
+          document.addEventListener('x-audio-player-pause', function(e) {
+          that.playingSrc=null;
+      });
+
+      },
+
+      toggleAudioPlay: function(e, sender) {
+        //e.stopImmediatePropagation();
+        var _el = e.path[0];
+
+        if(_el.icon == 'av:play-circle-outline') {
+            _el.icon = 'av:pause-circle-outline';
+            var _src = e.path[3].attributes["data-mp3"].value;
+            var _title = e.path[3].attributes["data-name"].value;
+            this.playingSrc = _src;
+            this.previousPlayingSrc = this.playingSrc;
+            this.fire('x-audio-list-play', {src: _src, name: _title});
+        } else {
+            _el.icon = 'close';
+            this.playingSrc=null;
+            this.fire('x-audio-list-pause');
+        }
 
       },
 
@@ -279,7 +313,7 @@
 
       // This is necessary because core list doesn't work properly with x-audio elements
       setAudioRecords: function() {
-        if(this.$.itemsList.data) {
+      /*  if(this.$.itemsList.data) {
           var that = this;
           setTimeout(function() {
             var audioPLayers = that.$.audioPlayersHolder.querySelectorAll('x-audio');
@@ -295,7 +329,7 @@
               }
           }, 0);
 
-        }
+        }*/
       }
     });
   })();

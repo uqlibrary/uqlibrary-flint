@@ -6,7 +6,9 @@
 
   <ul class="three-line-icon-list">
     <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px; padding: 24px" horizontal layout>
-        <paper-icon-button class="playerButton" icon="{{isPlaying ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}" on-click="{{toggleAudioPlay}}"></paper-icon-button>
+      <uqlibrary-a11y-link on-click="{{ audioToggleClick }}">
+        <paper-icon-button class="playerButton" icon="{{isPlaying ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}"></paper-icon-button>
+      </uqlibrary-a11y-link>
         <div class="content" style="margin-left: 0px;" flex horizontal layout center-centre>
         <div>
         {{item.title_t}}
@@ -83,7 +85,7 @@
       // Accessibility issues fixes
       keyboardNavigationKeys: 'space enter',
 
-      playingId: null,
+      playingSrc: null,
 
       a11yKeyPressed: function(source, event) {
         if (source.path && source.path.length > 0 && source.path[0].target) {
@@ -102,11 +104,16 @@
         this.item = {};
         var that = this;
         document.addEventListener('uqlibrary-flint-response-current-audio', function(e) {
-            if(e.detail.audio != null && that.item.mp3 == e.detail.audio.src) {
+            if(e.detail.audio != null) {
+              that.playingSrc = e.audio.src;
+              if(that.item.mp3 == e.detail.audio.src && e.detail.isPlaying){
                 that.isPlaying = true;
-            } else {
-              that.isPlaying = false;
+              } else {
+                that.isPlaying = false;
+              }
             }
+
+
         });
 
       document.addEventListener('x-audio-player-play', function(e) {
@@ -131,8 +138,15 @@
         this.fire("close-button-clicked", { });
       },
 
-      toggleAudioPlay: function(e, sender) {
-        var _el = e.path[0];
+      audioToggleClick: function(e, value, sender) {
+        var _el = sender.querySelector('paper-icon-button');
+        if(_el) {
+          this.toggleAudioPlay(e, value, _el)
+        }
+      },
+
+      toggleAudioPlay: function(e, value, sender) {
+        var _el = sender;
         if(_el.icon == 'av:play-circle-outline') {
             _el.icon = 'av:pause-circle-outline';
             var _src = this.item.mp3;

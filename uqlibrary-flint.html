@@ -215,7 +215,7 @@
                     });
 
                     document.addEventListener('uqlibrary-flint-request-current-audio', function(e) {
-                        that.fire('uqlibrary-flint-response-current-audio', {audio: that.$.audioPlayer.audio})
+                        that.fire('uqlibrary-flint-response-current-audio', {audio: that.$.audioPlayer.audio, isPlaying: that.$.audioPlayer.isPlaying})
                     });
 
 

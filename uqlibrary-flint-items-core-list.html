@@ -32,17 +32,11 @@
       </li>
     </ul>
 
-  <!--<div id="audioPlayersHolder">
-    <template repeat="{{item, index in $.itemsList.data}}">
-      <x-audio hidden id="audio-{{index}}" name="{{item.title_t}}" src="{{ item.mp3 }}" ></x-audio>
-    </template>
-  </div>-->
-
   <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
-      <core-list id="itemsList" on-core-activate="{{itemSelected}}" fit style="margin-bottom: 83px;">
+      <core-list id="itemsList" fit style="margin-bottom: 83px;">
       <template>
 
-        <li class="list-item header border" divider horizontal layout center-center on-tap="{{keepItemDetailsOpen}}">
+        <li class="list-item header border" divider horizontal layout center-center>
 
           <div class="avatar">
             <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
@@ -63,12 +57,14 @@
 
           <div class="avatar">
             <div class="audio-holder">
-                <paper-icon-button class="playerButton" icon="{{model.mp3 == playingSrc ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}" on-click="{{toggleAudioPlay}}"></paper-icon-button>
+              <uqlibrary-a11y-link data-index="{{index}}" on-click="{{ audioToggleClick }}">
+                <paper-icon-button class="playerButton" data-index="{{index}}" icon="{{model.mp3 == playingSrc ? 'av:pause-circle-outline' : 'av:play-circle-outline'}}"></paper-icon-button>
+              </uqlibrary-a11y-link>
 
             </div>
           </div>
 
-          <div class="content" relative>
+          <div class="content" relative on-tap="{{itemSelected}}" data-index="{{index}}" data-id="{{model.id}}" data-mp3="{{model.mp3}}" data-name="{{model.title_t}}">
 
             <div class="line1" horizontal layout>
               <div flex class="line1">
@@ -173,7 +169,7 @@
         });
 
         document.addEventListener('uqlibrary-flint-response-current-audio', function(e) {
-          if(e.detail.audio != null) {
+          if(e.detail.audio != null && e.detail.isPlaying) {
             that.playingSrc = e.detail.audio.src;
             that.previousPlayingSrc = that.playingSrc;
           }
@@ -181,18 +177,14 @@
 
       },
 
-      toggleAudioPlay: function(e, sender) {
-        if (this.skipItemSelected){
-          this.skipItemSelected = false;
-          return;
-        }
+      toggleAudioPlay: function(e, value, sender) {
         //e.stopImmediatePropagation();
-        var _el = e.path[0];
-
+        var _el = sender;
+        var itemIndex = sender.attributes['data-index'].value;
         if(_el.icon == 'av:play-circle-outline') {
             _el.icon = 'av:pause-circle-outline';
-            var _src = e.path[3].attributes["data-mp3"].value;
-            var _title = e.path[3].attributes["data-name"].value;
+            var _src = this.$.itemsList.data[itemIndex].mp3;
+            var _title = this.$.itemsList.data[itemIndex].title_t;
             this.playingSrc = _src;
             this.previousPlayingSrc = this.playingSrc;
             this.fire('x-audio-list-play', {src: _src, name: _title});
@@ -204,60 +196,28 @@
 
       },
 
-      keepItemDetailsOpen: function(e, data, source) {
-        this.skipItemSelected = true;
-      },
-
-      itemSelected: function(event, itemRow, list) {
-        //do not close item details if user clicks on item details area
-        if (this.skipItemSelected){
-          this.skipItemSelected = false;
-          return;
+      audioToggleClick: function(e, value, sender) {
+        var _el = sender.querySelector('paper-icon-button');
+        if(_el) {
+          this.toggleAudioPlay(e, value, _el)
         }
-
-        this.fire("item-selected", { item: itemRow.data });
       },
 
-      itemSelectedKeyPressed: function(source) {
+      itemSelected: function(event, itemRow, sender) {
+        var itemIndex = sender.attributes["data-index"].value;
+        this.fire("item-selected", { item: this.$.itemsList.data[itemIndex] });
+      },
+
+      itemSelectedKeyPressed: function(source, value, sender) {
+
         if (source.path && source.path.length > 0 && (source.path[2].attributes["data-index"] || source.path[0].attributes["data-index"])) {
-          this.skipItemSelected = false;
-
-          var itemIndex = source.path[2].attributes["data-index"] ? source.path[2].attributes["data-index"].value : source.path[0].attributes["data-index"].value;
-          this.itemSelected(null, { data: this.$.itemsList.data[itemIndex], item: source.path[4] }, null);
+          this.itemSelected(null, null, sender);
         }
       },
 
-     /* playRecord: function(source) {
-        var button = null;
-
-        //event can be triggered by keyboard or mouse, process event for either
-        if (source.path && source.path.length > 0 && source.path[0].tagName.toLowerCase() === "paper-icon-button") {
-          //do not open/close item details on play/pause
-          this.skipItemSelected = true;
-          button = source.path[0];
-        } else if (source.path && source.path.length > 0 && source.path[0].children
-                && source.path[0].children[0].tagName.toLowerCase() === "paper-icon-button") {
-          //do not open/close item details on play/pause
-          this.skipItemSelected = true;
-          button = source.path[0].children[0];
-        }
-
-        //setup audio player, play mp3 file
-        this.currentPlayRecordButton = button;
-        var audioFile = button.getAttribute("data-mp3");
-        var audioFileName = button.getAttribute("data-title");
-
-        if (this.$.audioPlayerMirror.xaudio === audioFileName && this.$.audioPlayer.src === audioFile) {
-          this.$.audioPlayer.togglePlay();
-        } else {
-          this.$.audioPlayer.src = audioFile;
-          this.$.audioPlayer.name = audioFileName;
-        }
-      },*/
 
       closeButtonHandler: function(e) {
         //do not open/close item details on close
-        this.skipItemSelected = true;
         this.fire("close-button-clicked", { });
       },
 

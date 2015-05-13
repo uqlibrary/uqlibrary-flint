@@ -42,7 +42,7 @@
             <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
           </div>
 
-          <div flex>{{listTitle}}</div>
+          <div flex>{{groupModel.label}}</div>
 
           <div>
             <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
@@ -130,7 +130,9 @@
           }
 
           var data = e.detail;
-          that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
+
+          that.$.itemsList.data = data;
+          that.showNoResults = that.searchTerm && data && data == 0;
           that.listTitle = that.language && that.language.cvo_title ? that.language.cvo_title :
                   that.voice && that.voice.cvo_title ? that.voice.cvo_title :
                   "Search results for: " + that.searchTerm + " (" + data.length + " items found) ";
@@ -139,7 +141,9 @@
             {
               length: data.length,
               data: {
-                label: that.language ? that.language.cvo_title : that.voice ? that.voice.cvo_title : "Search results for: " + that.searchTerm + " (" + data.length + " items found) "
+                label: that.language && that.language.cvo_title ? that.language.cvo_title :
+                        that.voice && that.voice.cvo_title ? that.voice.cvo_title :
+                        "Search results for: " + that.searchTerm + " (" + data.length + " items found) "
               }
             }
           ];
@@ -272,9 +276,9 @@
           this.$.recordsApiElement.get({ keyword: this.searchTerm });
         }
 
-        this.listTitle = this.language && this.language.cvo_title ? this.language.cvo_title :
-                this.voice && this.voice.cvo_title ? this.voice.cvo_title :
-                "Search results for: " + this.searchTerm;;
+//        this.listTitle = this.language && this.language.cvo_title ? this.language.cvo_title :
+//                this.voice && this.voice.cvo_title ? this.voice.cvo_title :
+//                "Search results for: " + this.searchTerm;;
 
       }
     });

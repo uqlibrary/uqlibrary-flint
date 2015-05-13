@@ -12,14 +12,13 @@
     <template if="{{!showMap}}">
       <ul class="single-line-list">
         <core-list id="itemsList" fit selectionEnabled selection="{{selectedItem}}" data="{{items}}" groups="{{groups}}">
-          <!--on-core-activate="{{itemSelected}}"-->
           <template>
 
             <li class="list-item header" divider>
               {{groupModel.label}}
             </li>
 
-            <li class="list-item" data-index="{{index}}">
+            <li class="list-item" data-index="{{index}}" on-tap="{{itemSelected}}">
               <div class="content" relative horizontal layout>
                 <paper-ripple fit></paper-ripple>
                 <div flex>
@@ -85,18 +84,15 @@
           }
         },
 
-        selectedItemChanged: function(oldValue, newValue) {
-          this.fire("category-selected", this.selectedItem);
-        },
-
-        itemSelected: function (event, itemRow, list) {
-          this.fire("category-selected", itemRow.data);
+        itemSelected: function (event) {
+          var itemIndex = event.currentTarget.attributes["data-index"].value;
+          this.fire("category-selected", this.$.itemsList.data[itemIndex]);
         },
 
         itemSelectedKeyPressed: function (source) {
           if (source.path && source.path.length > 0 && source.path[0].attributes["data-index"]) {
             var itemIndex = source.path[0].attributes["data-index"].value;
-            this.itemSelected(null, {data: this.$.itemsList.data[itemIndex], item: source.path[3]}, null);
+            this.fire("category-selected", this.$.itemsList.data[itemIndex]);
           }
         },
 

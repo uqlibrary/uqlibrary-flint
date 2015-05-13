@@ -70,7 +70,7 @@
           expect(displayedItems.length).to.be.equal(languages.length);
 
           done();
-        }, 100);
+        }, 500);
       });
 
       it('selected item is returned', function(done) {
@@ -87,7 +87,7 @@
           var list = element.shadowRoot.querySelector('#itemsList');
           var displayedItems = list.querySelectorAll('li .content uqlibrary-a11y-link');
           displayedItems[0].fire('tap');
-        }, 100);
+        }, 500);
 
       });
 

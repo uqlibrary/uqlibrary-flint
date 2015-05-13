@@ -29,6 +29,20 @@
       it('should load uqlibrary-flint element', function(done) {
         setTimeout(function () {
           expect(element).not.to.be.null;
+
+          var uqlibraryToolbar = element.shadowRoot.querySelector('uqlibrary-toolbar');
+          expect(uqlibraryToolbar).not.to.be.null;
+
+          var uqlibraryMenu = element.shadowRoot.querySelector('uqlibrary-menu');
+          expect(uqlibraryMenu).not.to.be.null;
+
+          var infoSection = element.shadowRoot.querySelector('#infoSection');
+          expect(infoSection).not.to.be.null;
+          expect(infoSection.getAttribute('class')).equals('core-selected');
+
+          var audioPlayer = element.shadowRoot.querySelector('#audioPlayer');
+          expect(audioPlayer).not.to.be.null;
+
           done();
         }, 1000);
       });
@@ -68,14 +82,17 @@
       describe('map display testing', function () {
 
         it('should select map tab in tabs', function (done) {
-          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
-          expect(paperTabs).not.to.be.null;
+          setTimeout(function () {
 
-          var tab = paperTabs.querySelector('#mapSection');
-          expect(tab).not.to.be.null;
-          expect(tab.getAttribute('class')).equals('core-selected');
+            var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+            expect(paperTabs).not.to.be.null;
 
-          done();
+            var tab = paperTabs.querySelector('#mapSection');
+            expect(tab).not.to.be.null;
+            expect(tab.getAttribute('class')).equals('core-selected');
+
+            done();
+          }, 1000);
         });
 
         it('should select map section in pages', function (done) {
@@ -86,14 +103,11 @@
         });
 
         it('should display markers on the map', function (done) {
-          var mapMarkers = element.shadowRoot.querySelectorAll('#mapList /deep/ google-map-marker');
-          expect(mapMarkers.length).not.to.equal(0);
-
-          //TODO: click on marker
-          setTimeout(function() {
-
+          var mapMarkers = element.shadowRoot.querySelector('#mapList')
+                  .shadowRoot.querySelector('uqlibrary-flint-google-map')
+                  .shadowRoot.querySelectorAll('google-map-marker');
+            expect(mapMarkers.length).not.to.equal(0);
             done();
-          }, 10000);
         });
       });
 
@@ -120,19 +134,54 @@
           expect(section.getAttribute('class')).equals('core-selected');
           done();
         });
-
-        it('items should be displayed', function (done) {
-          setTimeout(function () {
-            done();
-          }, 100);
-        });
       });
 
       describe('search testing', function () {
-        it('items should be displayed', function (done) {
+
+        it('should show search box', function (done) {
+
+          var uqlibraryToolbar = element.shadowRoot.querySelector('uqlibrary-toolbar');
+          expect(uqlibraryToolbar).not.to.be.null;
+
+          var expandSearch = uqlibraryToolbar.shadowRoot.querySelector('#expandSearch paper-icon-button');
+          expect(expandSearch).not.to.be.null;
+          expandSearch.fire('tap');
+
           setTimeout(function () {
-            done();
-          }, 100);
+
+            var searchInputField = uqlibraryToolbar.shadowRoot.querySelector('#searchInputField');
+            expect(searchInputField).not.to.be.null;
+            searchInputField.value = 'test';
+
+            var searchButton = uqlibraryToolbar.shadowRoot.querySelector('#searchButton');
+            expect(searchButton).not.to.be.null;
+
+            searchButton.fire('tap');
+            setTimeout(function () {
+              var itemsListSection = element.shadowRoot.querySelector('#itemsListSection');
+              expect(itemsListSection).not.to.be.null;
+              expect(itemsListSection.getAttribute('class')).equals('core-selected');
+
+              var listItems = element.shadowRoot.querySelector('#itemsListElement')
+                      .shadowRoot.querySelector('#itemsList')
+                      .querySelectorAll('li.list-item');
+              expect(listItems.length).not.to.equal(0);
+
+              var listItem = listItems[1].querySelector('.content');
+              expect(listItem).not.to.be.null;
+
+              listItem.dispatchEvent(new MouseEvent('tap', {'view': window, 'bubbles': true}));
+
+              setTimeout(function () {
+
+                var itemSection = element.shadowRoot.querySelector('#itemSection');
+                expect(itemSection).not.to.be.null;
+                expect(itemSection.getAttribute('class')).equals('core-selected');
+
+                done();
+              }, 1000);
+            }, 500);
+          }, 1000);
         });
       });
     });

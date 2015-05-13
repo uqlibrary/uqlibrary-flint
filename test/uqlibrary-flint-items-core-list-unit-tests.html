@@ -34,21 +34,9 @@
 
     describe('unit tests for uqlibrary-flint-items-core-list', function () {
 
-      var handlers = [];
-
-      before(function () {
-        element.setData({ language: language });
-      });
-
-      afterEach(function(){
-        handlers.forEach(function(item){
-          element.removeEventListener(item.event, item.handler);
-        })
-
-        handlers = [];
-      });
-
       it('list title should be set to language title', function(done) {
+        element.setData({ language: language });
+
         setTimeout(function () {
           var list = element.shadowRoot.querySelector('#itemsList');
           expect(list).not.to.be.null;
@@ -56,10 +44,9 @@
           expect(headers).not.to.be.null;
           var topHeader = headers[0].querySelectorAll('div')[1];
           expect(topHeader).not.to.be.null;
-
           expect(topHeader.innerHTML).to.be.equal(language.cvo_title);
           done();
-        }, 100);
+        }, 1000);
 
       });
 

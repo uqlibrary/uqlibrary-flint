@@ -6,7 +6,7 @@
       <template repeat="{{language, languageIndex in items}}">
         <google-map-marker title="{{language_cvo_title}}" latitude="{{language.cvo_lat}}"
                            longitude="{{language.cvo_long}}"
-                           data-index="{{languageIndex}}" clickEvents mouseEvents
+                           data-index="{{languageIndex}}" icon="[[initialMapMarkerIcon]]" clickEvents mouseEvents
                            on-google-map-marker-mouseover="{{markerHoverHandler}}"
                            on-google-map-marker-click="{{mapMarkerClicked}}"
             >

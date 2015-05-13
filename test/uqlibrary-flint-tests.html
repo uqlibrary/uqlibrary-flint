@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
   <title>uqlibrary-flint-categories-list-unit-test</title>
 
-  <script src="../../webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
   <script src="../../web-component-tester/browser.js"></script>
 
   <link rel="import" href="../uqlibrary-flint.html">
@@ -16,7 +16,6 @@
 
 <script>
   window.addEventListener('polymer-ready', function() {
-
     var element = document.querySelector('uqlibrary-flint');
 
     describe('integration tests for uqlibrary-flint', function () {
@@ -95,37 +94,6 @@
 
             done();
           }, 10000);
-        });
-      });
-
-      describe('languages list testing', function () {
-
-        it('should select languages tab in tabs', function (done) {
-          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
-          expect(paperTabs).not.to.be.null;
-
-          var tab = paperTabs.querySelector('paper-tab[data-selected-section="languageSection"]');
-          expect(tab).not.to.be.null;
-
-          tab.fire('tap');
-
-          setTimeout(function() {
-            expect(tab.getAttribute('class')).equals('core-selected');
-            done();
-          }, 100);
-        });
-
-        it('should select languages list section in pages', function (done) {
-          var section = element.shadowRoot.querySelector('#languageListSection');
-          expect(section).not.to.be.null;
-          expect(section.getAttribute('class')).equals('core-selected');
-          done();
-        });
-
-        it('items should be displayed', function (done) {
-          setTimeout(function () {
-            done();
-          }, 100);
         });
       });
 

@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=no">
+  <title>uqlibrary-flint-categories-list-unit-test</title>
+
+  <script src="../../webcomponentsjs/webcomponents.js"></script>
+  <script src="../../web-component-tester/browser.js"></script>
+
+  <link rel="import" href="../uqlibrary-flint.html">
+</head>
+<body>
+
+<uqlibrary-flint></uqlibrary-flint>
+
+<script>
+  document.cookie="UQLMockData=enabled";
+  document.cookie="sensitiveMaterialAccepted=1";
+
+  window.addEventListener('polymer-ready', function() {
+    var element = document.querySelector('uqlibrary-flint');
+
+    describe('integration tests for uqlibrary-flint languages tab', function () {
+
+      before(function () {
+      });
+
+      afterEach(function(){
+      });
+
+      it('should load uqlibrary-flint element', function(done) {
+        setTimeout(function () {
+          expect(element).not.to.be.null;
+          done();
+        }, 1000);
+      });
+
+      describe('languages list testing', function () {
+
+        it('should select languages tab in tabs', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          expect(paperTabs).not.to.be.null;
+
+          var tab = paperTabs.querySelector('paper-tab[data-selected-section="languageSection"]');
+          expect(tab).not.to.be.null;
+
+          tab.fire('tap');
+
+          setTimeout(function() {
+            expect(tab.getAttribute('class')).equals('core-selected');
+            done();
+          }, 100);
+        });
+
+        it('should select languages list section in pages', function (done) {
+          var section = element.shadowRoot.querySelector('#languageListSection');
+          expect(section).not.to.be.null;
+          expect(section.getAttribute('class')).equals('core-selected');
+          done();
+        });
+
+        it('should display languages', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          var tab = paperTabs.querySelector('paper-tab[data-selected-section="languageSection"]');
+          tab.fire('tap');
+          setTimeout(function () {
+            var categoriesList = element.shadowRoot.querySelector('#languageListSection uqlibrary-flint-categories-list');
+            expect(categoriesList).to.not.be.null;
+            var languageListItems = categoriesList.shadowRoot.querySelectorAll('core-list li.list-item');
+            expect(languageListItems).not.to.be.null;
+            expect(languageListItems.length).not.to.equal(0);
+            var categoriesList = element.shadowRoot.querySelector('#languageListSection uqlibrary-flint-categories-list');
+            var languageListItem = categoriesList.shadowRoot.querySelector('core-list li.list-item[data-index="0"] div[flex]');
+            expect(languageListItem).to.not.be.null;
+            expect(languageListItem.textContent.trim()).to.equal('Bidjara');
+            done();
+          }, 100);
+        });
+
+        it('should display alphabetical headings', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          var tab = paperTabs.querySelector('paper-tab[data-selected-section="languageSection"]');
+          tab.fire('tap');
+          setTimeout(function () {
+            var categoriesList = element.shadowRoot.querySelector('#languageListSection uqlibrary-flint-categories-list');
+            var languageListItems = categoriesList.shadowRoot.querySelectorAll('core-list li.list-item.header');
+            expect(languageListItems).to.not.be.null;
+            expect(languageListItems.length).not.to.equal(0);
+            var categoriesList = element.shadowRoot.querySelector('#languageListSection uqlibrary-flint-categories-list');
+            var languageListItem = categoriesList.shadowRoot.querySelector('core-list li.list-item.header');
+            expect(languageListItem).to.not.be.null;
+            expect(languageListItem.textContent.trim()).to.equal('B');
+            done();
+          }, 100);
+        });
+
+        it('should enable clicking on language to return results', function (done) {
+          var paperTabs = element.shadowRoot.querySelector('paper-tabs');
+          var tab = paperTabs.querySelector('paper-tab[data-selected-section="languageSection"]');
+          tab.fire('tap');
+          setTimeout(function () {
+            var categoriesList = element.shadowRoot.querySelector('#languageListSection uqlibrary-flint-categories-list');
+            expect(categoriesList).to.not.be.null;
+            var languageListItem = categoriesList.shadowRoot.querySelector('core-list li.list-item[data-index="0"] div div').children[0];
+            expect(languageListItem).to.not.be.null;
+            languageListItem.fire('tap');
+            setTimeout(function () {
+              var flintCoreList = element.shadowRoot.querySelector('#itemsListSection uqlibrary-flint-items-core-list');
+              expect(flintCoreList).to.not.be.null;
+              var searchResultsListItem = flintCoreList.shadowRoot.querySelector('#itemsList li.header div:nth-child(2)');
+              expect(searchResultsListItem).to.not.be.null;
+              expect(searchResultsListItem.textContent.trim()).to.equal('Bidjara');
+              done();
+            }, 100);
+          }, 100);
+        });
+      });
+    });
+  });
+
+</script>
+
+</body>
+</html>

@@ -157,6 +157,7 @@
             expect(searchButton).not.to.be.null;
 
             searchButton.fire('tap');
+
             setTimeout(function () {
               var itemsListSection = element.shadowRoot.querySelector('#itemsListSection');
               expect(itemsListSection).not.to.be.null;
@@ -180,7 +181,7 @@
 
                 done();
               }, 1000);
-            }, 500);
+            }, 1000);
           }, 1000);
         });
       });

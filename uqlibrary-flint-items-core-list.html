@@ -6,7 +6,7 @@
   <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css">
   <uqlibrary-api-flint-records id="recordsApiElement"></uqlibrary-api-flint-records>
 
-    <ul hidden?="{{!showNoResults}}" class="three-line-icon-list">
+  <ul hidden?="{{!showNoResults}}" class="three-line-icon-list">
       <li class="list-item header border" horizontal layout center-center>
 
         <div class="avatar">
@@ -42,7 +42,7 @@
             <core-icon icon="hardware:headset" style="width: 32px; height: 32px;"></core-icon>
           </div>
 
-          <div flex>{{groupModel.label}}</div>
+          <div flex>{{listTitle}}</div>
 
           <div>
             <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
@@ -107,9 +107,8 @@
 
         var that = this;
 
-        this.previousPlayRecordButton = null;
-        this.currentPlayRecordButton = null;
         this.skipItemSelected = false;
+        this.listTitle = '';
         this.language = null;
         this.voice = null;
         this.searchTerm = '';
@@ -117,13 +116,10 @@
           languages : {},
           voices: {}
         };
-        this.currentRecordPlayingTitle = null,
-        this.currentActivePlayer = null,
-        this.activePlayer = null,
-        this.playingSrc = null,
-        this.previousPlayingSrc = null,
 
-
+        this.activePlayer = null;
+        this.playingSrc = null;
+        this.previousPlayingSrc = null;
 
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
 
@@ -135,7 +131,10 @@
 
           var data = e.detail;
           that.showNoResults = that.searchTerm && e.detail && e.detail.length == 0;
-          that.$.itemsList.data = data;
+          that.listTitle = that.language && that.language.cvo_title ? that.language.cvo_title :
+                  that.voice && that.voice.cvo_title ? that.voice.cvo_title :
+                  "Search results for: " + that.searchTerm + " (" + data.length + " items found) ";
+
           that.$.itemsList.groups = [
             {
               length: data.length,
@@ -155,8 +154,6 @@
 
 
         document.addEventListener('x-audio-player-play', function(e) {
-          //that.currentRecordPlayingTitle = e.path[0].name;
-
           if(that.previousPlayingSrc != null) {
             that.playingSrc = that.previousPlayingSrc;
           } else {
@@ -228,7 +225,6 @@
         this.searchTerm = '';
 
         var items = [];
-        var listTitle = '';
 
         var that = this;
 
@@ -253,7 +249,6 @@
           }
         } else if (args && args.voice) {
           this.voice = args.voice;
-          listTitle = this.voice.cvo_title;
 
           if (this.cacheData.voices[this.voice.cvo_title]) {
             //get data from local cache
@@ -276,6 +271,11 @@
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });
         }
+
+        this.listTitle = this.language && this.language.cvo_title ? this.language.cvo_title :
+                this.voice && this.voice.cvo_title ? this.voice.cvo_title :
+                "Search results for: " + this.searchTerm;;
+
       }
     });
   })();

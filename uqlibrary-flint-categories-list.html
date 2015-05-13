@@ -11,7 +11,8 @@
 
     <template if="{{!showMap}}">
       <ul class="single-line-list">
-        <core-list id="itemsList" fit on-core-activate="{{itemSelected}}" data="{{items}}" groups="{{groups}}">
+        <core-list id="itemsList" fit selectionEnabled selection="{{selectedItem}}" data="{{items}}" groups="{{groups}}">
+          <!--on-core-activate="{{itemSelected}}"-->
           <template>
 
             <li class="list-item header" divider>
@@ -82,6 +83,10 @@
               this.$.categoriesApiElement.get({getVoices: true});
             }
           }
+        },
+
+        selectedItemChanged: function(oldValue, newValue) {
+          this.fire("category-selected", this.selectedItem);
         },
 
         itemSelected: function (event, itemRow, list) {

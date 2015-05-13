@@ -79,7 +79,7 @@
             <div class="line2">
               <template if={{voice}}>{{model.subject_mi_lookup[0]}}</template>
               <template if={{searchTerm}}>{{model.subject_mi_lookup[0]}}</template>
-              <template if={{language}}>by {{model.contributor_mt[0]}}</template>
+              <template if={{languageObject}}>by {{model.contributor_mt[0]}}</template>
             </div>
 
             <div class="line3">
@@ -109,7 +109,7 @@
 
         this.skipItemSelected = false;
         this.listTitle = '';
-        this.language = null;
+        this.languageObject = null;
         this.voice = null;
         this.searchTerm = '';
         this.cacheData = {
@@ -133,15 +133,12 @@
 
           that.$.itemsList.data = data;
           that.showNoResults = that.searchTerm && data && data == 0;
-          that.listTitle = that.language && that.language.cvo_title ? that.language.cvo_title :
-                  that.voice && that.voice.cvo_title ? that.voice.cvo_title :
-                  "Search results for: " + that.searchTerm + " (" + data.length + " items found) ";
 
           that.$.itemsList.groups = [
             {
               length: data.length,
               data: {
-                label: that.language && that.language.cvo_title ? that.language.cvo_title :
+                label: that.languageObject && that.languageObject.cvo_title ? that.languageObject.cvo_title :
                         that.voice && that.voice.cvo_title ? that.voice.cvo_title :
                         "Search results for: " + that.searchTerm + " (" + data.length + " items found) "
               }
@@ -149,8 +146,8 @@
           ];
 
           //save data for this session - don't need to query api again for this language or voice
-          if (that.language) {
-            that.cacheData.languages[that.language.cvo_id] = data;
+          if (that.languageObject) {
+            that.cacheData.languages[that.languageObject.cvo_id] = data;
           } else if (that.voice){
             that.cacheData.voices[that.voice.cvo_title] = data;
           }
@@ -224,7 +221,7 @@
 
       setData: function(args) {
 
-        this.language = null;
+        this.languageObject = null;
         this.voice = null;
         this.searchTerm = '';
 
@@ -233,23 +230,23 @@
         var that = this;
 
         if (args && args.language) {
-          this.language = args.language;
+          this.languageObject = args.language;
 
-          if (this.cacheData.languages[this.language.cvo_id]) {
+          if (this.cacheData.languages[this.languageObject.cvo_id]) {
             //get data from local cache
-            items = this.cacheData.languages[this.language.cvo_id];
+            items = this.cacheData.languages[this.languageObject.cvo_id];
             this.$.itemsList.data = items;
             this.$.itemsList.groups = [
               {
                 length: items.length,
                 data: {
-                  label: this.language.cvo_title
+                  label: this.languageObject.cvo_title
                 }
               }
             ];
           } else {
             //get data from search api
-            this.$.recordsApiElement.get({ language: this.language.cvo_title });
+            this.$.recordsApiElement.get({ language: this.languageObject.cvo_title });
           }
         } else if (args && args.voice) {
           this.voice = args.voice;
@@ -275,11 +272,6 @@
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });
         }
-
-//        this.listTitle = this.language && this.language.cvo_title ? this.language.cvo_title :
-//                this.voice && this.voice.cvo_title ? this.voice.cvo_title :
-//                "Search results for: " + this.searchTerm;;
-
       }
     });
   })();

@@ -1,6 +1,6 @@
 (function () {
-  var mapMarkerIconActive = '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
-  var mapMarkerIcon = '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|CCCCCC';
+  //var mapMarkerIconActive = '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
+  //var mapMarkerIcon = '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|CCCCCC';
 
   // Small hack to define if this is a touchscreen device
   function is_touch_device() {
@@ -14,7 +14,7 @@
      */
     created: function () {
       this.items = null;
-      this.initialMapMarkerIcon = mapMarkerIconActive;
+      //this.initialMapMarkerIcon = mapMarkerIconActive;
       this.openedMarker = null;
       this.isTouchDevice = is_touch_device();
     },
@@ -88,7 +88,7 @@
       if (marker.marker.info != null) {
         this.openedMarker = marker;
       }
-      this.setActiveMapMarker(e.target);
+      //this.setActiveMapMarker(e.target);
       if (showDetails) {
         this.fire("category-selected", this.items[index]);
       }

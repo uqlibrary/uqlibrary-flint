@@ -80,7 +80,7 @@
       var index = e.path[0].getAttribute('data-index');
 
       if (this.isTouchDevice) {
-        if (this.openedMarker == null || (this.openedMarker != e.path[0])) {
+        if (this.openedMarker == null || this.openedMarker.getAttribute('data-index') != index) {
           this.openedMarker = e.target;
           showDetails = false;
         }

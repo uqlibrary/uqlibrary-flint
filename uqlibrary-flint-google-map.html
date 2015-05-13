@@ -11,7 +11,7 @@
                            on-google-map-marker-click="{{mapMarkerClicked}}"
             >
           <core-collapse opened>
-            <div layout horizontal onclick="showDetails({{languageIndex}})">
+            <div layout horizontal on-click="{{showDetails(languageIndex)}}">
               <div self-center flex>{{language.cvo_title}}</div>
               <div>
                 <core-icon icon="chevron-right" hidden?="{{!isTouchDevice}}"></core-icon>
@@ -25,13 +25,6 @@
     </google-map>
   </template>
   <script>
-
-    function showDetails(el) {
-      var item = document.querySelector("uqlibrary-flint /deep/ google-map-marker[data-index='" + el + "']");
-      if (item != null) {
-        item.fire('google-map-marker-click');
-      }
-    }
 
     (function () {
       var mapMarkerIconActive = '//chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|FE7569';
@@ -159,7 +152,15 @@
               url: mapMarkers[i] === activeMapMarker ? mapMarkerIconActive : mapMarkerIcon
             };
           }
+        },
+
+        showDetails: function (el) {
+          var item = el.parent.parent();
+          if (item != null) {
+            item.fire('google-map-marker-click');
+          }
         }
+
       });
     })();
     // Small hack to define if this is a touchscreen device

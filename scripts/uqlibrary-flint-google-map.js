@@ -1,12 +1,20 @@
+// Small hack to define if this is a touchscreen device
+function is_touch_device() {
+  return (('ontouchstart' in window)
+    || (navigator.MaxTouchPoints > 0)
+    || (navigator.msMaxTouchPoints > 0));
+}
+
+function showDetails(el) {
+  var item = document.querySelector("uqlibrary-flint /deep/ google-map-marker[data-index='" + el + "']");
+  if (item != null) {
+    item.fire('google-map-marker-click');
+  }
+}
+
 (function () {
   var mapMarkerIconActive = 'images/marker.png';
   var mapMarkerIcon = 'images/marker-grey.png';
-
-  // Small hack to define if this is a touchscreen device
-  function is_touch_device() {
-    return 'ontouchstart' in window // works on most browsers
-      || 'onmsgesturechange' in window; // works on ie10
-  }
 
   Polymer({
     /**
@@ -130,13 +138,6 @@
         };
       }
     },
-
-    showDetails: function (el) {
-      var item = el.parent.parent();
-      if (item != null) {
-        item.fire('google-map-marker-click');
-      }
-    }
 
   });
 })();

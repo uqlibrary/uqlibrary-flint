@@ -11,8 +11,8 @@
                            on-google-map-marker-click="{{mapMarkerClicked}}"
             >
           <core-collapse opened>
-            <div layout horizontal on-click="{{showDetails(languageIndex)}}">
-              <div self-center flex>{{language.cvo_title}}</div>
+            <div flex layout horizontal onclick="showDetails({{languageIndex}})">
+              <div flex?="{{isTouchDevice}}" self-center>{{language.cvo_title}}</div>
               <div>
                 <core-icon icon="chevron-right" hidden?="{{!isTouchDevice}}"></core-icon>
               </div>

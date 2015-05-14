@@ -79,7 +79,7 @@
             <div class="line2">
               <template if={{voice}}>{{model.subject_mi_lookup[0]}}</template>
               <template if={{searchTerm}}>{{model.subject_mi_lookup[0]}}</template>
-              <template if={{languageObject}}>by {{model.contributor_mt[0]}}</template>
+              <template if={{languageObject}}>by {{model.contributor_mt | showContributors}}</template>
             </div>
 
             <div class="line3">
@@ -199,6 +199,11 @@
         if(_el) {
           this.toggleAudioPlay(e, value, _el)
         }
+      },
+
+      showContributors: function(contributors) {
+        if (contributors)
+          return contributors.join(', ').replace('Elwyn Flint, ', '');
       },
 
       itemSelected: function(event, itemRow, sender) {

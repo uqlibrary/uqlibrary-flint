@@ -35,7 +35,7 @@
     <li class="list-item">
       <div class="content">
         <div class="line1">Voice</div>
-        <div class="line2">{{item.contributor_mt[0]}}</div>
+        <div class="line2">{{item.contributor_mt | showContributors}}</div>
       </div>
     </li>
 
@@ -98,6 +98,11 @@
         if (this.item && this.item.transcript_t && this.item.transcript_t) {
           this.item.lines = this.item.transcript_t.split('<br \/>').filter(function(line) { return line; });
         }
+      },
+
+      showContributors: function(contributors) {
+        if (contributors)
+          return contributors.join(', ').replace('Elwyn Flint, ', '');
       },
 
       ready: function() {

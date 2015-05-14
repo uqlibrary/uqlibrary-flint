@@ -7,315 +7,337 @@
 
 <polymer-element name="uqlibrary-flint">
 
-    <template>
-        <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css" shim-shadowdom>
+  <template>
+    <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css" shim-shadowdom>
 
-        <uqlibrary-ga id="ga" appName="FlintCollection"></uqlibrary-ga>
+    <uqlibrary-ga id="ga" appName="FlintCollection"></uqlibrary-ga>
 
-        <core-drawer-panel id="outerDrawerPanel" responsiveWidth="3000px">
-            <div drawer class="left-drawer">
-                <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
+    <core-drawer-panel id="outerDrawerPanel" responsiveWidth="3000px">
+      <div drawer class="left-drawer">
+        <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
+      </div>
+
+      <div main layout vertical relative class="main">
+        <!--<uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"-->
+                           <!--on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"-->
+                           <!--on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"-->
+                           <!--appTitle="Indigenous Voices"-->
+                           <!--appTitleLink="#"-->
+                           <!--appLinks=""-->
+                           <!--searchPlaceholderText="Search the Flint Collection">-->
+        <!--</uqlibrary-toolbar>-->
+
+      <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
+                         disableSwipe>
+        <div id="itemDetailDrawer" drawer class="right-drawer">
+
+          <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
+                               transitions="slide-from-right" id="animatedDrawerPages">
+            <section id="infoSection" data-selected-section="infoSection">
+
+              <ul class="three-line-icon-list">
+                <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px;" horizontal layout>
+                  <div class="avatar">
+                    <core-icon icon="info" aria-label="information about this application"
+                               style="height: 45px; width: 45px;"></core-icon>
+                  </div>
+                  <div class="content" style="margin-left: 0px;" flex>About this collection</div>
+                  <div>
+                    <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
+                                    on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
+                    <paper-icon-button aria-label="Close panel" icon="close" id="closeButton"
+                                       class="flint-responsive-menu-toggle-icon"
+                                       on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
+                  </div>
+                </li>
+              </ul>
+
+              <p class="text-container body1"><b>Indigenous Voices</b><br>By Elwyn Flint</p>
+
+              <p class="text-container body1" style="padding-bottom: 100px;">
+                The Flint Papers comprise some 24 boxes of written documents compiled and collected by the late Elwyn
+                Flint,
+                most of them as part of a long-term research project he carried out mainly in the 1960s known as the
+                Queensland Speech Survey funded by the Australian Research Council.<br><br>
+                <b>To begin, try selecting a language or voice to see all of its associated recordings.</b><br><br>
+                You can play any item from the list of recordings, and continue to look through the collection while the
+                item is playing.</p>
+
+            </section>
+            <section id="itemsListSection" data-selected-section="itemsListSection">
+              <uqlibrary-flint-items-core-list id="itemsListElement"
+                                               on-close-button-clicked="{{toggleItemDetailsDrawer}}"
+                                               on-item-selected="{{displayItemDetails}}"
+                                               on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
+            </section>
+            <section id="itemSection" data-selected-section="itemSection">
+              <uqlibrary-flint-item id="itemElement"
+                                    on-close-button-clicked="{{toggleItemDetailsDrawer}}"
+                                    on-back-button-clicked="{{displayListSection}}"></uqlibrary-flint-item>
+            </section>
+          </core-animated-pages>
+
+          <div id="activePlayerWrapper">
+            <div layout vertical fit>
+
+              <div>
+                <x-audio id="audioPlayer" disabled showVolumeControls?="{{!isIOS}}" showSeekControl></x-audio>
+              </div>
+              <div class="currentlyPlayingTitle">
+                Currently playing: {{$.audioPlayer.name || '--'}}
+              </div>
             </div>
+          </div>
+        </div>
+        <div main layout vertical relative class="main">
 
-            <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
-                               disableSwipe>
-                <div id="itemDetailDrawer" drawer class="right-drawer">
+          <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
+          on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
+          on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"
+          appTitle="Indigenous Voices"
+          appTitleLink="#"
+          appLinks=""
+          searchPlaceholderText="Search the Flint Collection">
+          </uqlibrary-toolbar>
 
-                  <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
-                                       transitions="slide-from-right" id="animatedDrawerPages">
-                    <section id="infoSection" data-selected-section="infoSection">
+          <div id="headerPlayerMirrorWrapper" class="{{isIOS ? 'ios' : ''}}"
+               hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
+            <x-audio-mirror id="headerPlayerMirror" showVolumeControls?="{{!isIOS}}"></x-audio-mirror>
+          </div>
 
-                      <ul class="three-line-icon-list">
-                        <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px;" horizontal layout>
-                          <div class="avatar">
-                            <core-icon icon="info" aria-label="information about this application" style="height: 45px; width: 45px;"></core-icon>
-                          </div>
-                          <div class="content" style="margin-left: 0px;" flex>About this collection</div>
-                          <div>
-                            <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
-                                            on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
-                            <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
-                          </div>
-                        </li>
-                      </ul>
+          <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
+            <paper-tab data-selected-section="mapSection" id="mapSection" on-tap="{{centerMapIfSelected}}">
+              <uqlibrary-a11y-link>Map</uqlibrary-a11y-link>
+            </paper-tab>
+            <paper-tab data-selected-section="languageSection">
+              <uqlibrary-a11y-link>Languages</uqlibrary-a11y-link>
+            </paper-tab>
+            <paper-tab data-selected-section="voicesSection">
+              <uqlibrary-a11y-link>Voices</uqlibrary-a11y-link>
+            </paper-tab>
+          </paper-tabs>
 
-                        <p class="text-container body1"><b>Indigenous Voices</b><br>By Elwyn Flint</p>
+          <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
+                               transitions="slide-from-right" flex id="animatedPages">
+            <section id="mapDisplaySection" data-selected-section="mapSection">
+              <uqlibrary-flint-categories-list id="mapList" showMap="true"
+                                               on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
+            </section>
+            <section id="languageListSection" data-selected-section="languageSection">
+              <uqlibrary-flint-categories-list id="languagesList"
+                                               on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
+            </section>
+            <section id="voiceListSection" data-selected-section="voicesSection">
+              <uqlibrary-flint-categories-list id="voicesList"
+                                               on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
+            </section>
+          </core-animated-pages>
 
-                        <p class="text-container body1" style="padding-bottom: 100px;">
-                          The Flint Papers comprise some 24 boxes of written documents compiled and collected by the late Elwyn Flint,
-                          most of them as part of a long-term research project he carried out mainly in the 1960s known as the
-                          Queensland Speech Survey funded by the Australian Research Council.<br><br>
-                        <b>To begin, try selecting a language or voice to see all of its associated recordings.</b><br><br>
-                        You can play any item from the list of recordings, and continue to look through the collection while the item is playing.</p>
+        </div>
+      </core-drawer-panel>
+      </div>
 
-                    </section>
-                    <section id="itemsListSection" data-selected-section="itemsListSection">
-                      <uqlibrary-flint-items-core-list id="itemsListElement"
-                                                       on-close-button-clicked="{{toggleItemDetailsDrawer}}"
-                                                       on-item-selected="{{displayItemDetails}}"
-                                                       on-play-record-clicked="{{playRecord}}"></uqlibrary-flint-items-core-list>
-                    </section>
-                    <section id="itemSection" data-selected-section="itemSection">
-                      <uqlibrary-flint-item id="itemElement"
-                                            on-close-button-clicked="{{toggleItemDetailsDrawer}}"
-                                            on-back-button-clicked="{{displayListSection}}"></uqlibrary-flint-item>
-                    </section>
-                  </core-animated-pages>
-
-                  <div id="activePlayerWrapper">
-                    <div layout vertical fit>
-
-                      <div>
-                        <x-audio id="audioPlayer" disabled showVolumeControls?="{{!isIOS}}" showSeekControl></x-audio>
-                      </div>
-                      <div class="currentlyPlayingTitle">
-                        Currently playing: {{$.audioPlayer.name || '--'}}
-                      </div>
-                    </div>
-                  </div>
-
-                </div>
-                <div main layout vertical relative class="main">
-
-                        <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
-                                           on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
-                                           on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"
-                                           appTitle="Indigenous Voices"
-                                           appTitleLink="#"
-                                           appLinks=""
-                                           searchPlaceholderText="Search the Flint Collection">
-                        </uqlibrary-toolbar>
-
-                  <div id="headerPlayerMirrorWrapper" class="{{isIOS ? 'ios' : ''}}" hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
-                    <x-audio-mirror id="headerPlayerMirror" showVolumeControls?="{{!isIOS}}"></x-audio-mirror>
-                  </div>
-
-                    <paper-tabs selected="{{currentSection}}" valueattr="data-selected-section">
-                        <paper-tab data-selected-section="mapSection" id="mapSection" on-tap="{{centerMapIfSelected}}">
-                            <uqlibrary-a11y-link>Map</uqlibrary-a11y-link>
-                        </paper-tab>
-                        <paper-tab data-selected-section="languageSection">
-                            <uqlibrary-a11y-link>Languages</uqlibrary-a11y-link>
-                        </paper-tab>
-                        <paper-tab data-selected-section="voicesSection">
-                            <uqlibrary-a11y-link>Voices</uqlibrary-a11y-link></paper-tab>
-                    </paper-tabs>
-
-                    <core-animated-pages selected="{{currentSection}}" valueattr="data-selected-section"
-                                         transitions="slide-from-right" flex id="animatedPages">
-                        <section id="mapDisplaySection" data-selected-section="mapSection">
-                            <uqlibrary-flint-categories-list id="mapList" showMap="true" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
-                        </section>
-                        <section id="languageListSection" data-selected-section="languageSection">
-                            <uqlibrary-flint-categories-list id="languagesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
-                        </section>
-                        <section id="voiceListSection" data-selected-section="voicesSection">
-                            <uqlibrary-flint-categories-list id="voicesList" on-category-selected="{{categorySelected}}"></uqlibrary-flint-categories-list>
-                        </section>
-                    </core-animated-pages>
-
-                </div>
-            </core-drawer-panel>
-
-        </core-drawer-panel>
-
-        <uqlibrary-flint-warning-dialog autoOpen
-                                        cancelRedirectUrl="https://www.library.uq.edu.au/fryer-library/"></uqlibrary-flint-warning-dialog>
-
-    </template>
-
-    <script>
-        (function () {
-            Polymer('uqlibrary-flint', {
-
-                // Accessibility issues fixes
-                keyboardNavigationKeys: 'space enter',
-                a11yKeyPressed: function (source, event) {
-                    if (source.path && source.path.length > 0 && source.path[0].target) {
-                        source.path[0].target.fire("tap");
-                    }
-                },
-                activePlayer: null,
-                activeAudioSrc: null,
-                activeAudioMirror: null,
-                searchActivated: false,
-                isIOS: false,
-
-                ready: function () {
-                  var that = this;
-                  this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
-                  that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
-                  that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
-
-                    window.addEventListener('resize', function() {
-                      that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
-                      that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
-
-                      var responsiveWidth = parseInt(that.$.innerDrawerPanel.responsiveWidth);
-
-                      if (responsiveWidth > window.innerWidth) {
-                        that.$.innerDrawerPanel.drawerWidth = "95%";
-                      } else if (responsiveWidth <= window.innerWidth) {
-                        that.$.innerDrawerPanel.drawerWidth = "50%";
-                      }
-                    });
-
-                    var responsiveWidth = parseInt(this.$.innerDrawerPanel.responsiveWidth);
-
-                    if (responsiveWidth > window.innerWidth) {
-                        this.$.innerDrawerPanel.drawerWidth = "95%";
-                    } else if (responsiveWidth <= window.innerWidth) {
-                        this.$.innerDrawerPanel.drawerWidth = "50%";
-                    }
-
-                    this.currentSection = "mapSection";
-
-                    // Fix Google map bug when window is resized and map is hidden
-                    this.$.animatedPages.addEventListener('core-animated-pages-transition-end', function() {
-                        if (that.currentSection == "mapSection") {
-                            that.$.mapList.resizeMap();
-                        }
-                    });
-
-                    this.addEventListener('x-audio-initialized', function(e, source) {
-                        that.$.audioPlayer.disabled = false;
-                        that.$.headerPlayerMirror.xaudio = that.$.audioPlayer;
-                        that.activeAudioSrc = that.$.audioPlayer.src;
-
-                        that.$.audioPlayer.play();
-                        that.activePlayer = that.$.audioPlayer;
-
-                    });
-
-                    this.addEventListener('x-audio-list-pause', function(e) {
-                      that.$.audioPlayer.pause();
-                  });
-
-                  this.addEventListener('x-audio-list-play', function(e, source) {
-                      if(that.activeAudioSrc && (that.activeAudioSrc != e.detail.src) || that.activeAudioSrc == null)  {
-                          if(that.$.audioPlayer.src) {
-                            that.$.audioPlayer.pause();
-                          }
-                          that.$.audioPlayer.setSrc(e.detail.src);
-                          that.$.audioPlayer.name = e.detail.name;
-                      }
-                      else {
-                          that.$.audioPlayer.play();
-                      }
-
-                      if( that.activeAudioMirror != null) {
-                          that.activeAudioMirror.togglePlay();
-                      }
-                  });
-
-                    this.$.audioPlayer.addEventListener('x-audio-play', function(e) {
-                        that.fire('x-audio-player-play', {audio: that.$.audioPlayer.audio});
-                    });
-
-                    this.$.audioPlayer.addEventListener('x-audio-pause', function(e) {
-                        that.fire('x-audio-player-pause', {audio: that.$.audioPlayer.audio});
-                    });
-
-                    document.addEventListener('uqlibrary-flint-request-current-audio', function(e) {
-                        that.fire('uqlibrary-flint-response-current-audio', {audio: that.$.audioPlayer.audio, isPlaying: that.$.audioPlayer.isPlaying})
-                    });
+    </core-drawer-panel>
 
 
-                },
+    <uqlibrary-flint-warning-dialog autoOpen
+                                    cancelRedirectUrl="https://www.library.uq.edu.au/fryer-library/"></uqlibrary-flint-warning-dialog>
 
+  </template>
 
+  <script>
+    (function () {
+      Polymer('uqlibrary-flint', {
 
+        // Accessibility issues fixes
+        keyboardNavigationKeys: 'space enter',
+        a11yKeyPressed: function (source, event) {
+          if (source.path && source.path.length > 0 && source.path[0].target) {
+            source.path[0].target.fire("tap");
+          }
+        },
+        activePlayer: null,
+        activeAudioSrc: null,
+        activeAudioMirror: null,
+        searchActivated: false,
+        isIOS: false,
 
-                centerMapIfSelected: function () {
-                    if (this.currentSection === "mapSection") {
-                        this.fire('uqlibrary-flint-map-center-tap');
-                    }
-                },
+        ready: function () {
+          var that = this;
+          this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
+          that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
+          that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
 
-                toggleItemDetailsDrawer: function () {
-                  this.$.innerDrawerPanel.togglePanel();
-                },
+          window.addEventListener('resize', function () {
+            that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
+            that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
 
-                toggleMenuDrawer: function () {
-                    this.$.outerDrawerPanel.togglePanel();
-                },
+            var responsiveWidth = parseInt(that.$.innerDrawerPanel.responsiveWidth);
 
-                performSearch: function(e) {
-                    if (e.detail.searchTerm != "") {
-                        this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
-                        this.currentDrawerSection = 'itemsListSection';
-                        this.toggleItemDetailsDrawer();
-                    }
-                },
+            if (responsiveWidth > window.innerWidth) {
+              that.$.innerDrawerPanel.drawerWidth = "95%";
+            } else if (responsiveWidth <= window.innerWidth) {
+              that.$.innerDrawerPanel.drawerWidth = "50%";
+            }
+          });
 
-                keyPerformSearch: function(e) {
-                    if ((e.detail.keyPressed == 13) && (e.detail.searchTerm != "")) {
-                        this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
-                        this.currentDrawerSection = 'itemsListSection';
-                        this.toggleItemDetailsDrawer();
-                    }
-                },
+          var responsiveWidth = parseInt(this.$.innerDrawerPanel.responsiveWidth);
 
-                currentSectionChanged : function(oldValue, newValue){
+          if (responsiveWidth > window.innerWidth) {
+            this.$.innerDrawerPanel.drawerWidth = "95%";
+          } else if (responsiveWidth <= window.innerWidth) {
+            this.$.innerDrawerPanel.drawerWidth = "50%";
+          }
 
-                  switch(this.currentSection) {
-                        case "languageSection":
-                            //setup languages list
-                            this.$.languagesList.setData({ displayLanguages: true });
-                            break;
-                        case "voicesSection":
-                            //setup voices list
-                            this.$.voicesList.setData({ displayVoices: true });
-                            break;
-                        case "mapSection":
-                            //setup map
-                            this.$.mapList.setData({ displayLanguages: true });
-                            break;
-                    }
-                },
+          this.currentSection = "mapSection";
 
-                categorySelected: function(e) {
-                    switch(this.currentSection) {
-                        case "mapSection":
-                            this.$.itemsListElement.setData( { language: e.detail });
-                            this.toggleItemDetailsDrawer();
-                            break;
-                        case "languageSection":
-                            this.$.itemsListElement.setData( { language: e.detail });
-                            this.toggleItemDetailsDrawer();
-                            break;
-                        case "voicesSection":
-                            this.$.itemsListElement.setData( { voice: e.detail });
-                            this.toggleItemDetailsDrawer();
-                            break;
-                    }
+          // Fix Google map bug when window is resized and map is hidden
+          this.$.animatedPages.addEventListener('core-animated-pages-transition-end', function () {
+            if (that.currentSection == "mapSection") {
+              that.$.mapList.resizeMap();
+            }
+          });
 
-                  this.currentDrawerSection = 'itemsListSection';
-                },
+          this.addEventListener('x-audio-initialized', function (e, source) {
+            that.$.audioPlayer.disabled = false;
+            that.$.headerPlayerMirror.xaudio = that.$.audioPlayer;
+            that.activeAudioSrc = that.$.audioPlayer.src;
 
-              displayItemDetails: function(e) {
-                this.currentDrawerSection = 'itemSection';
-                this.$.itemElement.item = e.detail.item;
-                this.fire('uqlibrary-flint-request-current-audio');
-              },
+            that.$.audioPlayer.play();
+            that.activePlayer = that.$.audioPlayer;
 
-              displayListSection: function(e) {
-                this.currentDrawerSection = 'itemsListSection';
-                this.fire('uqlibrary-flint-request-current-audio');
-              },
+          });
 
-              menuLinkClicked: function(e) {
-                switch(e.detail) {
-                  case "#about":
-                    this.currentDrawerSection = 'infoSection';
+          this.addEventListener('x-audio-list-pause', function (e) {
+            that.$.audioPlayer.pause();
+          });
 
-                    this.toggleMenuDrawer();
-                    this.toggleItemDetailsDrawer();
-                    break;
-                }
+          this.addEventListener('x-audio-list-play', function (e, source) {
+            if (that.activeAudioSrc && (that.activeAudioSrc != e.detail.src) || that.activeAudioSrc == null) {
+              if (that.$.audioPlayer.src) {
+                that.$.audioPlayer.pause();
               }
+              that.$.audioPlayer.setSrc(e.detail.src);
+              that.$.audioPlayer.name = e.detail.name;
+            }
+            else {
+              that.$.audioPlayer.play();
+            }
+
+            if (that.activeAudioMirror != null) {
+              that.activeAudioMirror.togglePlay();
+            }
+          });
+
+          this.$.audioPlayer.addEventListener('x-audio-play', function (e) {
+            that.fire('x-audio-player-play', {audio: that.$.audioPlayer.audio});
+          });
+
+          this.$.audioPlayer.addEventListener('x-audio-pause', function (e) {
+            that.fire('x-audio-player-pause', {audio: that.$.audioPlayer.audio});
+          });
+
+          document.addEventListener('uqlibrary-flint-request-current-audio', function (e) {
+            that.fire('uqlibrary-flint-response-current-audio', {
+              audio: that.$.audioPlayer.audio,
+              isPlaying: that.$.audioPlayer.isPlaying
             })
-        })();
-    </script>
+          });
+
+
+        },
+
+
+        centerMapIfSelected: function () {
+          if (this.currentSection === "mapSection") {
+            this.fire('uqlibrary-flint-map-center-tap');
+          }
+        },
+
+        toggleItemDetailsDrawer: function () {
+          this.$.innerDrawerPanel.togglePanel();
+        },
+
+        toggleMenuDrawer: function () {
+          this.$.outerDrawerPanel.togglePanel();
+        },
+
+        performSearch: function (e) {
+          if (e.detail.searchTerm != "") {
+            this.$.itemsListElement.setData({searchTerm: e.detail.searchTerm});
+            this.currentDrawerSection = 'itemsListSection';
+            this.toggleItemDetailsDrawer();
+          }
+        },
+
+        keyPerformSearch: function (e) {
+          if ((e.detail.keyPressed == 13) && (e.detail.searchTerm != "")) {
+            this.$.itemsListElement.setData({searchTerm: e.detail.searchTerm});
+            this.currentDrawerSection = 'itemsListSection';
+            this.toggleItemDetailsDrawer();
+          }
+        },
+
+        currentSectionChanged: function (oldValue, newValue) {
+
+          switch (this.currentSection) {
+            case "languageSection":
+              //setup languages list
+              this.$.languagesList.setData({displayLanguages: true});
+              break;
+            case "voicesSection":
+              //setup voices list
+              this.$.voicesList.setData({displayVoices: true});
+              break;
+            case "mapSection":
+              //setup map
+              this.$.mapList.setData({displayLanguages: true});
+              break;
+          }
+        },
+
+        categorySelected: function (e) {
+          switch (this.currentSection) {
+            case "mapSection":
+              this.$.itemsListElement.setData({language: e.detail});
+              this.toggleItemDetailsDrawer();
+              break;
+            case "languageSection":
+              this.$.itemsListElement.setData({language: e.detail});
+              this.toggleItemDetailsDrawer();
+              break;
+            case "voicesSection":
+              this.$.itemsListElement.setData({voice: e.detail});
+              this.toggleItemDetailsDrawer();
+              break;
+          }
+
+          this.currentDrawerSection = 'itemsListSection';
+        },
+
+        displayItemDetails: function (e) {
+          this.currentDrawerSection = 'itemSection';
+          this.$.itemElement.item = e.detail.item;
+          this.fire('uqlibrary-flint-request-current-audio');
+        },
+
+        displayListSection: function (e) {
+          this.currentDrawerSection = 'itemsListSection';
+          this.fire('uqlibrary-flint-request-current-audio');
+        },
+
+        menuLinkClicked: function (e) {
+          switch (e.detail) {
+            case "#about":
+              this.currentDrawerSection = 'infoSection';
+
+              this.toggleMenuDrawer();
+              this.toggleItemDetailsDrawer();
+              break;
+          }
+        }
+      })
+    })();
+  </script>
 
 </polymer-element>

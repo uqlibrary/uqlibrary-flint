@@ -40,13 +40,18 @@
         setTimeout(function () {
           var list = element.shadowRoot.querySelector('#itemsList');
           expect(list).not.to.be.null;
+
+          console.log(list);
+
           var headers = list.querySelectorAll('li.header');
-          expect(headers).not.to.be.null;
+          expect(headers.length).not.to.equal(0);
+
           var topHeader = headers[0].querySelectorAll('div')[1];
-          expect(topHeader).not.to.be.null;
+          expect(topHeader.length).not.to.equal(0)
           expect(topHeader.innerHTML).to.be.equal(language.cvo_title);
+
           done();
-        }, 1000);
+        }, 3000);
 
       });
 

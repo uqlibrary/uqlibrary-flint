@@ -113,7 +113,7 @@
         this.item = {};
         var that = this;
         document.addEventListener('uqlibrary-flint-response-current-audio', function(e) {
-            if(e.detail.audio != null) {
+            if(e.detail.audio != null && e.audio) {
               that.playingSrc = e.audio.src;
               if(that.item.mp3 == e.detail.audio.src && e.detail.isPlaying){
                 that.isPlaying = true;

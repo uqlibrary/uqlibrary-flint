@@ -152,13 +152,13 @@
         ready: function () {
           var that = this;
           this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
-          that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
-          that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
+          that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + (window.innerHeight - 64) + 'px');
+          that.$.itemsListSection.setAttribute('style', 'height: ' + (window.innerHeight - 64) + 'px');
           that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + (window.innerHeight - 64) + 'px');
 
           window.addEventListener('resize', function() {
-            that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
-            that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
+            that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + (window.innerHeight - 64) + 'px');
+            that.$.itemsListSection.setAttribute('style', 'height: ' + (window.innerHeight - 64) + 'px');
             that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + (window.innerHeight - 64) + 'px');
 
             var responsiveWidth = parseInt(that.$.innerDrawerPanel.responsiveWidth);

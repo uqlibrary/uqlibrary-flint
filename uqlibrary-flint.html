@@ -12,13 +12,26 @@
 
     <uqlibrary-ga id="ga" appName="FlintCollection"></uqlibrary-ga>
 
+
+
     <core-drawer-panel id="outerDrawerPanel" responsiveWidth="1535px">
       <div drawer class="left-drawer">
         <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
       </div>
+      <div main layout vertical class="main">
+        <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
+                           on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
+                           on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"
+                           appTitle="Indigenous Voices"
+                           appTitleLink="#"
+                           appLinks=""
+                           searchPlaceholderText="Search the Flint Collection">
+        </uqlibrary-toolbar>
 
-      <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
-                         disableSwipe>
+        <core-drawer-panel id="innerDrawerPanel" main rightDrawer responsiveWidth="768px" drawerWidth="300px"
+                         disableSwipe style="margin-top: 64px;">
+
+
         <div id="itemDetailDrawer" drawer class="right-drawer">
 
           <core-animated-pages selected="{{currentDrawerSection}}" valueattr="data-selected-section"
@@ -80,15 +93,6 @@
         </div>
         <div main layout vertical relative class="main">
 
-          <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
-                             on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
-                             on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"
-                             appTitle="Indigenous Voices"
-                             appTitleLink="#"
-                             appLinks=""
-                             searchPlaceholderText="Search the Flint Collection">
-          </uqlibrary-toolbar>
-
           <div id="headerPlayerMirrorWrapper" class="{{isIOS ? 'ios' : ''}}" hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
             <x-audio-mirror id="headerPlayerMirror" showVolumeControls?="{{!isIOS}}"></x-audio-mirror>
           </div>
@@ -120,6 +124,7 @@
         </div>
       </core-drawer-panel>
 
+      </div>
     </core-drawer-panel>
 
     <uqlibrary-flint-warning-dialog autoOpen
@@ -149,10 +154,12 @@
           this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
           that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
           that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
+          that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + (window.innerHeight - 64) + 'px');
 
           window.addEventListener('resize', function() {
             that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + window.innerHeight + 'px');
             that.$.itemsListSection.setAttribute('style', 'height: ' + window.innerHeight + 'px');
+            that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + (window.innerHeight - 64) + 'px');
 
             var responsiveWidth = parseInt(that.$.innerDrawerPanel.responsiveWidth);
 

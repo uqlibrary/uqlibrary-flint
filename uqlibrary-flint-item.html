@@ -14,15 +14,19 @@
         {{item.title_t}}
         </div>
       </div>
-      <div>
-        <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
-                        on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
-        <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" on-click="{{backButtonHandler}}"></paper-icon-button>
-      </div>
     </li>
   </ul>
 
   <ul class="two-line-list" style="padding-bottom: 100px;">
+
+      <li>
+          <core-a11y-keys id="a11yCloseButton" target="{{$.closeButton}}" keys="{{keyboardNavigationKeys}}"
+          on-keys-pressed="{{ a11yKeyPressed }}"></core-a11y-keys>
+          <paper-button class="colored custom" id="closeButton" on-click="{{backButtonHandler}}" aria-label="Return to the list" style="text-transform: none">
+              <core-icon icon="chevron-left"></core-icon>
+              Back to list
+          </paper-button>
+      </li>
 
     <li class="list-item" horizontal layout>
       <div class="content" flex>

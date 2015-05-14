@@ -179,15 +179,14 @@
         //e.stopImmediatePropagation();
         var _el = sender;
         var itemIndex = sender.attributes['data-index'].value;
-        if(_el.icon == 'av:play-circle-outline') {
-            _el.icon = 'av:pause-circle-outline';
-            var _src = this.$.itemsList.data[itemIndex].mp3;
-            var _title = this.$.itemsList.data[itemIndex].title_t;
+        var _src = this.$.itemsList.data[itemIndex].mp3;
+        var _title = this.$.itemsList.data[itemIndex].title_t;
+
+        if(_src != this.playingSrc) {
             this.playingSrc = _src;
             this.previousPlayingSrc = this.playingSrc;
             this.fire('x-audio-list-play', {src: _src, name: _title});
         } else {
-            _el.icon = 'close';
             this.playingSrc=null;
             this.fire('x-audio-list-pause');
         }

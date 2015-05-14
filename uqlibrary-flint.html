@@ -180,21 +180,21 @@
                         }
                     });
 
-                    this.addEventListener('x-audio-initialized', function(e, source) {
+                  document.addEventListener('x-audio-initialized', function(e, source) {
                         that.$.audioPlayer.disabled = false;
                         that.$.headerPlayerMirror.xaudio = that.$.audioPlayer;
                         that.activeAudioSrc = that.$.audioPlayer.src;
-
                         that.$.audioPlayer.play();
                         that.activePlayer = that.$.audioPlayer;
 
                     });
 
-                    this.addEventListener('x-audio-list-pause', function(e) {
+                 document.addEventListener('x-audio-list-pause', function(e) {
+
                       that.$.audioPlayer.pause();
                   });
 
-                  this.addEventListener('x-audio-list-play', function(e, source) {
+                 document.addEventListener('x-audio-list-play', function(e, source) {
                       if(that.activeAudioSrc && (that.activeAudioSrc != e.detail.src) || that.activeAudioSrc == null)  {
                           if(that.$.audioPlayer.src) {
                             that.$.audioPlayer.pause();
@@ -211,11 +211,11 @@
                       }
                   });
 
-                    this.$.audioPlayer.addEventListener('x-audio-play', function(e) {
+                    document.addEventListener('x-audio-play', function(e) {
                         that.fire('x-audio-player-play', {audio: that.$.audioPlayer.audio});
                     });
 
-                    this.$.audioPlayer.addEventListener('x-audio-pause', function(e) {
+                    document.addEventListener('x-audio-pause', function(e) {
                         that.fire('x-audio-player-pause', {audio: that.$.audioPlayer.audio});
                     });
 

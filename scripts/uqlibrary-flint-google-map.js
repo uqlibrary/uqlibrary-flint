@@ -1,8 +1,8 @@
 // Small hack to define if this is a touchscreen device
 function is_touch_device() {
   return (('ontouchstart' in window)
-    || (navigator.MaxTouchPoints > 0)
-    || (navigator.msMaxTouchPoints > 0));
+    || (window.navigator.MaxTouchPoints > 0)
+    || (window.navigator.msMaxTouchPoints > 0));
 }
 
 function showDetails(el) {

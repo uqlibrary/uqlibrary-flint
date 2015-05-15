@@ -151,35 +151,37 @@
 
             var searchInputField = uqlibraryToolbar.shadowRoot.querySelector('#searchInputField');
             expect(searchInputField).not.to.be.null;
-            searchInputField.value = 'test';
-
-            var searchButton = uqlibraryToolbar.shadowRoot.querySelector('#searchButton');
-            expect(searchButton).not.to.be.null;
-
-            searchButton.fire('tap');
+            uqlibraryToolbar.searchFieldValue = 'test';
 
             setTimeout(function () {
-              var itemsListSection = element.shadowRoot.querySelector('#itemsListSection');
-              expect(itemsListSection).not.to.be.null;
-              expect(itemsListSection.getAttribute('class')).equals('core-selected');
-
-              var listItems = element.shadowRoot.querySelector('#itemsListElement')
-                      .shadowRoot.querySelector('#itemsList')
-                      .querySelectorAll('li.list-item');
-              expect(listItems.length).not.to.equal(0);
-
-              var listItem = listItems[1].querySelector('.content');
-              expect(listItem).not.to.be.null;
-
-              listItem.dispatchEvent(new MouseEvent('tap', {'view': window, 'bubbles': true}));
+              var searchButton = uqlibraryToolbar.shadowRoot.querySelector('#rightFlex paper-icon-button');
+              expect(searchButton).not.to.be.null;
+              searchButton.fire('tap');
 
               setTimeout(function () {
+                var itemsListSection = element.shadowRoot.querySelector('#itemsListSection');
+                expect(itemsListSection).not.to.be.null;
 
-                var itemSection = element.shadowRoot.querySelector('#itemSection');
-                expect(itemSection).not.to.be.null;
-                expect(itemSection.getAttribute('class')).equals('core-selected');
+                expect(itemsListSection.getAttribute('class')).equals('core-selected');
 
-                done();
+                var listItems = element.shadowRoot.querySelector('#itemsListElement')
+                        .shadowRoot.querySelector('#itemsList')
+                        .querySelectorAll('li.list-item');
+                expect(listItems.length).not.to.equal(0);
+
+                var listItem = listItems[1].querySelector('.content');
+                expect(listItem).not.to.be.null;
+
+                listItem.dispatchEvent(new MouseEvent('tap', {'view': window, 'bubbles': true}));
+
+                setTimeout(function () {
+
+                  var itemSection = element.shadowRoot.querySelector('#itemSection');
+                  expect(itemSection).not.to.be.null;
+                  expect(itemSection.getAttribute('class')).equals('core-selected');
+
+                  done();
+                }, 1000);
               }, 1000);
             }, 1000);
           }, 1000);

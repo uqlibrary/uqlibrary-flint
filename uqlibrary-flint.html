@@ -20,8 +20,7 @@
       </div>
       <div main layout vertical class="main">
         <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
-                           on-uqlibrary-toolbar-search-button-clicked="{{performSearch}}"
-                           on-uqlibrary-toolbar-search-key-pressed="{{keyPerformSearch}}"
+                           on-uqlibrary-toolbar-search-submitted="{{performSearch}}"
                            appTitle="Indigenous Voices"
                            appTitleLink="#"
                            appLinks=""
@@ -252,14 +251,6 @@
 
         performSearch: function(e) {
           if (e.detail.searchTerm != "") {
-            this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
-            this.currentDrawerSection = 'itemsListSection';
-            this.toggleItemDetailsDrawer();
-          }
-        },
-
-        keyPerformSearch: function(e) {
-          if ((e.detail.keyPressed == 13) && (e.detail.searchTerm != "")) {
             this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
             this.currentDrawerSection = 'itemsListSection';
             this.toggleItemDetailsDrawer();

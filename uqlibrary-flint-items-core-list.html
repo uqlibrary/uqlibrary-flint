@@ -229,50 +229,13 @@
         this.voice = null;
         this.searchTerm = '';
 
-        var items = [];
-
-        var that = this;
-
         if (args && args.language) {
           this.languageObject = args.language;
-
-          if (this.cacheData.languages[this.languageObject.cvo_id]) {
-            //get data from local cache
-            items = this.cacheData.languages[this.languageObject.cvo_id];
-            this.$.itemsList.data = items;
-            this.$.itemsList.groups = [
-              {
-                length: items.length,
-                data: {
-                  label: this.languageObject.cvo_title
-                }
-              }
-            ];
-          } else {
-            //get data from search api
-            this.$.recordsApiElement.get({ language: this.languageObject.cvo_title });
-          }
+          this.$.recordsApiElement.get({ language: this.languageObject.cvo_title });
         } else if (args && args.voice) {
           this.voice = args.voice;
-
-          if (this.cacheData.voices[this.voice.cvo_title]) {
-            //get data from local cache
-            items = this.cacheData.voices[this.voice.cvo_title];
-            this.$.itemsList.data = items;
-            this.$.itemsList.groups = [
-              {
-                length: items.length,
-                data: {
-                  label: this.voice.cvo_title
-                }
-              }
-            ];
-          } else {
-            //get data from search api
-            this.$.recordsApiElement.get({ voice: this.voice.cvo_title });
-          }
+          this.$.recordsApiElement.get({ voice: this.voice.cvo_title });
         } else if (args && args.searchTerm) {
-          //get data from search api
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });
         }

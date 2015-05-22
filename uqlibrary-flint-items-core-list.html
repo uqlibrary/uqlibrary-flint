@@ -126,22 +126,19 @@
 
           //TODO: remove when items will have their own MP3 files
           //adding test mp3 files
-          for(var i=0; i < e.detail.length; i++) {
-            e.detail[i].mp3 = (Math.random() < Math.random() ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')
+          for(var i=0; i < e.detail.docs.length; i++) {
+            e.detail.docs[i].mp3 = (Math.random() < Math.random() ? 'http://espace.library.uq.edu.au/view/UQ:318711/Reel35_PatBowe.mp3' : 'http://espace.library.uq.edu.au/view/UQ:318711/Reel36_PatBowe.mp3')
           }
 
-          var data = e.detail;
+          var data = e.detail.docs;
           var clearThreshold = false;
 
-          if (that.$.itemsList.data) {
+          if (that.$.itemsList.data.length > 0) {
             clearThreshold = true;
             data = that.$.itemsList.data.concat(e.detail.docs);
           }
 
           that.searchItemsCount = e.detail.numFound;
-
-          console.log(e.detail.numFound);
-          console.log(e.detail.start);
 
           that.$.itemsList.data = data;
           that.$.itemsList.groups = [
@@ -155,7 +152,7 @@
             }
           ];
 
-          that.showNoResults = that.searchTerm && data && data == 0;
+          that.showNoResults = data && data.length == 0;
 
           that.$.threshold.clearLower();
         });
@@ -181,11 +178,12 @@
       },
 
       loadMore: function() {
-        if (this.$.itemsList.data.length >= this.searchItemsCount)
+        //do not load more if reached the end of search
+        if (this.searchItemsCount < 50 || this.$.itemsList.data.length >= this.searchItemsCount)
           return;
 
         var searchData = {
-          start: this.$.itemsList.data.length + 1,
+          start: this.$.itemsList.data.length,
           rows: 50
         };
 
@@ -251,6 +249,7 @@
         this.voice = null;
         this.searchTerm = '';
         this.$.itemsList.data = [];
+        this.$.itemsList.scrollToItem = 0;
 
         if (args && args.language) {
           this.languageObject = args.language;

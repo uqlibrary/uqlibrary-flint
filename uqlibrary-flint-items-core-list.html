@@ -23,10 +23,7 @@
       <li class="list-item">
         <div class="content">
           <div class="line3">
-            0 items found for the search: '{{searchTerm}}'.
-          </div>
-          <div class="line3">
-            Please, update your query and search again.
+            0 items found
           </div>
         </div>
       </li>
@@ -248,8 +245,11 @@
         this.languageObject = null;
         this.voice = null;
         this.searchTerm = '';
-        this.$.itemsList.data = [];
+
+        //reset items list element to scroll to top for new data set
         this.$.itemsList.scrollToItem = 0;
+        this.$.itemsList.data = [];
+        this.$.itemsList.updateSize();
 
         if (args && args.language) {
           this.languageObject = args.language;

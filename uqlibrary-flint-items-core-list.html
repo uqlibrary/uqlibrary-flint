@@ -130,7 +130,7 @@
           var data = e.detail.docs;
           var clearThreshold = false;
 
-          if (that.$.itemsList.data.length > 0) {
+          if (that.$.itemsList.data && that.$.itemsList.data.length > 0) {
             clearThreshold = true;
             data = that.$.itemsList.data.concat(e.detail.docs);
           }
@@ -152,6 +152,9 @@
           that.showNoResults = data && data.length == 0;
 
           that.$.threshold.clearLower();
+          that.$.itemsList.hidden = false;
+          that.$.itemsList.updateSize();
+
         });
 
         document.addEventListener('x-audio-player-play', function(e) {
@@ -247,9 +250,9 @@
         this.searchTerm = '';
 
         //reset items list element to scroll to top for new data set
+        this.$.itemsList.hidden = true;
         this.$.itemsList.scrollToItem = 0;
         this.$.itemsList.data = [];
-        this.$.itemsList.updateSize();
 
         if (args && args.language) {
           this.languageObject = args.language;

@@ -36,8 +36,7 @@
                          lowerThreshold="500" on-lower-trigger="{{loadMore}}">
   </core-scroll-threshold>
   <div id="scroller" style="overflow:auto;" flex>
-
-  <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
+    <ul class="three-line-icon-list" flex hidden?="{{showNoResults}}">
       <core-list id="itemsList" fit style="margin-bottom: 83px;" scrollTarget="{{$.scroller}}">
       <template>
 
@@ -96,7 +95,6 @@
       </template>
     </core-list>
   </ul>
-
   </div>
 </template>
 
@@ -122,6 +120,7 @@
         this.activePlayer = null;
         this.playingSrc = null;
         this.previousPlayingSrc = null;
+        this.searchItemsCount = 0;
 
         this.$.recordsApiElement.addEventListener('uqlibrary-api-flint-records-loaded', function(e) {
 
@@ -132,9 +131,17 @@
           }
 
           var data = e.detail;
+          var clearThreshold = false;
+
           if (that.$.itemsList.data) {
-            data = that.$.itemsList.data.concat(e.detail);
+            clearThreshold = true;
+            data = that.$.itemsList.data.concat(e.detail.docs);
           }
+
+          that.searchItemsCount = e.detail.numFound;
+
+          console.log(e.detail.numFound);
+          console.log(e.detail.start);
 
           that.$.itemsList.data = data;
           that.$.itemsList.groups = [
@@ -149,6 +156,7 @@
           ];
 
           that.showNoResults = that.searchTerm && data && data == 0;
+
           that.$.threshold.clearLower();
         });
 
@@ -173,6 +181,9 @@
       },
 
       loadMore: function() {
+        if (this.$.itemsList.data.length >= this.searchItemsCount)
+          return;
+
         var searchData = {
           start: this.$.itemsList.data.length + 1,
           rows: 50

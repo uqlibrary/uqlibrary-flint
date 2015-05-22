@@ -19,7 +19,8 @@
         <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
       </div>
       <div main layout vertical class="main">
-        <uqlibrary-toolbar on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
+        <uqlibrary-toolbar id="toolbar"
+                           on-uqlibrary-toolbar-menu-clicked="{{toggleMenuDrawer}}"
                            on-uqlibrary-toolbar-search-submitted="{{performSearch}}"
                            appTitle="Indigenous Voices of Queensland"
                            appTitleLink="#"
@@ -150,15 +151,23 @@
 
         ready: function () {
           var that = this;
+          var toolbarHeight = this.$.toolbar.clientHeight;
+          var playerHeight = this.$.activePlayerWrapper.clientHeight;
+          var listHeight = window.innerHeight - toolbarHeight - playerHeight;
+          var innerPanelHeight = window.innerHeight - toolbarHeight;
+
           this.isIOS = navigator.userAgent.match(/iP(?:hone|ad;(?: U;)? CPU) OS (\d+)/);
-          that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + (window.innerHeight - 64) + 'px');
-          that.$.itemsListSection.setAttribute('style', 'height: ' + (window.innerHeight - 64) + 'px');
-          that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + (window.innerHeight - 64) + 'px');
+          that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + innerPanelHeight + 'px');
+          that.$.itemsListSection.setAttribute('style', 'height: ' + listHeight + 'px');
+          that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + innerPanelHeight + 'px');
 
           window.addEventListener('resize', function() {
-            that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + (window.innerHeight - 64) + 'px');
-            that.$.itemsListSection.setAttribute('style', 'height: ' + (window.innerHeight - 64) + 'px');
-            that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + (window.innerHeight - 64) + 'px');
+            listHeight = window.innerHeight - toolbarHeight - playerHeight;
+            innerPanelHeight = window.innerHeight - toolbarHeight;
+
+            that.$.animatedDrawerPages.setAttribute('style', 'overflow-x: hidden; overflow-y: auto; height: ' + innerPanelHeight + 'px');
+            that.$.itemsListSection.setAttribute('style', 'height: ' + listHeight + 'px');
+            that.$.innerDrawerPanel.setAttribute('style', 'margin-top:64px; height: ' + innerPanelHeight + 'px');
 
             var responsiveWidth = parseInt(that.$.innerDrawerPanel.responsiveWidth);
 

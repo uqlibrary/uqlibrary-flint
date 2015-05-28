@@ -1,0 +1,422 @@
+a {
+  text-decoration: none;
+  color: #007e9e; }
+  a:hover, a:focus {
+    text-decoration: underline; }
+
+.inverse a {
+  text-decoration: none;
+  color: white; }
+
+h1 {
+  font-family: "Roboto";
+  font-weight: 300;
+  font-size: 8em;
+  line-height: 1.1em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: rgba(0, 0, 0, 0.54); }
+
+h1.inverse {
+  font-family: "Roboto";
+  font-weight: 300;
+  font-size: 8em;
+  line-height: 1.1em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: white; }
+
+h2 {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 4em;
+  white-space: nowrap;
+  line-height: 1.1em;
+  text-overflow: ellipsis;
+  color: rgba(0, 0, 0, 0.54); }
+
+h2.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 4em;
+  white-space: nowrap;
+  line-height: 1.1em;
+  text-overflow: ellipsis;
+  color: white; }
+
+h3 {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 3.4em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.54); }
+
+h3.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 3.4em;
+  line-height: 1.1em;
+  color: white; }
+
+h4 {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 2.6em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.54); }
+
+h4.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 2.6em;
+  line-height: 1.1em;
+  color: white; }
+
+.headline {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1.8em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.87); }
+
+.headline.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1.8em;
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+.title {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1.42857em;
+  line-height: 1.1em;
+  white-space: normal;
+  color: rgba(0, 0, 0, 0.87); }
+
+.title.inverse {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1.42857em;
+  line-height: 1.1em;
+  white-space: normal;
+  color: rgba(255, 255, 255, 0.87); }
+
+.subhead {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1.14286em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.87); }
+
+.subhead.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1.14286em;
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+.body2 {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.87); }
+
+.body2.inverse {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1em;
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+.body1 {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.87); }
+
+.body1.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1em;
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+.caption {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 0.85714em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.54); }
+
+.caption.inverse {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 0.85714em;
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.54); }
+
+.menu {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.87); }
+
+.menu.inverse {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1em;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+.button {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.87); }
+
+.button.inverse {
+  font-family: "Roboto";
+  font-weight: 500;
+  font-size: 1em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.87);
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+.link {
+  text-decoration: none;
+  color: rgba(0, 126, 158, 0.87); }
+
+h1#toolbar-page-title {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 1em;
+  line-height: 1.1em;
+  color: rgba(255, 255, 255, 0.87); }
+
+paper-action-dialog {
+  border-radius: 2px;
+  max-width: 500px; }
+
+paper-tabs {
+  z-index: 1; }
+
+core-drawer-panel {
+  background-color: white; }
+  core-drawer-panel /deep/ .main {
+    background-color: white;
+    z-index: 0; }
+
+.gm-style-iw {
+  cursor: pointer; }
+
+#infoSection ul li {
+  padding-left: 8px; }
+  #infoSection ul li .avatar {
+    white-space: nowrap; }
+    #infoSection ul li .avatar core-icon {
+      width: 32px;
+      height: 32px; }
+  #infoSection ul li .content {
+    margin-left: 0;
+    padding-bottom: 0; }
+    #infoSection ul li .content div {
+      white-space: normal;
+      text-overflow: initial; }
+
+#feedbackButton {
+  margin-bottom: 12px; }
+
+core-list li {
+  background-color: white; }
+  core-list li:hover, core-list li:focus, core-list li:active {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05); }
+  core-list li .avatar {
+    margin-left: 16px; }
+    core-list li .avatar paper-icon-button:hover, core-list li .avatar paper-icon-button:focus, core-list li .avatar paper-icon-button:active {
+      background-color: rgba(0, 0, 0, 0.1); }
+    core-list li .avatar .audio-holder /deep/ .playerButton {
+      padding: 0; }
+  core-list li #closeButton {
+    margin-right: 16px; }
+
+.list-item.header {
+  background-color: transparent;
+  padding-bottom: 12px; }
+  .list-item.header:hover, .list-item.header:focus, .list-item.header:active {
+    background-color: transparent;
+    cursor: default; }
+
+.three-line-icon-list .list-item {
+  padding-left: 0;
+  padding-right: 0;
+  transition: transform 100ms ease-in; }
+  .three-line-icon-list .list-item .content {
+    padding-bottom: 32px;
+    padding-left: 16px;
+    padding-right: 16px; }
+
+.three-line-icon-list .list-item.expanded {
+  padding-left: 16px;
+  transition: transform 100ms ease-in; }
+  .three-line-icon-list .list-item.expanded:hover, .three-line-icon-list .list-item.expanded:focus, .three-line-icon-list .list-item.expanded:active {
+    background-color: white;
+    cursor: text; }
+
+#itemDetailsCollapse {
+  padding-left: 72px;
+  padding-right: 16px; }
+
+#playButton {
+  padding: 0; }
+
+paper-icon-button {
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1); }
+  paper-icon-button[focused], paper-icon-button:hover, paper-icon-button:focus, paper-icon-button:active {
+    background-color: rgba(0, 0, 0, 0.1); }
+
+paper-icon {
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1); }
+  paper-icon[focused], paper-icon:hover, paper-icon:focus, paper-icon:active {
+    background-color: rgba(0, 0, 0, 0.1); }
+
+paper-slider {
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1); }
+  paper-slider:focus {
+    background-color: rgba(0, 0, 0, 0.1); }
+    paper-slider:focus::shadow #sliderContainer.ring #sliderKnobInner, paper-slider:focus::shadow #sliderContainer.ring #sliderKnobInner::before {
+      background-color: rgba(0, 0, 0, 0.26);
+      border-color: rgba(0, 0, 0, 0.26); }
+    paper-slider:focus::shadow #sliderBar::shadow #progressContainer {
+      background-color: rgba(0, 0, 0, 0.26); }
+    paper-slider:focus::shadow #sliderBar::shadow #progressContainer {
+      background-color: rgba(0, 0, 0, 0.26); }
+
+#headerPlayerMirrorWrapper {
+  position: absolute;
+  right: -10px;
+  top: 112px;
+  z-index: 99999;
+  width: 70px;
+  background-color: #EEEEEE; }
+  #headerPlayerMirrorWrapper x-audio-mirror::shadow paper-slider {
+    display: none; }
+  #headerPlayerMirrorWrapper x-audio-mirror::shadow .volume {
+    min-width: 40px; }
+  #headerPlayerMirrorWrapper x-audio-mirror::shadow paper-icon-button::shadow core-icon {
+    color: rgba(0, 0, 0, 0.54) !important;
+    width: 24px !important;
+    height: 24px !important; }
+  #headerPlayerMirrorWrapper x-audio-mirror::shadow paper-icon-button:hover, #headerPlayerMirrorWrapper x-audio-mirror::shadow paper-icon-button:active, #headerPlayerMirrorWrapper x-audio-mirror::shadow paper-icon-button:focus {
+    transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: rgba(255, 255, 255, 0.12); }
+  #headerPlayerMirrorWrapper.ios {
+    width: 45px; }
+
+.playerButton::shadow core-icon {
+  color: rgba(0, 0, 0, 0.54);
+  width: 44px;
+  height: 44px; }
+.playerButton:hover, .playerButton:active, .playerButton:focus {
+  transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: rgba(255, 255, 255, 0.12); }
+
+.currentlyPlayingTitle {
+  font-family: "Roboto";
+  font-weight: 400;
+  font-size: 0.85714em;
+  line-height: 1.1em;
+  color: rgba(0, 0, 0, 0.54);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 0 8px; }
+
+#itemSection {
+  background: white; }
+  #itemSection /deep/ .playerButton {
+    padding: 0; }
+
+#activePlayerWrapper {
+  background: #FAFAFA;
+  height: 83px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid #cccccc; }
+  #activePlayerWrapper div {
+    margin: 3px; }
+
+[drawer] {
+  background-color: #FAFAFA;
+  box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37); }
+  [drawer] /deep/ .glow {
+    color: white;
+    cursor: pointer;
+    transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1); }
+    [drawer] /deep/ .glow:hover, [drawer] /deep/ .glow:focus, [drawer] /deep/ .glow:active {
+      text-decoration: none;
+      -webkit-filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.5));
+      transition: all 280ms cubic-bezier(0.4, 0, 0.2, 1); }
+  [drawer] /deep/ #uq-logo {
+    height: 36px;
+    border-right: 1px solid white;
+    margin-right: 10px;
+    padding-right: 10px; }
+    @media (max-width: 768px) {
+      [drawer] /deep/ #uq-logo {
+        display: none; } }
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      [drawer] /deep/ #uq-logo {
+        display: none; } }
+  [drawer] /deep/ #uq-logo-text {
+    border-right: 1px solid white;
+    margin-right: 10px;
+    padding-right: 14px; }
+    @media (min-width: 769px) {
+      [drawer] /deep/ #uq-logo-text {
+        display: none; } }
+    @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+      [drawer] /deep/ #uq-logo-text {
+        display: inline; } }
+  @media (min-width: 769px) {
+    [drawer] /deep/ #uq-library-logo-text {
+      vertical-align: super; } }
+  @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    [drawer] /deep/ #uq-library-logo-text {
+      vertical-align: middle; } }
+
+@media (min-width: 1536px) {
+  .flint-responsive-menu-icon {
+    display: none; } }
+
+@media (min-width: 769px) {
+  .flint-responsive-menu-toggle-icon {
+    display: none; } }
+
+.flint-item-info {
+  height: 112px;
+  background-color: #FAFAFA; }
+  .flint-item-info h2 {
+    white-space: normal;
+    margin-left: 12px; }
+
+.flint-header-icon {
+  margin-left: 10px;
+  width: 44px;
+  height: 44px; }
+
+body /deep/ div.gmnoscreen {
+  display: none; }
+
+/*# sourceMappingURL=uqlibrary-flint.css.map */

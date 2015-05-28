@@ -4,6 +4,7 @@
 <link rel="import" href="uqlibrary-flint-item.html">
 <link rel="import" href="uqlibrary-flint-google-map.html">
 <link rel="import" href="uqlibrary-flint-warning-dialog.html">
+<link rel="import" href="core-collapse.html">
 
 <polymer-element name="uqlibrary-flint">
 
@@ -11,8 +12,6 @@
     <link rel="stylesheet" href="../uqlibrary-elements/resources/theme/element.css" shim-shadowdom>
 
     <uqlibrary-ga id="ga" appName="FlintCollection"></uqlibrary-ga>
-
-
 
     <core-drawer-panel id="outerDrawerPanel" responsiveWidth="768px">
       <div drawer class="left-drawer">
@@ -38,31 +37,64 @@
                                transitions="slide-from-right" id="animatedDrawerPages">
             <section id="infoSection" data-selected-section="infoSection">
 
+
               <ul class="three-line-icon-list">
-                <li class="list-item header border" style="padding-bottom: 0px; margin-top: 0px;" horizontal layout>
+                <li class="list-item header border" horizontal layout center-center>
+
                   <div class="avatar">
-                    <core-icon icon="info" aria-label="information about this application" style="height: 45px; width: 45px;"></core-icon>
+                    <core-icon icon="info" aria-label="information about this application"></core-icon>
                   </div>
-                  <div class="content" style="margin-left: 0px;" flex>About this collection</div>
+
+                  <div flex>About this collection</div>
                   <div>
-                    <core-a11y-keys id="a11yCloseButton" keys="{{keyboardNavigationKeys}}"
-                                    on-keys-pressed="{{ toggleItemDetailsDrawer }}"></core-a11y-keys>
+                    <core-a11y-keys target="{{$.closeNoResultsButton}}" keys="{{keyboardNavigationKeys}}"
+                                    on-keys-pressed="{{ closeButtonHandler }}"></core-a11y-keys>
                     <paper-icon-button aria-label="Close panel" icon="close" id="closeButton" class="flint-responsive-menu-toggle-icon" on-click="{{toggleItemDetailsDrawer}}"></paper-icon-button>
                   </div>
                 </li>
+                <li class="list-item">
+
+                  <div class="content">
+                  <div class="subhead" on-tap="{{toggle}}">
+                    <core-icon icon="expand-more"></core-icon> What is the Indigenous Voices of Queensland website?
+                    <core-collapse opened>
+                      <div class="line2">
+                        Indigenous voices makes available rare, archival recordings of Indigenous languages. The project has digitised, identified, and consulted with Indigenous communities to ensure access for:
+                        <ul>
+                          <li>Indigenous community members</li>
+                          <li>descendants of those whose languages were recorded</li>
+                          <li>students</li>
+                          <li>researchers</li>
+                          <li>the public.</li>
+                        </ul>
+                      </div>
+                    </core-collapse>
+                  </div>
+                    </div>
+
+                  <div class="content">
+                  <div class="subhead" on-tap="{{toggle}}">
+                    <core-icon icon="chevron-right"></core-icon> Why were the languages recorded?
+                  <core-collapse>
+                    <div class="line2">
+                        The languages were recorded in the 1960s as part of the Queensland Speech Survey conducted by Elwyn Flint of the University of Queensland English Department. The survey included recording varieties of English spoken throughout Queensland, including varieties of English spoken in Aboriginal reserves and missions.  While Flint and his assistants visited these reserves and missions, they also were able to record samples of some of the traditional Indigenous languages spoken by people living there at the time.  The Queensland Speech Survey thus includes one of the largest and broadest collection of recordings of Indigenous languages spoken in Queensland in the 20th century.
+                    </div>
+                  </core-collapse>
+                  </div>
+                    </div>
+
+                  <div class="content">
+                  <div class="subhead" on-tap="{{toggle}}">
+                    <core-icon icon="chevron-right"></core-icon> About Queensland Indigenous Languages
+                    <core-collapse>
+                      <div class="line2">
+                        Flint’s recordings were made of people who were living on reserves and missions, mostly in the North of the State, including some Torres Strait Islands. He also visited Woorabinda in Central Queensland and Cherbourg in South-East Queensland. He was not attempting a comprehensive survey of all Queensland Indigenous languages still spoken.
+                      </div>
+                    </core-collapse>
+                  </div>
+                    </div>
+
               </ul>
-
-              <p class="text-container body1"><b>Indigenous Voices</b><br>By Elwyn Flint</p>
-
-              <p class="text-container body1" style="padding-bottom: 100px;">
-                The Flint Papers comprise some 24 boxes of written documents compiled and collected by the late Elwyn Flint,
-                most of them as part of a long-term research project he carried out mainly in the 1960s known as the
-                Queensland Speech Survey funded by the Australian Research Council.<br><br>
-                <b>To begin, try selecting a language or voice to see all of its associated recordings.</b><br><br>
-                You can play any item from the list of recordings, and continue to look through the collection while the item is playing.<br><br>
-                <b>How to cite this:</b><br><br>
-                Indigenous Languages recorded in the Queensland Speech Survey, 2015. doi: http://dx.doi.org/10.14264/uql.2015.467</p>
-
 
             </section>
             <section id="itemsListSection" data-selected-section="itemsListSection">
@@ -241,8 +273,25 @@
 
         },
 
+        // toggles core-collapse and updates icon for infoSection stuff
+        toggle: function(sender) {
+          if (sender.target.nodeName == "CORE-ICON") {
+            if (sender.target.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
+              sender.target.querySelector('core-icon').icon = "expand-more";
+            } else if (sender.target.parentNode.querySelector('core-collapse').classList != "core-collapse-closed") {
+              sender.target.querySelector('core-icon').icon = "chevron-right";
+            }
+            sender.target.parentNode.querySelector('core-collapse').toggle();
+          } else {
+            if (sender.target.querySelector('core-collapse').classList == "core-collapse-closed") {
+              sender.target.querySelector('core-icon').icon = "expand-more";
+            } else if (sender.target.querySelector('core-collapse').classList != "core-collapse-closed") {
+              sender.target.querySelector('core-icon').icon = "chevron-right";
+            }
+            sender.target.querySelector('core-collapse').toggle();
+          }
 
-
+        },
 
         centerMapIfSelected: function () {
           if (this.currentSection === "mapSection") {

@@ -4,7 +4,6 @@
 <link rel="import" href="uqlibrary-flint-item.html">
 <link rel="import" href="uqlibrary-flint-google-map.html">
 <link rel="import" href="uqlibrary-flint-warning-dialog.html">
-<link rel="import" href="core-collapse.html">
 
 <polymer-element name="uqlibrary-flint">
 
@@ -275,11 +274,14 @@
 
         // toggles core-collapse and updates icon for infoSection stuff
         toggle: function(sender) {
+          if ((sender.target.nodeName == 'LI') || (sender.target.classList == 'line2')) {
+            return;
+          }
           if (sender.target.nodeName == "CORE-ICON") {
             if (sender.target.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
-              sender.target.querySelector('core-icon').icon = "expand-more";
+              sender.target.icon = "expand-more";
             } else if (sender.target.parentNode.querySelector('core-collapse').classList != "core-collapse-closed") {
-              sender.target.querySelector('core-icon').icon = "chevron-right";
+              sender.target.icon = "chevron-right";
             }
             sender.target.parentNode.querySelector('core-collapse').toggle();
           } else {

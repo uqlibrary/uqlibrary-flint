@@ -58,7 +58,9 @@
                     <div class="content">
                       <div class="subhead">
                         <!--<icon-transition color="#fff" id="hero" shape="{{ shape }}"></icon-transition>-->
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="expand-more"></core-icon> What is the Indigenous Voices of Queensland website?</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="expand-more"></core-icon>What is the Indigenous Voices of Queensland website?
+                        </uqlibrary-a11y-link>
                         <core-collapse opened>
                           <div class="line2">
                             Indigenous voices makes available rare, archival recordings of Indigenous languages. The project has digitised, identified, and consulted with Indigenous communities to ensure access for:
@@ -81,7 +83,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> Why were the languages recorded?</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>Why were the languages recorded?
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             The languages were recorded in the 1960s as part of the Queensland Speech Survey conducted by Elwyn Flint of the University of Queensland English Department. The survey included recording varieties of English spoken throughout Queensland, including varieties of English spoken in Aboriginal reserves and missions.  While Flint and his assistants visited these reserves and missions, they also were able to record samples of some of the traditional Indigenous languages spoken by people living there at the time.  The Queensland Speech Survey thus includes one of the largest and broadest collection of recordings of Indigenous languages spoken in Queensland in the 20th century.
@@ -92,7 +96,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> About Queensland Indigenous Languages</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>About Queensland Indigenous Languages
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             Flint’s recordings were made of people who were living on reserves and missions, mostly in the North of the State, including some Torres Strait Islands. He also visited Woorabinda in Central Queensland and Cherbourg in South-East Queensland. He was not attempting a comprehensive survey of all Queensland Indigenous languages still spoken.
@@ -109,7 +115,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> Who was Elwyn Flint?</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>Who was Elwyn Flint?
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             Elwyn Henry Flint (1910-1983) was an academic in the English department at The University of Queensland. He completed honours in Modern Languages and Literature in 1927, and was appointed as a reader, before becoming a priest in 1938. He was an army chaplain and intelligence officer before being discharged in 1946. His major research work is the Queensland Speech Survey, which is preserved in his papers at Fryer Library, The University of Queensland Library.
@@ -123,7 +131,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> Why were the languages made available?</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>Why were the languages made available?
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             Since Flint’s death the collection has been part of Fryer Library, The University of Queensland Library. In 2013, the Library digitised the original reel-to-reel tapes to ensure the continued preservation of the data.
@@ -143,7 +153,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> How were the languages identified?</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>How were the languages identified?
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             In the 1990s, Jeanie Bell, Anke Boewe, Kate Donnelly and Mary Laughren completed a project to document the materials in the Queensland Speech Survey which related to Australian Aboriginal languages and their speakers.
@@ -157,7 +169,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> Using Indigenous Voices of Queensland website</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>Using Indigenous Voices of Queensland website
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             Browse the website by:
@@ -179,7 +193,9 @@
 
                     <div class="content">
                       <div class="subhead">
-                        <uqlibrary-a11y-link on-tap="{{toggle}}"><core-icon icon="chevron-right"></core-icon> Acknowledgements</uqlibrary-a11y-link>
+                        <uqlibrary-a11y-link on-tap="{{toggle}}">
+                          <core-icon icon="chevron-right"></core-icon>Acknowledgements
+                        </uqlibrary-a11y-link>
                         <core-collapse>
                           <div class="line2">
                             This project is supported by the Australian National Data Service (ANDS). ANDS is supported by the Australian Government through the:
@@ -384,16 +400,31 @@
 //          }
 //        },
 
-        //TODO: Use a11y-links to make these accessible
+        // TODO: Use a11y-links to make these accessible
         // toggles core-collapse and updates icon for infoSection stuff
         toggle: function(sender) {
-          // update the icon
-          if (sender.target.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
-            sender.target.querySelector('core-icon').icon = "expand-more";
-          } else if (sender.target.parentNode.querySelector('core-collapse').classList != "core-collapse-closed") {
-            sender.target.querySelector('core-icon').icon = "chevron-right";
+          var toggler = sender.target;
+          var togglerParent = toggler.parentNode;
+
+          //handle icon click
+          if (toggler.nodeName == "CORE-ICON") {
+            if (togglerParent.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
+              toggler.icon = "expand-more";
+            } else if (togglerParent.parentNode.querySelector('core-collapse').classList != "core-collapse-closed") {
+              toggler.icon = "chevron-right";
+            }
+            togglerParent.parentNode.querySelector('core-collapse').toggle();
+          } else {
+            // handle text click
+            if (togglerParent.querySelector('core-collapse').classList == "core-collapse-closed") {
+              toggler.querySelector('core-icon').icon = "expand-more";
+            } else if (togglerParent.querySelector('core-collapse').classList != "core-collapse-closed") {
+              toggler.querySelector('core-icon').icon = "chevron-right";
+            }
+            togglerParent.querySelector('core-collapse').toggle();
           }
-          sender.target.parentNode.querySelector('core-collapse').toggle();
+
+
         },
 
         centerMapIfSelected: function () {

@@ -238,6 +238,7 @@ core-drawer-panel {
     #infoSection ul li .content div {
       white-space: normal;
       text-overflow: initial;
+      line-height: 1.5em;
       margin: 8px 0; }
 
 #feedbackButton {

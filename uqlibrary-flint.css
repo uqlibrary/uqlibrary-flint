@@ -229,13 +229,16 @@ core-drawer-panel {
   #infoSection ul li .content {
     margin-left: 0;
     padding-bottom: 0; }
+    #infoSection ul li .content /deep/ core-icon {
+      color: #007e9e; }
     #infoSection ul li .content #featureImage {
       border-radius: 2px;
-      margin: 24px;
+      margin: 16px;
       box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.37); }
     #infoSection ul li .content div {
       white-space: normal;
-      text-overflow: initial; }
+      text-overflow: initial;
+      margin: 8px 0; }
 
 #feedbackButton {
   margin-bottom: 12px; }

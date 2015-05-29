@@ -4,6 +4,7 @@
 <link rel="import" href="uqlibrary-flint-item.html">
 <link rel="import" href="uqlibrary-flint-google-map.html">
 <link rel="import" href="uqlibrary-flint-warning-dialog.html">
+<!--<link rel="import" href="../icon-transition/icon-transition.html">-->
 
 <polymer-element name="uqlibrary-flint">
 
@@ -56,8 +57,12 @@
 
                   <div class="content">
                   <div class="subhead" on-tap="{{toggle}}">
+                    <!--<icon-transition color="#fff" id="hero" shape="{{ shape }}"></icon-transition>-->
                     <core-icon icon="expand-more"></core-icon> What is the Indigenous Voices of Queensland website?
                     <core-collapse opened>
+                      <div horizontal layout center-justified>
+                      <img id="featureImage" width="75%" height="75%" src="images/flint.jpg">
+                      </div>
                       <div class="line2">
                         Indigenous voices makes available rare, archival recordings of Indigenous languages. The project has digitised, identified, and consulted with Indigenous communities to ensure access for:
                         <ul>
@@ -273,11 +278,25 @@
 
         },
 
+        // TODO: use for icon-transition
+//        shape: 'plus',
+//        pickShape: function(e, target, sender) {
+//          this.shape = sender.shape;
+//        },
+//        triggerTransition: function(e, target, sender) {
+//          var shape = sender.attributes['data-shape'].value;
+//          if (!!shape) {
+//            this.shape = shape;
+//          }
+//        },
+
+        //TODO: Use a11y-links to make these accessible
         // toggles core-collapse and updates icon for infoSection stuff
         toggle: function(sender) {
           if ((sender.target.nodeName == 'LI') || (sender.target.classList == 'line2')) {
             return;
           }
+          // handle clicking the icon
           if (sender.target.nodeName == "CORE-ICON") {
             if (sender.target.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
               sender.target.icon = "expand-more";
@@ -286,6 +305,7 @@
             }
             sender.target.parentNode.querySelector('core-collapse').toggle();
           } else {
+            // handle clicking the text
             if (sender.target.querySelector('core-collapse').classList == "core-collapse-closed") {
               sender.target.querySelector('core-icon').icon = "expand-more";
             } else if (sender.target.querySelector('core-collapse').classList != "core-collapse-closed") {

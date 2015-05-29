@@ -32,6 +32,11 @@ core-drawer-panel {
     .content {
       margin-left: 0;
       padding-bottom: 0;
+      #featureImage {
+        border-radius: 2px;
+        margin: 24px;
+        box-shadow: $shadow-z-1;
+      }
       div {
         white-space: normal;
         text-overflow: initial;

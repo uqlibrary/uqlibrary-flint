@@ -387,33 +387,13 @@
         //TODO: Use a11y-links to make these accessible
         // toggles core-collapse and updates icon for infoSection stuff
         toggle: function(sender) {
-
-          console.log(sender.target.parentNode);
-          sender.target.parentNode.querySelector('core-icon').icon = "expand-more";
+          // update the icon
+            if (sender.target.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
+              sender.target.querySelector('core-icon').icon = "expand-more";
+            } else if (sender.target.parentNode.querySelector('core-collapse').classList != "core-collapse-closed") {
+              sender.target.querySelector('core-icon').icon = "chevron-right";
+            }
           sender.target.parentNode.querySelector('core-collapse').toggle();
-//
-//          if ((sender.target.nodeName == 'LI') || (sender.target.classList == 'line2')) {
-//            return;
-//          }
-//
-//          // handle clicking the icon
-//          if (sender.target.nodeName == "CORE-ICON") {
-//            if (sender.target.parentNode.querySelector('core-collapse').classList == "core-collapse-closed") {
-//              sender.target.icon = "expand-more";
-//            } else if (sender.target.parentNode.querySelector('core-collapse').classList != "core-collapse-closed") {
-//              sender.target.icon = "chevron-right";
-//            }
-//            sender.target.parentNode.querySelector('core-collapse').toggle();
-//          } else {
-//            // handle clicking the text
-//            if (sender.target.querySelector('core-collapse').classList == "core-collapse-closed") {
-//              sender.target.querySelector('core-icon').icon = "expand-more";
-//            } else if (sender.target.querySelector('core-collapse').classList != "core-collapse-closed") {
-//              sender.target.querySelector('core-icon').icon = "chevron-right";
-//            }
-//            sender.target.querySelector('core-collapse').toggle();
-//          }
-
         },
 
         centerMapIfSelected: function () {

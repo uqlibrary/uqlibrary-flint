@@ -362,8 +362,8 @@ paper-slider {
   bottom: 0;
   width: 100%;
   border-top: 1px solid #cccccc; }
-  #activePlayerWrapper div {
-    margin: 3px; }
+  #activePlayerWrapper /deep/ .disabled {
+    opacity: 0; }
 
 [drawer] {
   background-color: #FAFAFA;

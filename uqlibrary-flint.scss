@@ -219,7 +219,10 @@ paper-slider {
   width: 100%;
   border-top: 1px solid $divider;
   div {
-    margin: 3px;
+//    margin: 3px;
+  }
+  /deep/ .disabled {
+    opacity: 0;
   }
 }
 [drawer] {

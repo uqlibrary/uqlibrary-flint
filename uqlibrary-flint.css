@@ -231,6 +231,8 @@ core-drawer-panel {
     padding-bottom: 0; }
     #infoSection ul li .content /deep/ core-icon {
       color: #007e9e; }
+    #infoSection ul li .content:last-of-type {
+      padding-bottom: 100px; }
     #infoSection ul li .content #featureImage {
       border-radius: 2px;
       margin: 16px;

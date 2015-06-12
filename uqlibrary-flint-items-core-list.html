@@ -189,9 +189,9 @@
         };
 
         if (this.languageObject) {
-          searchData.language = this.languageObject.cvo_title;
+          searchData.language = this.languageObject.cvo_id;
         } else if (this.voice) {
-          searchData.voice = this.voice.cvo_title;
+          searchData.voice = this.voice.cvo_id;
         } else if (this.searchTerm) {
           searchData.keyword = this.searchTerm;
         }
@@ -257,10 +257,10 @@
 
         if (args && args.language) {
           this.languageObject = args.language;
-          this.$.recordsApiElement.get({ language: this.languageObject.cvo_title });
+          this.$.recordsApiElement.get({ language: this.languageObject.cvo_id });
         } else if (args && args.voice) {
           this.voice = args.voice;
-          this.$.recordsApiElement.get({ voice: this.voice.cvo_title });
+          this.$.recordsApiElement.get({ voice: this.voice.cvo_id });
         } else if (args && args.searchTerm) {
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });

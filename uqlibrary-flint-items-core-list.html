@@ -191,7 +191,7 @@
         if (this.languageObject) {
           searchData.language = this.languageObject.cvo_id;
         } else if (this.voice) {
-          searchData.voice = this.voice.cvo_id;
+          searchData.voice = this.voice.cvo_title;
         } else if (this.searchTerm) {
           searchData.keyword = this.searchTerm;
         }
@@ -260,7 +260,7 @@
           this.$.recordsApiElement.get({ language: this.languageObject.cvo_id });
         } else if (args && args.voice) {
           this.voice = args.voice;
-          this.$.recordsApiElement.get({ voice: this.voice.cvo_id });
+          this.$.recordsApiElement.get({ voice: this.voice.cvo_title });
         } else if (args && args.searchTerm) {
           this.searchTerm = args.searchTerm;
           this.$.recordsApiElement.get({ keyword: this.searchTerm });

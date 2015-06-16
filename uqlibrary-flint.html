@@ -462,6 +462,7 @@
 
         performSearch: function(e) {
           if (e.detail.searchTerm != "") {
+            this.$.ga.addEvent('search', e.detail.searchTerm);
             this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
             this.currentDrawerSection = 'itemsListSection';
             this.toggleItemDetailsDrawer();
@@ -473,14 +474,17 @@
           switch(this.currentSection) {
             case "languageSection":
               //setup languages list
+              this.$.ga.addEvent('showLanguages');
               this.$.languagesList.setData({ displayLanguages: true });
               break;
             case "voicesSection":
               //setup voices list
+              this.$.ga.addEvent('showVoices');
               this.$.voicesList.setData({ displayVoices: true });
               break;
             case "mapSection":
               //setup map
+              this.$.ga.addEvent('showMap');
               this.$.mapList.setData({ displayLanguages: true });
               break;
           }
@@ -490,13 +494,16 @@
           switch(this.currentSection) {
             case "mapSection":
               this.$.itemsListElement.setData( { language: e.detail });
+              this.$.ga.addEvent('selectedFromMap', e.detail.cvo_title);
               this.toggleItemDetailsDrawer();
               break;
             case "languageSection":
+              this.$.ga.addEvent('selectedFromLanguages', e.detail.cvo_title);
               this.$.itemsListElement.setData( { language: e.detail });
               this.toggleItemDetailsDrawer();
               break;
             case "voicesSection":
+              this.$.ga.addEvent('selectedFromVoices', e.detail.cvo_title);
               this.$.itemsListElement.setData( { voice: e.detail });
               this.toggleItemDetailsDrawer();
               break;
@@ -506,6 +513,7 @@
         },
 
         displayItemDetails: function(e) {
+          this.$.ga.addEvent('viewRecord', e.detail.item.id);
           this.currentDrawerSection = 'itemSection';
           this.$.itemElement.item = e.detail.item;
           this.fire('uqlibrary-flint-request-current-audio');
@@ -519,6 +527,7 @@
         menuLinkClicked: function(e) {
           switch(e.detail) {
             case "#about":
+              this.$.ga.addEvent('showInfo');
               this.currentDrawerSection = 'infoSection';
 
               this.toggleMenuDrawer();

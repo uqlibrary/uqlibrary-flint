@@ -101,6 +101,11 @@
         resizeMap: function() {
           if (this.shadowRoot.querySelector('uqlibrary-flint-google-map'))
             this.shadowRoot.querySelector('uqlibrary-flint-google-map').resizeMap();
+        },
+
+        redrawMap: function() {
+          if (this.shadowRoot.querySelector('uqlibrary-flint-google-map'))
+            this.shadowRoot.querySelector('uqlibrary-flint-google-map').redrawMap();
         }
 
       });

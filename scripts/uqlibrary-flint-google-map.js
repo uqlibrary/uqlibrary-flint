@@ -130,7 +130,7 @@ function showDetails(el) {
     },
 
     redrawMap: function() {
-      this.$.gmap.contentChanged();
+      this.$.gmap.updateMarkers();
     },
 
     setActiveMapMarker: function (activeMapMarker) {

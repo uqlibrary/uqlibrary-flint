@@ -129,6 +129,10 @@ function showDetails(el) {
       this.$.gmap.resize();
     },
 
+    redrawMap: function() {
+      this.$.gmap.contentChanged();
+    },
+
     setActiveMapMarker: function (activeMapMarker) {
       var mapMarkers = this.getMapMarkers();
 

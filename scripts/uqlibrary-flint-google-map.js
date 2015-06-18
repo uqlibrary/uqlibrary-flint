@@ -65,6 +65,7 @@ function showDetails(el) {
       this.$.gmap.map.set('overviewMapControl', true);
       this.$.gmap.map.set('overviewMapControlOptions', {opened: true});
 
+      this.recenterMap();
       // listen for event, currently triggered from map tab header
       document.addEventListener('uqlibrary-flint-map-center-tap', function () {
         that.recenterMap();
@@ -122,11 +123,9 @@ function showDetails(el) {
      * Set map back to initial state
      */
     recenterMap: function () {
-      this.$.gmap.map.fitBounds(this.getLatLngBounds());
-    },
-
-    setFitToBounds: function (value) {
-      this.$.gmap.fitToMarkers = value;
+      if(!!this.$.gmap.map) {
+        this.$.gmap.map.fitBounds(this.getLatLngBounds());
+      }
     },
 
     resizeMap: function () {
@@ -144,8 +143,8 @@ function showDetails(el) {
     },
 
     itemsChanged: function(oldValue, newValue) {
-      if(!!newValue) {
-        this.setFitToBounds(true);
+      if(!!newValue && newValue.length > 0) {
+        this.recenterMap();
       }
     }
 

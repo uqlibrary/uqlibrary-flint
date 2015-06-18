@@ -125,12 +125,12 @@ function showDetails(el) {
       this.$.gmap.map.fitBounds(this.getLatLngBounds());
     },
 
-    resizeMap: function () {
-      this.$.gmap.resize();
+    setFitToBounds: function (value) {
+      this.$.gmap.fitToMarkers = value;
     },
 
-    redrawMap: function() {
-      this.$.gmap.updateMarkers();
+    resizeMap: function () {
+      this.$.gmap.resize();
     },
 
     setActiveMapMarker: function (activeMapMarker) {
@@ -142,6 +142,12 @@ function showDetails(el) {
         };
       }
     },
+
+    itemsChanged: function(oldValue, newValue) {
+      if(!!newValue) {
+        this.setFitToBounds(true);
+      }
+    }
 
   });
 })();

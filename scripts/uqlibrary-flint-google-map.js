@@ -76,7 +76,7 @@ function showDetails(el) {
         var allowedBounds = this.getLatLngBounds();
         var lastValidCenter = this.$.gmap.map.getCenter();
         var that = this;
-        this.$.gmap.map.set('overviewMapControl', true);
+        this.$.gmap.map.set('overviewMapControl', false);
         this.$.gmap.map.set('overviewMapControlOptions', {opened: true});
         // listen for event, currently triggered from map tab header
         document.addEventListener('uqlibrary-flint-map-center-tap', function () {

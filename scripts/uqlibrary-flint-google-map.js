@@ -25,6 +25,8 @@ function showDetails(el) {
       this.initialMapMarkerIcon = mapMarkerIconActive;
       this.openedMarker = null;
       this.isTouchDevice = is_touch_device();
+      this.isMapLoaded = false;
+      this.isMapInitialized = false;
     },
 
     /**
@@ -34,11 +36,11 @@ function showDetails(el) {
      * @returns {google.maps.LatLngBounds}
      */
     getLatLngBounds: function () {
-      var mapMarkers = this.getMapMarkers();
+      var mapMarkers = this.items;
       var bounds = new google.maps.LatLngBounds();
 
       for (var i = 0, l = mapMarkers.length; i < l; i++) {
-        var ll = new google.maps.LatLng(mapMarkers[i].latitude, mapMarkers[i].longitude);
+        var ll = new google.maps.LatLng(mapMarkers[i].cvo_lat, mapMarkers[i].cvo_long);
         bounds.extend(ll);
       }
 
@@ -58,30 +60,41 @@ function showDetails(el) {
      * Run the map initialisation
      */
     mapReady: function () {
-      var allowedBounds = this.getLatLngBounds();
-      var lastValidCenter = this.$.gmap.map.getCenter();
-      var that = this;
+      this.isMapLoaded = true;
+    },
 
-      this.$.gmap.map.set('overviewMapControl', true);
-      this.$.gmap.map.set('overviewMapControlOptions', {opened: true});
 
-      this.recenterMap();
-      // listen for event, currently triggered from map tab header
-      document.addEventListener('uqlibrary-flint-map-center-tap', function () {
-        that.recenterMap();
-      });
+    isMapLoadedChanged: function(){
+      // Make sure both data and map are ready so the map can be initialized
+      if(this.isMapLoaded && this.isDataLoaded) {
+        this.initMap();
+      }
+    },
 
-      // ensure that Yury can't scroll all the way to Belarus
-      google.maps.event.addListener(this.$.gmap.map, 'center_changed', function () {
-        if (allowedBounds.contains(this.getCenter())) {
-          // still within valid bounds, so save the last valid position
-          lastValidCenter = this.getCenter();
-          return;
-        }
+    initMap: function() {
+      if(!this.isMapInitialized) {
+        var allowedBounds = this.getLatLngBounds();
+        var lastValidCenter = this.$.gmap.map.getCenter();
+        var that = this;
+        this.$.gmap.map.set('overviewMapControl', true);
+        this.$.gmap.map.set('overviewMapControlOptions', {opened: true});
+        // listen for event, currently triggered from map tab header
+        document.addEventListener('uqlibrary-flint-map-center-tap', function () {
+          that.recenterMap();
+        });
 
-        // not valid anymore => return to last valid position
-        this.panTo(lastValidCenter);
-      });
+        // ensure that Yury can't scroll all the way to Belarus
+        google.maps.event.addListener(this.$.gmap.map, 'center_changed', function () {
+          if (allowedBounds.contains(this.getCenter())) {
+            // still within valid bounds, so save the last valid position
+            lastValidCenter = this.getCenter();
+            return;
+          }
+          // not valid anymore => return to last valid position
+          this.panTo(lastValidCenter);
+        });
+        this.isMapInitialized = true;
+      }
     },
 
     mapMarkerClicked: function (e, sender, marker) {
@@ -145,6 +158,11 @@ function showDetails(el) {
     itemsChanged: function(oldValue, newValue) {
       if(!!newValue && newValue.length > 0) {
         this.recenterMap();
+        this.isDataLoaded = true;
+        if(this.isMapLoaded) {
+          this.initMap();
+        }
+
       }
     }
 

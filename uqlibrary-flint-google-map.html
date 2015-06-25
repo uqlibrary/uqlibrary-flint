@@ -1,6 +1,11 @@
 <link rel="import" href="../uqlibrary-elements/0.5.4/lib/vulcanized-flint.html">
 <polymer-element name="uqlibrary-flint-google-map" extends="google-map" attributes="items">
   <template>
+    <style>
+      #gmap /deep/ div.gmnoscreen {
+        display: none;
+      }
+    </style>
     <google-map minZoom="4" latitude="-20.3770965" longitude="145.0244235" zoom="6" on-google-map-ready="{{mapReady}}" map="{{map}}" id="gmap" disableDefaultUI fitToMarkers>
 
       <template repeat="{{language, languageIndex in items}}">

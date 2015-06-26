@@ -460,7 +460,7 @@
         },
 
         performSearch: function(e) {
-          if (e.detail.searchTerm != "") {
+          if (!!e.detail.searchTerm) {
             this.$.ga.addEvent('search', e.detail.searchTerm);
             this.$.itemsListElement.setData( { searchTerm: e.detail.searchTerm });
             this.currentDrawerSection = 'itemsListSection';

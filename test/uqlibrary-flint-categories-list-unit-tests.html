@@ -43,6 +43,7 @@
     describe('unit tests for uqlibrary-flint-categories-list', function () {
 
       var handlers = [];
+      var isDone = false;
 
       before(function () {
         element.setData({ displayLanguages: true, items: languages});
@@ -51,6 +52,7 @@
       afterEach(function(){
         handlers.forEach(function(item){
           element.removeEventListener(item.event, item.handler);
+          isDone = false;
         })
 
         handlers = [];
@@ -77,7 +79,10 @@
 
         var itemSelectedHandler = function(data) {
           expect(data.detail.cvo_id).to.be.equal(languages[0].cvo_id);
-          done();
+          if (!isDone) {
+            isDone = true;
+            done();
+          }
         };
 
         element.addEventListener('category-selected', itemSelectedHandler);

@@ -16,7 +16,7 @@
 
     <core-drawer-panel id="outerDrawerPanel" responsiveWidth="768px">
       <div drawer class="left-drawer">
-        <uqlibrary-menu menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
+        <uqlibrary-menu fit menuFile="flint.json" on-uqlibrary-menu-link-clicked="{{menuLinkClicked}}"></uqlibrary-menu>
       </div>
       <div main layout vertical class="main">
         <uqlibrary-toolbar id="toolbar"
@@ -257,7 +257,7 @@
             </div>
 
           </div>
-          <div main layout vertical relative class="main">
+          <div main layout vertical relative fit class="main">
 
             <div id="headerPlayerMirrorWrapper" class="{{isIOS ? 'ios' : ''}}" hidden?="{{$.audioPlayer.src == '' || !$.innerDrawerPanel.narrow || searchActivated}}">
               <x-audio-mirror id="headerPlayerMirror" showVolumeControls?="{{!isIOS}}"></x-audio-mirror>
